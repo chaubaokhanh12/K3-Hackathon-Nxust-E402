@@ -14,6 +14,12 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
+# Nạp .env (OPENAI_API_KEY, OPENAI_EMBEDDING_MODEL) trước khi import bot —
+# uvicorn server khởi động từ start-dev.ps1 không tự export biến từ .env.
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from bot import answer
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent

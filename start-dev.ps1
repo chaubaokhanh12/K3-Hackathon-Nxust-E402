@@ -1,11 +1,17 @@
 $ErrorActionPreference = 'Stop'
 
 $projectRoot = $PSScriptRoot
-$python = Join-Path $projectRoot '.venv\Scripts\python.exe'
 $frontend = Join-Path $projectRoot 'frontend'
 
+# Kiem tra xem co conda environment dang active khong
+if (-not $env:CONDA_PREFIX) {
+  throw 'Khong tim thay conda environment dang active. Hay activate conda environment truoc (vi du: conda activate <ten_moi>).'
+}
+
+$python = Join-Path $env:CONDA_PREFIX 'python.exe'
+
 if (-not (Test-Path -LiteralPath $python)) {
-  throw 'Chua co .venv. Chay phan cai dat lan dau trong README.md truoc.'
+  throw "Khong tim thay python trong conda environment: $env:CONDA_PREFIX"
 }
 if (-not (Test-Path -LiteralPath (Join-Path $frontend 'node_modules'))) {
   throw 'Chua co frontend/node_modules. Chay npm install trong frontend truoc.'

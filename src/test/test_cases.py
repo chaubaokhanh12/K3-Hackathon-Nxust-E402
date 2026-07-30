@@ -11,6 +11,11 @@ Ket qua ghi nguoc vao test_cases.json o truong status va actual.
 """
 import argparse, json, re, time
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()  # nạp .env để benchmark chạy được OpenAI path khi shell không export key
+
 from bot import load_impl
 
 HERE = Path(__file__).parent
