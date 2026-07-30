@@ -1,4 +1,4 @@
-# AI SPEC — DupBot: Triage câu hỏi trùng lặp · Nhóm [XX] · Zone [X]
+# AI SPEC — DupBot: Triage câu hỏi trùng lặp ·
 Hướng: [ ] A — VLearn  [x] B — Trợ lý Học viên  [ ] C — Làn mở
 Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 
@@ -31,7 +31,7 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 ## §4. Thiết kế
 - Lát cắt MỘT CÂU: Học viên đặt câu hỏi, AI phân loại mức độ tương đồng (HIGH/LOW/NONE) với các thread cũ và đề xuất tối đa 3 thread đã giải quyết hoặc tự động chuyển LabCoach.
 - Non-goals: 
-  1. KHÔNG giảng bài mới, KHÔNG giải thích dài dòng.
+  1. KHÔNG tạo mới, KHÔNG giải thích dài dòng.
   2. KHÔNG tự bịa hoặc viết lại câu trả lời (chỉ dùng snippet verbatim).
   3. KHÔNG trả lời các câu hỏi ngoài phạm vi khóa học.
 - Mức prototype nhắm tới: [ ] Sketch [ ] Mock [x] Working — backend tool kết nối frontend thật.
@@ -65,17 +65,20 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 - Kết quả các lượt chạy:
   | Lượt | Tổng thể | Không bịa khi không có nguồn | Status |
   |---|---|---|---|
-  | Lần 1 | 57.1% (32/56) | 0% (0/4) | ❌ CRITICAL FAIL |
-  | Lần 2 (Dự kiến) | TBD | TBD | TBD |
+  | Lần 1 | 57.1% (32/56) | 0% (0/4) | CRITICAL FAIL |
+  | Lần 2 | 82% (46/56) | 3/4 | |
 
-## §8. Phân công & kế hoạch
-- Phân công có tên: 
-  - Spec & Evidence: [Tên thành viên]
-  - Prompt & Logic: [Tên thành viên]
-  - Code & Tích hợp: [Tên thành viên]
-  - Demo: [Tên thành viên]
-- Willing users: [Tên 3 người thật] + kế hoạch vòng validation CP5
-- Multi-prototype: [Không áp dụng]
+# §8. Phân công & kế hoạch
+
+| Thành viên | Vai trò | Công việc |
+|------------|----------|-----------|
+| Châu | PM | Quản lý dự án, AI Spec, Evidence, Evaluation, Demo |
+| Khải | Tool Developer | Discord Bot, API, Semantic Search |
+| Tâm | Core Developer | Backend, Vector Database, Demo |
+| Thắng | UI/UX | Thiết kế giao diện, Prototype, Slide |
+| An | Prompt Engineer | System Prompt, Guardrails, AI Summary |
+| Đạt | Data Engineer | Thu thập dữ liệu, Embedding, Indexing |
+| Châu + Đạt | Testing | Golden Set, Test Case, Evaluation |
 
 ## §9. Changelog
 | Thời điểm | Đổi gì | Vì sao (trỏ về feedback/case nào) |
