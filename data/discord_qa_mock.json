@@ -1,0 +1,4930 @@
+{
+  "_readme": {
+    "muc_dich": "Mock data kenh hoi dap Discord khoa AI Thuc Chien. Dung cho bot phat hien cau hoi trung + tim kiem ngu nghia.",
+    "nguon": "Ngoai suy tu 19 cap Q-A that do team cung cap. Toan bo ten nguoi dung la sinh ra, khong co thong tin that.",
+    "don_vi_index": "Moi phan tu trong threads[] = 1 don vi. Text de embed goi y: title + question.content.",
+    "phan_tang_nguon": "replies[].is_verified_source = True voi LabCoach/Mentor/Admin/BTC. thread.trust = cau tra loi da xac minh, uu tien tra ve truoc.",
+    "ground_truth": "duplicate_groups[] = cac thread hoi cung mot van de. test_queries[] = bo cau truy van kem dap an de cham benchmark.",
+    "link_format": "https://discord.com/channels/{guild_id}/{channel_id}/{message_id}",
+    "snowflake": "message_id la snowflake that, sinh tu timestamp, nen sap xep theo id = sap xep theo thoi gian."
+  },
+  "meta": {
+    "guild_id": "1198734562891034624",
+    "guild_name": "AI Thuc Chien",
+    "channel_id": "1198734789234567890",
+    "channel_name": "hoi-dap",
+    "channel_type": "GuildForum",
+    "date_range": [
+      "2026-06-15T11:40:34+07:00",
+      "2026-07-27T13:10:01+07:00"
+    ],
+    "source": "mock"
+  },
+  "roles": {
+    "1198734600000000001": {
+      "name": "Learner",
+      "verified_source": false
+    },
+    "1198734600000000002": {
+      "name": "LabCoach",
+      "verified_source": true
+    },
+    "1198734600000000003": {
+      "name": "Mentor",
+      "verified_source": true
+    },
+    "1198734600000000004": {
+      "name": "Admin",
+      "verified_source": true
+    },
+    "1198734600000000005": {
+      "name": "BTC",
+      "verified_source": true
+    }
+  },
+  "users": [
+    {
+      "id": "874523901000000001",
+      "name": "quang.tran",
+      "nickname": "HV01",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000002",
+      "name": "minhanh.ng",
+      "nickname": "HV02",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000003",
+      "name": "hoangduy02",
+      "nickname": "HV03",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000004",
+      "name": "thao.le",
+      "nickname": "HV04",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000005",
+      "name": "baongoc.pham",
+      "nickname": "HV05",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000006",
+      "name": "tuananh.hv",
+      "nickname": "HV06",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000007",
+      "name": "khanhlinh.d",
+      "nickname": "HV07",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000008",
+      "name": "phuclam99",
+      "nickname": "HV08",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000009",
+      "name": "haiyen.ng",
+      "nickname": "HV09",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000010",
+      "name": "datnguyen.dev",
+      "nickname": "HV10",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000011",
+      "name": "trangmy.ho",
+      "nickname": "HV11",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000012",
+      "name": "vietanh.bui",
+      "nickname": "HV12",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000013",
+      "name": "ngocmai.tr",
+      "nickname": "HV13",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000014",
+      "name": "huyhoang.le",
+      "nickname": "HV14",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000015",
+      "name": "phuonganh.vu",
+      "nickname": "HV15",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000016",
+      "name": "danhkhoi.ng",
+      "nickname": "HV16",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000017",
+      "name": "thanhtung.pd",
+      "nickname": "HV17",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000018",
+      "name": "kimchi.hv",
+      "nickname": "HV18",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000019",
+      "name": "longnhat.tr",
+      "nickname": "HV19",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000020",
+      "name": "yennhi.dang",
+      "nickname": "HV20",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000021",
+      "name": "gialinh.pham",
+      "nickname": "HV21",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000022",
+      "name": "minhduc.vo",
+      "nickname": "HV22",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000023",
+      "name": "hanhnguyen.tt",
+      "nickname": "HV23",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000024",
+      "name": "quocbao.ly",
+      "nickname": "HV24",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000025",
+      "name": "tuyetnhung.ng",
+      "nickname": "HV25",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000026",
+      "name": "chithanh.hoang",
+      "nickname": "HV26",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000027",
+      "name": "bichngoc.le",
+      "nickname": "HV27",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000028",
+      "name": "nampham.dev",
+      "nickname": "HV28",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000029",
+      "name": "thuytien.ng",
+      "nickname": "HV29",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523901000000030",
+      "name": "anhkhoa.tran",
+      "nickname": "HV30",
+      "role": "Learner",
+      "role_id": "1198734600000000001",
+      "is_bot": false
+    },
+    {
+      "id": "874523902000000001",
+      "name": "duy.labcoach",
+      "nickname": "Duy | LabCoach",
+      "role": "LabCoach",
+      "role_id": "1198734600000000002",
+      "is_bot": false
+    },
+    {
+      "id": "874523902000000002",
+      "name": "hanh.labcoach",
+      "nickname": "Hạnh | LabCoach",
+      "role": "LabCoach",
+      "role_id": "1198734600000000002",
+      "is_bot": false
+    },
+    {
+      "id": "874523902000000003",
+      "name": "minh.labcoach",
+      "nickname": "Minh | LabCoach",
+      "role": "LabCoach",
+      "role_id": "1198734600000000002",
+      "is_bot": false
+    },
+    {
+      "id": "874523902000000004",
+      "name": "son.mentor",
+      "nickname": "Sơn | Mentor",
+      "role": "Mentor",
+      "role_id": "1198734600000000003",
+      "is_bot": false
+    },
+    {
+      "id": "874523902000000005",
+      "name": "btc.admin",
+      "nickname": "BTC AI Thực Chiến",
+      "role": "Admin",
+      "role_id": "1198734600000000004",
+      "is_bot": false
+    }
+  ],
+  "threads": [
+    {
+      "thread_id": "1516044745179267072",
+      "title": "Trùng đề tài với nhóm khác thì sao",
+      "topic_id": "de_tai_khoa_truoc",
+      "tag": "Dự án",
+      "created_at": "2026-06-15T11:40:34+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516044745179267072",
+      "question": {
+        "message_id": "1516044745179267072",
+        "author_id": "874523901000000025",
+        "author_name": "HV25",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-15T11:40:34+07:00",
+        "content": "nếu 2 nhóm cùng chọn 1 đề tài thì btc có bắt đổi ko ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1516058083065987073",
+          "author_id": "874523901000000022",
+          "author_name": "HV22",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-15T12:33:34+07:00",
+          "content": "mình nghĩ là ko, quan trọng là cách giải khác nhau",
+          "reply_to_message_id": "1516044745179267072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1516171580932227074",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-15T20:04:34+07:00",
+          "content": "Không bắt đổi nhé. Trùng đề tài là chuyện bình thường, cái được chấm là cách các em xác định vấn đề và giải nó, không phải cái tên đề tài.",
+          "reply_to_message_id": "1516044745179267072",
+          "reaction_count": 8,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1516171580932227074",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516171580932227074"
+      },
+      "first_response_minutes": 53,
+      "verified_response_minutes": 504
+    },
+    {
+      "thread_id": "1516116866236547072",
+      "title": "Slide buổi hôm nay up ở đâu ạ",
+      "topic_id": "tai_lieu_buoi_hoc",
+      "tag": "Tài nguyên",
+      "created_at": "2026-06-15T16:27:09+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516116866236547072",
+      "question": {
+        "message_id": "1516116866236547072",
+        "author_id": "874523901000000017",
+        "author_name": "HV17",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-15T16:27:09+07:00",
+        "content": "cho e hỏi slide buổi sáng nay up ở đâu ạ, e tìm trên vlearn ko thấy",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1516133475680387073",
+          "author_id": "874523901000000015",
+          "author_name": "HV15",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-15T17:33:09+07:00",
+          "content": "thường cuối ngày mới lên bạn ạ",
+          "reply_to_message_id": "1516116866236547072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 66,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1516150491971715072",
+      "title": "Không đi khai giảng thì lấy áo ở đâu ạ",
+      "topic_id": "ao_khoa",
+      "tag": "Vận hành",
+      "created_at": "2026-06-15T18:40:46+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516150491971715072",
+      "question": {
+        "message_id": "1516150491971715072",
+        "author_id": "874523901000000022",
+        "author_name": "HV22",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-15T18:40:46+07:00",
+        "content": "Hôm qua em không đi khai giảng nên chưa nhận được áo ạ, em có thể liên hệ ai để lấy áo ạ.",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1516328162689155073",
+          "author_id": "874523902000000001",
+          "author_name": "Duy | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-16T06:26:46+07:00",
+          "content": "cái này chắc sang tuần sẽ có thông tin để cho các bạn lấy bổ sung áo nha",
+          "reply_to_message_id": "1516150491971715072",
+          "reaction_count": 4,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1516328162689155073",
+        "author_id": "874523902000000001",
+        "author_name": "Duy | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516328162689155073"
+      },
+      "first_response_minutes": 706,
+      "verified_response_minutes": 706
+    },
+    {
+      "thread_id": "1516157068640387072",
+      "title": "Không tìm được nhóm thì BTC ghép thế nào",
+      "topic_id": "ghep_team",
+      "tag": "Team",
+      "created_at": "2026-06-15T19:06:54+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516157068640387072",
+      "question": {
+        "message_id": "1516157068640387072",
+        "author_id": "874523901000000008",
+        "author_name": "HV08",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-15T19:06:54+07:00",
+        "content": "Nếu mà ko tìm được nhóm thì BTC đánh giá như nào để ghép team hợp lý hơn ak",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1516271824797827073",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-16T02:42:54+07:00",
+          "content": "Chào bạn. Nếu chưa tìm được nhóm thì bạn cứ yên tâm nhé. BTC sẽ xem xét các thông tin mà các bạn đã cung cấp khi đăng ký (ví dụ kỹ năng, lĩnh vực quan tâm, kinh nghiệm, mong muốn về vai trò) để ghép các thành viên có sự phù hợp nhất với nhau.",
+          "reply_to_message_id": "1516157068640387072",
+          "reaction_count": 11,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1516271824797827073",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516271824797827073"
+      },
+      "first_response_minutes": 456,
+      "verified_response_minutes": 456
+    },
+    {
+      "thread_id": "1516185631850627072",
+      "title": "Xin file ghi âm buổi mentor duty",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-06-15T21:00:24+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516185631850627072",
+      "question": {
+        "message_id": "1516185631850627072",
+        "author_id": "874523901000000008",
+        "author_name": "HV08",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-15T21:00:24+07:00",
+        "content": "buổi mentor duty hôm qua có ghi âm lại ko ạ, e bận ko tham gia dc",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1516206519484547073",
+          "author_id": "874523901000000012",
+          "author_name": "HV12",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-15T22:23:24+07:00",
+          "content": "mình nghĩ là ko có đâu bạn",
+          "reply_to_message_id": "1516185631850627072",
+          "reaction_count": 1,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 83,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1516211212910723072",
+      "title": "Điểm cuối khóa tính dựa trên những gì ạ",
+      "topic_id": "cham_diem",
+      "tag": "Điểm số",
+      "created_at": "2026-06-15T22:42:03+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516211212910723072",
+      "question": {
+        "message_id": "1516211212910723072",
+        "author_id": "874523901000000023",
+        "author_name": "HV23",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-15T22:42:03+07:00",
+        "content": "dạ cho em hỏi điểm tổng kết cuối khóa được tính từ những phần nào ạ, có bảng tỉ trọng cụ thể không ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1516228577329283073",
+          "author_id": "874523901000000012",
+          "author_name": "HV12",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-15T23:51:03+07:00",
+          "content": "chắc là điểm lab + sản phẩm cuối + điểm chuyên cần",
+          "reply_to_message_id": "1516211212910723072",
+          "reaction_count": 1,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1516381333880963074",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-16T09:58:03+07:00",
+          "content": "Có 4 phần chính nhé em: chuyên cần, bài lab, đóng góp cá nhân trong build phase, và sản phẩm cuối của nhóm. Tỉ trọng cụ thể bên mình sẽ công bố trước khi vào phase 2, em theo dõi kênh thông báo nha.",
+          "reply_to_message_id": null,
+          "reaction_count": 10,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1516381333880963074",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516381333880963074"
+      },
+      "first_response_minutes": 69,
+      "verified_response_minutes": 676
+    },
+    {
+      "thread_id": "1516731629568131072",
+      "title": "Đề xuất thêm buổi office hour",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-06-17T09:10:00+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516731629568131072",
+      "question": {
+        "message_id": "1516731629568131072",
+        "author_id": "874523901000000008",
+        "author_name": "HV08",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-17T09:10:00+07:00",
+        "content": "btc có thể mở thêm buổi hỏi đáp trực tiếp buổi tối ko ạ, ban ngày tụi e học kín lịch",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [],
+      "reply_count": 0,
+      "resolved": false,
+      "resolved_by": "none",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": null,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1516938148708483072",
+      "title": "Không thấy nút rời đội",
+      "topic_id": "roi_nhom",
+      "tag": "Team",
+      "created_at": "2026-06-17T22:50:38+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1516938148708483072",
+      "question": {
+        "message_id": "1516938148708483072",
+        "author_id": "874523901000000026",
+        "author_name": "HV26",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-17T22:50:38+07:00",
+        "content": "Hiện tại mình thấy không thể rời đội khi đã tham gia. Vậy có cách nào để rời không ạ?",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1517131170578563073",
+          "author_id": "874523902000000002",
+          "author_name": "Hạnh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-18T11:37:38+07:00",
+          "content": "Hiện tại hệ thống ghép đội tự do đã đóng, các bạn đã được ghép vào team cố định nhé.",
+          "reply_to_message_id": "1516938148708483072",
+          "reaction_count": 6,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1517131170578563073",
+        "author_id": "874523902000000002",
+        "author_name": "Hạnh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1517131170578563073"
+      },
+      "first_response_minutes": 767,
+      "verified_response_minutes": 767
+    },
+    {
+      "thread_id": "1517223705313411072",
+      "title": "Log không lên dashboard Phoenix",
+      "topic_id": "ai_log_setup",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-06-18T17:45:20+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1517223705313411072",
+      "question": {
+        "message_id": "1517223705313411072",
+        "author_id": "874523901000000030",
+        "author_name": "HV30",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-18T17:45:20+07:00",
+        "content": "e setup ai-log theo đúng readme mà vào phoenix ko thấy log nào hết ạ, terminal thì ko báo lỗi gì",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1517232010035331073",
+          "author_id": "874523901000000003",
+          "author_name": "HV03",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-18T18:18:20+07:00",
+          "content": "bạn check lại biến môi trường xem đúng team id chưa",
+          "reply_to_message_id": "1517223705313411072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1517245347922051074",
+          "author_id": "874523901000000028",
+          "author_name": "HV28",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-18T19:11:20+07:00",
+          "content": "mình bị y chang, restart lại ide là lên",
+          "reply_to_message_id": "1517223705313411072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1517365137244291075",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-19T03:07:20+07:00",
+          "content": "Em kiểm tra 3 chỗ nhé: token trong file env, team id có khớp với team trên Phoenix không, và script có thực sự chạy nền không. Nếu vẫn không được thì tạo ticket kèm log terminal, bên mình xem giúp.",
+          "reply_to_message_id": "1517223705313411072",
+          "reaction_count": 9,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 3,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1517365137244291075",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1517365137244291075"
+      },
+      "first_response_minutes": 33,
+      "verified_response_minutes": 562
+    },
+    {
+      "thread_id": "1517506246213763072",
+      "title": "Không đăng nhập được Phoenix",
+      "topic_id": "phoenix_loi",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-06-19T12:28:03+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1517506246213763072",
+      "question": {
+        "message_id": "1517506246213763072",
+        "author_id": "874523901000000001",
+        "author_name": "HV01",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-19T12:28:03+07:00",
+        "content": "e ko vào dc phoenix ạ, nó cứ quay quay rồi văng ra",
+        "has_code_block": false,
+        "has_attachment": true,
+        "attachment_types": [
+          "image/png"
+        ]
+      },
+      "replies": [
+        {
+          "message_id": "1517513795960963073",
+          "author_id": "874523901000000003",
+          "author_name": "HV03",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-19T12:58:03+07:00",
+          "content": "bạn thử xoá cache hoặc vào ẩn danh xem",
+          "reply_to_message_id": "1517506246213763072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1517529650430083074",
+          "author_id": "874523901000000006",
+          "author_name": "HV06",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-19T14:01:03+07:00",
+          "content": "lúc nãy mình cũng vậy, tầm 10p sau thì vào lại dc",
+          "reply_to_message_id": null,
+          "reaction_count": 4,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 30,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1517653160099971072",
+      "title": "Ai đi ăn trưa gần trường không",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-06-19T22:11:50+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1517653160099971072",
+      "question": {
+        "message_id": "1517653160099971072",
+        "author_id": "874523901000000012",
+        "author_name": "HV12",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-19T22:11:50+07:00",
+        "content": "trưa nay ai ăn gì chưa, rủ e với",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1517666749644931073",
+          "author_id": "874523901000000008",
+          "author_name": "HV08",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-19T23:05:50+07:00",
+          "content": "quán cơm đầu ngõ ngon á bạn",
+          "reply_to_message_id": "1517653160099971072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 54,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1517668553195651072",
+      "title": "Có được dùng template có sẵn trên mạng không",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-06-19T23:13:00+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1517668553195651072",
+      "question": {
+        "message_id": "1517668553195651072",
+        "author_id": "874523901000000015",
+        "author_name": "HV15",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-19T23:13:00+07:00",
+        "content": "phần giao diện tụi e xài template có sẵn thì có bị trừ điểm ko ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1517680381132931073",
+          "author_id": "874523901000000013",
+          "author_name": "HV13",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-20T00:00:00+07:00",
+          "content": "mình nghĩ ko, quan trọng là phần lõi",
+          "reply_to_message_id": "1517668553195651072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 47,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1517685938585731072",
+      "title": "PRD cần có những mục gì",
+      "topic_id": "brd_prd",
+      "tag": "Dự án",
+      "created_at": "2026-06-20T00:22:05+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1517685938585731072",
+      "question": {
+        "message_id": "1517685938585731072",
+        "author_id": "874523901000000016",
+        "author_name": "HV16",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-20T00:22:05+07:00",
+        "content": "e chưa viết prd bao giờ, nó cần những phần nào là tối thiểu ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1517689713459331073",
+          "author_id": "874523901000000028",
+          "author_name": "HV28",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-20T00:37:05+07:00",
+          "content": "vấn đề, người dùng, giải pháp, tiêu chí nghiệm thu là đủ cho scope này rồi bạn",
+          "reply_to_message_id": "1517685938585731072",
+          "reaction_count": 5,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 15,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1518345891348611072",
+      "title": "XP trong discord dùng để làm gì vậy mn",
+      "topic_id": "xp_diem",
+      "tag": "Điểm số",
+      "created_at": "2026-06-21T20:04:30+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518345891348611072",
+      "question": {
+        "message_id": "1518345891348611072",
+        "author_id": "874523901000000012",
+        "author_name": "HV12",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-21T20:04:30+07:00",
+        "content": "cho e hỏi cái XP trên server này dùng làm gì v ạ, e thấy nó tăng mà ko biết để làm j",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1518355957678211073",
+          "author_id": "874523901000000013",
+          "author_name": "HV13",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-21T20:44:30+07:00",
+          "content": "để đánh giá mình có active ko á bạn",
+          "reply_to_message_id": "1518345891348611072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1518359732551811074",
+          "author_id": "874523901000000005",
+          "author_name": "HV05",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-21T20:59:30+07:00",
+          "content": "hình như cuối khoá có thưởng gì đó",
+          "reply_to_message_id": "1518345891348611072",
+          "reaction_count": 1,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 40,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1518409497968771072",
+      "title": "Ốm nghỉ buổi học thì báo với ai ạ",
+      "topic_id": "nghi_hoc",
+      "tag": "Vận hành",
+      "created_at": "2026-06-22T00:17:15+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518409497968771072",
+      "question": {
+        "message_id": "1518409497968771072",
+        "author_id": "874523901000000009",
+        "author_name": "HV09",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-22T00:17:15+07:00",
+        "content": "em bị sốt chắc mai ko lên lớp dc, e cần báo với ai để dc tính là nghỉ có phép ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1518421577564291073",
+          "author_id": "874523901000000020",
+          "author_name": "HV20",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-22T01:05:15+07:00",
+          "content": "bạn tạo ticket là dc á",
+          "reply_to_message_id": "1518409497968771072",
+          "reaction_count": 1,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1518562757836931074",
+          "author_id": "874523902000000001",
+          "author_name": "Duy | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-22T10:26:15+07:00",
+          "content": "Em tạo ticket trước giờ học kèm ảnh giấy khám nếu có nhé. Báo sau buổi học thì bên mình khó xử lý.",
+          "reply_to_message_id": "1518409497968771072",
+          "reaction_count": 5,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1518562757836931074",
+        "author_id": "874523902000000001",
+        "author_name": "Duy | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518562757836931074"
+      },
+      "first_response_minutes": 48,
+      "verified_response_minutes": 609
+    },
+    {
+      "thread_id": "1518697634070659072",
+      "title": "Setup xong repo thì đã sẵn sàng làm việc nhóm chưa?",
+      "topic_id": "lam_viec_nhom",
+      "tag": "Dự án",
+      "created_at": "2026-06-22T19:22:12+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518697634070659072",
+      "question": {
+        "message_id": "1518697634070659072",
+        "author_id": "874523901000000013",
+        "author_name": "HV13",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-22T19:22:12+07:00",
+        "content": "Cho mình hỏi là hiện tại mình đã clone repo nhóm về, setup AI logging đầy đủ, và đã push được branch lên remote để test. Vậy các bước trên đã đủ để sẵn sàng làm việc nhóm chưa ạ?",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1518804840480899073",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-23T02:28:12+07:00",
+          "content": "Về mặt kỹ thuật thì đủ rồi, nhưng phần quan trọng hơn nằm ở nhóm chứ không nằm ở repo. Việc nên làm ngay: mỗi người tự nói về thế mạnh và vị trí muốn đảm nhận để cả nhóm hiểu năng lực của nhau. Thống nhất nền tảng nhắn tin, công cụ quản lý task và lịch họp cố định. Khi có đề bài thì mỗi người tự tìm hiểu độc lập vài hướng trước khi họp, tránh cả nhóm hùa theo ý kiến đầu tiên. Tạm chia người phụ trách tiến độ, kỹ thuật, giao diện và hướng sản phẩm, phân vai này có thể đổi sau. Mục tiêu tuần đầu là chốt đề tài và đánh giá khả thi, chưa cần code ngay.",
+          "reply_to_message_id": "1518697634070659072",
+          "reaction_count": 13,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1518804840480899073",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518804840480899073"
+      },
+      "first_response_minutes": 426,
+      "verified_response_minutes": 426
+    },
+    {
+      "thread_id": "1518703711617155072",
+      "title": "AI-log có được tính vào điểm không",
+      "topic_id": "cham_diem",
+      "tag": "Điểm số",
+      "created_at": "2026-06-22T19:46:21+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518703711617155072",
+      "question": {
+        "message_id": "1518703711617155072",
+        "author_id": "874523901000000013",
+        "author_name": "HV13",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-22T19:46:21+07:00",
+        "content": "cái ai-log gửi lên phoenix đó có ảnh hưởng đến điểm cá nhân ko ạ hay chỉ để thống kê thôi",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1518712771313795073",
+          "author_id": "874523901000000008",
+          "author_name": "HV08",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-22T20:22:21+07:00",
+          "content": "mình nghĩ là có, nó đo mình dùng ai như nào",
+          "reply_to_message_id": "1518703711617155072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1518751526682755074",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-22T22:56:21+07:00",
+          "content": "Có nhé. AI-log là một trong những căn cứ để đánh giá đóng góp cá nhân trong build phase, nên các em nhớ setup sớm và để nó chạy đều.",
+          "reply_to_message_id": "1518703711617155072",
+          "reaction_count": 8,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1518751526682755074",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518751526682755074"
+      },
+      "first_response_minutes": 36,
+      "verified_response_minutes": 190
+    },
+    {
+      "thread_id": "1518745080037507072",
+      "title": "Hạn chốt team là khi nào ạ",
+      "topic_id": "ghep_team",
+      "tag": "Team",
+      "created_at": "2026-06-22T22:30:44+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518745080037507072",
+      "question": {
+        "message_id": "1518745080037507072",
+        "author_id": "874523901000000005",
+        "author_name": "HV05",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-22T22:30:44+07:00",
+        "content": "cho e hỏi deadline chốt danh sách team là ngày nào ạ, nhóm e vẫn đang thiếu 1 người",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1518765212696707073",
+          "author_id": "874523901000000020",
+          "author_name": "HV20",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-22T23:50:44+07:00",
+          "content": "hình như cuối tuần này á",
+          "reply_to_message_id": "1518745080037507072",
+          "reaction_count": 0,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1518781067165827074",
+          "author_id": "874523901000000026",
+          "author_name": "HV26",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-23T00:53:44+07:00",
+          "content": "mình thấy trên phoenix ghi là thứ 6",
+          "reply_to_message_id": "1518745080037507072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 80,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1518747693088899072",
+      "title": "Bản free có đủ làm project không",
+      "topic_id": "api_key",
+      "tag": "Tài nguyên",
+      "created_at": "2026-06-22T22:41:07+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518747693088899072",
+      "question": {
+        "message_id": "1518747693088899072",
+        "author_id": "874523901000000004",
+        "author_name": "HV04",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-22T22:41:07+07:00",
+        "content": "dùng free tier của gemini có đủ để làm project ko mn hay phải nâng cấp",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1518752726253699073",
+          "author_id": "874523901000000024",
+          "author_name": "HV24",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-22T23:01:07+07:00",
+          "content": "đủ cho lúc thử nghiệm, lúc demo thì hơi giật vì rate limit",
+          "reply_to_message_id": "1518747693088899072",
+          "reaction_count": 6,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 20,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1518778273759363072",
+      "title": "Nhóm mình đặt tên gì cho hay",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-06-23T00:42:38+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518778273759363072",
+      "question": {
+        "message_id": "1518778273759363072",
+        "author_id": "874523901000000008",
+        "author_name": "HV08",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-23T00:42:38+07:00",
+        "content": "mn góp ý giúp nhóm e cái tên với ạ, đang bí quá",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1518779028734083073",
+          "author_id": "874523901000000002",
+          "author_name": "HV02",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-23T00:45:38+07:00",
+          "content": "cứ lấy tên đề tài viết tắt là dc bạn",
+          "reply_to_message_id": "1518778273759363072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 3,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1518791594868867072",
+      "title": "Tạo ticket ở đâu ạ",
+      "topic_id": "ticket",
+      "tag": "Vận hành",
+      "created_at": "2026-06-23T01:35:34+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1518791594868867072",
+      "question": {
+        "message_id": "1518791594868867072",
+        "author_id": "874523901000000012",
+        "author_name": "HV12",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-23T01:35:34+07:00",
+        "content": "mn cho e hỏi tạo ticket ở đâu v ạ, e thấy mọi người hay nhắc mà ko biết vào chỗ nào",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1518812230844547073",
+          "author_id": "874523901000000008",
+          "author_name": "HV08",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-23T02:57:34+07:00",
+          "content": "trên phoenix á bạn, menu bên trái",
+          "reply_to_message_id": "1518791594868867072",
+          "reaction_count": 5,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 82,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1519032259838083072",
+      "title": "Không thấy file pyproject.toml",
+      "topic_id": "deps_error",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-06-23T17:31:53+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1519032259838083072",
+      "question": {
+        "message_id": "1519032259838083072",
+        "author_id": "874523901000000010",
+        "author_name": "HV10",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-23T17:31:53+07:00",
+        "content": "Khi em đang cài dependencies thì không thấy file pyproject.toml nên ko chạy được lệnh pip install",
+        "has_code_block": true,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1519052644155523073",
+          "author_id": "874523901000000017",
+          "author_name": "HV17",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-23T18:52:53+07:00",
+          "content": "Lý do lệnh cũ của bạn không hoạt động là vì lệnh đó được thiết kế riêng để tự động tìm một tệp hướng dẫn cài đặt có tên là pyproject.toml hoặc setup.py. Khi bạn chạy lệnh, hệ thống đã kiểm tra thư mục hiện tại nhưng không tìm thấy các tệp này, dẫn đến việc nó không biết phải tiến hành cài đặt ra sao và buộc phải báo lỗi dừng lại. Bạn hãy mở thư mục dự án ra xem danh sách tệp đang có bên trong. Nếu có tệp requirements.txt thì thay bằng lệnh pip install -r requirements.txt. Ngược lại nếu tìm thấy pyproject.toml nhưng nó nằm sâu trong thư mục con thì bạn cd vào đúng thư mục đó rồi gõ lại lệnh cũ. Hôm qua mình cũng bị lỗi này và fix như này nhé.",
+          "reply_to_message_id": "1519032259838083072",
+          "reaction_count": 7,
+          "has_code_block": true,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 81,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1519096206196867072",
+      "title": "Merge conflict xử lý sao ạ",
+      "topic_id": "git_workflow",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-06-23T21:45:59+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1519096206196867072",
+      "question": {
+        "message_id": "1519096206196867072",
+        "author_id": "874523901000000026",
+        "author_name": "HV26",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-23T21:45:59+07:00",
+        "content": "2 bạn trong nhóm cùng sửa 1 file giờ merge bị conflict tùm lum, mn xử lý kiểu gì cho gọn ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1519116590514307073",
+          "author_id": "874523901000000021",
+          "author_name": "HV21",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-23T23:06:59+07:00",
+          "content": "chia file ra mỗi người 1 module là đỡ nhất bạn",
+          "reply_to_message_id": "1519096206196867072",
+          "reaction_count": 5,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1519236883153027074",
+          "author_id": "874523902000000004",
+          "author_name": "Sơn | Mentor",
+          "author_role": "Mentor",
+          "author_role_id": "1198734600000000003",
+          "is_verified_source": true,
+          "timestamp": "2026-06-24T07:04:59+07:00",
+          "content": "Về lâu dài thì cách chữa không nằm ở lệnh git mà ở cách chia việc. Mỗi task nên chạm vào ít file nhất có thể, và merge sớm merge thường xuyên thay vì để branch sống cả tuần. Conflict to thường là dấu hiệu task chia chưa đủ nhỏ.",
+          "reply_to_message_id": "1519096206196867072",
+          "reaction_count": 10,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1519236883153027074",
+        "author_id": "874523902000000004",
+        "author_name": "Sơn | Mentor",
+        "author_role": "Mentor",
+        "trust_tag_raw": "(TRUST - MENTOR)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1519236883153027074"
+      },
+      "first_response_minutes": 81,
+      "verified_response_minutes": 559
+    },
+    {
+      "thread_id": "1519120277307523072",
+      "title": "Phoenix không load được phần Đội của tôi",
+      "topic_id": "phoenix_loi",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-06-23T23:21:38+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1519120277307523072",
+      "question": {
+        "message_id": "1519120277307523072",
+        "author_id": "874523901000000014",
+        "author_name": "HV14",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-23T23:21:38+07:00",
+        "content": "phần Đội của tôi trên phoenix của e trống trơn ko hiện gì, mà e có team rồi ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1519191496589443073",
+          "author_id": "874523902000000001",
+          "author_name": "Duy | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-24T04:04:38+07:00",
+          "content": "Em thử đăng xuất rồi đăng nhập lại bằng đúng mail trường nhé. Nhiều bạn đăng ký một mail nhưng đăng nhập bằng mail khác nên hệ thống không map được team.",
+          "reply_to_message_id": "1519120277307523072",
+          "reaction_count": 7,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1519191496589443073",
+        "author_id": "874523902000000001",
+        "author_name": "Duy | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1519191496589443073"
+      },
+      "first_response_minutes": 283,
+      "verified_response_minutes": 283
+    },
+    {
+      "thread_id": "1519450239008899072",
+      "title": "Chiều phase 2 có bắt buộc ở lại trường không",
+      "topic_id": "giai_doan_2",
+      "tag": "Lịch trình",
+      "created_at": "2026-06-24T21:12:47+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1519450239008899072",
+      "question": {
+        "message_id": "1519450239008899072",
+        "author_id": "874523901000000008",
+        "author_name": "HV08",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-24T21:12:47+07:00",
+        "content": "buổi chiều giai đoạn 2 tụi e có bắt buộc phải ở lại trường build ko ạ hay về nhà làm cũng dc",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1519455020515459073",
+          "author_id": "874523901000000023",
+          "author_name": "HV23",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-24T21:31:47+07:00",
+          "content": "tự do mà bạn, ở lại thư viện hay về đều dc",
+          "reply_to_message_id": "1519450239008899072",
+          "reaction_count": 4,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 19,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1520022044278915072",
+      "title": "Tài liệu học RAG cho người mới",
+      "topic_id": "nguon_hoc_ai",
+      "tag": "Tài nguyên",
+      "created_at": "2026-06-26T11:04:56+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1520022044278915072",
+      "question": {
+        "message_id": "1520022044278915072",
+        "author_id": "874523901000000005",
+        "author_name": "HV05",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-26T11:04:56+07:00",
+        "content": "có nguồn nào học rag từ đầu ko mn, e đọc mấy bài blog mà rối quá",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1520025064177795073",
+          "author_id": "874523901000000012",
+          "author_name": "HV12",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-26T11:16:56+07:00",
+          "content": "xem mấy video của llamaindex với langchain trên youtube trước rồi hẵng đọc paper bạn",
+          "reply_to_message_id": "1520022044278915072",
+          "reaction_count": 4,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 12,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1520560529997955072",
+      "title": "Có recording buổi học không ạ",
+      "topic_id": "tai_lieu_buoi_hoc",
+      "tag": "Tài nguyên",
+      "created_at": "2026-06-27T22:44:41+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1520560529997955072",
+      "question": {
+        "message_id": "1520560529997955072",
+        "author_id": "874523901000000010",
+        "author_name": "HV10",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-27T22:44:41+07:00",
+        "content": "e nghỉ buổi hôm qua, có bản ghi lại buổi học để xem lại ko ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1520573867884675073",
+          "author_id": "874523901000000008",
+          "author_name": "HV08",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-06-27T23:37:41+07:00",
+          "content": "có trên vlearn đó bạn, mục bài giảng",
+          "reply_to_message_id": "1520560529997955072",
+          "reaction_count": 4,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1520691895599235074",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-06-28T07:26:41+07:00",
+          "content": "Recording có trên VLearn sau khoảng 1 ngày nhé. Nhưng em nhớ là xem lại recording không được tính là có mặt đâu.",
+          "reply_to_message_id": "1520560529997955072",
+          "reaction_count": 8,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1520691895599235074",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1520691895599235074"
+      },
+      "first_response_minutes": 53,
+      "verified_response_minutes": 522
+    },
+    {
+      "thread_id": "1520797214572675072",
+      "title": "Có kênh riêng cho từng track chưa ạ",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-06-28T14:25:11+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1520797214572675072",
+      "question": {
+        "message_id": "1520797214572675072",
+        "author_id": "874523901000000016",
+        "author_name": "HV16",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-28T14:25:11+07:00",
+        "content": "e thấy mới có kênh chung thôi, sau này chia track thì có kênh riêng ko ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [],
+      "reply_count": 0,
+      "resolved": false,
+      "resolved_by": "none",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": null,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1521607424082051072",
+      "title": "Gặp mentor có cần đăng ký trước không",
+      "topic_id": "mentor_duty",
+      "tag": "Lịch trình",
+      "created_at": "2026-06-30T20:04:40+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1521607424082051072",
+      "question": {
+        "message_id": "1521607424082051072",
+        "author_id": "874523901000000002",
+        "author_name": "HV02",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-06-30T20:04:40+07:00",
+        "content": "nhóm e muốn hỏi mentor về đề tài thì cần đăng ký slot trước ko ạ hay cứ tới",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1521786353090691073",
+          "author_id": "874523902000000001",
+          "author_name": "Duy | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-01T07:55:40+07:00",
+          "content": "Các em đăng ký slot trên Phoenix trước ít nhất 1 ngày nhé, không thì mentor không sắp được thời gian. Nhớ gửi trước câu hỏi cụ thể, buổi duty rất ngắn.",
+          "reply_to_message_id": "1521607424082051072",
+          "reaction_count": 9,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1521786353090691073",
+        "author_id": "874523902000000001",
+        "author_name": "Duy | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1521786353090691073"
+      },
+      "first_response_minutes": 711,
+      "verified_response_minutes": 711
+    },
+    {
+      "thread_id": "1522274549104771072",
+      "title": "Có được mở rộng dự án khóa trước không ạ",
+      "topic_id": "de_tai_khoa_truoc",
+      "tag": "Dự án",
+      "created_at": "2026-07-02T16:15:35+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1522274549104771072",
+      "question": {
+        "message_id": "1522274549104771072",
+        "author_id": "874523901000000025",
+        "author_name": "HV25",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-02T16:15:35+07:00",
+        "content": "Mọi người cho em hỏi là nếu mình thấy các khóa trước đã có 1 dự án cùng chủ đề mà tụi em thấy có thể mở rộng và hoàn thiện nó hơn theo cái painpoint của khách hàng mà tụi em xác định được á. Tụi em có thể liên hệ nhà trường, anh chị mentor và các anh chị đã làm dự án đấy để thuyết phục cho tụi em mở rộng và phát triển nó hơn được không ạ?",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1522288641966211073",
+          "author_id": "874523901000000019",
+          "author_name": "HV19",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-02T17:11:35+07:00",
+          "content": "Khả năng thuyết phục được vẫn là yếu tố then chốt, bạn hoàn toàn có thể nêu vấn đề ở Ticket.",
+          "reply_to_message_id": "1522274549104771072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1522311039549571074",
+          "author_id": "874523901000000021",
+          "author_name": "HV21",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-02T18:40:35+07:00",
+          "content": "Thực ra có thể suggest chủ đề cũng được, nhưng thuyết phục thì là vấn đề, đặc biệt là đã có sản phẩm trước đó, nên bạn phải trình bày những cái gì thật mới hoặc cải thiện đúng cái pain point hay khuyết điểm nhóm trước đã bỏ sót thì may ra mới được. Với lại mình nghĩ điểm có thể sẽ không được cao so với chủ đề mới đâu do có các tính năng cơ bản mà nhóm khóa trước đã làm rồi",
+          "reply_to_message_id": null,
+          "reaction_count": 6,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 56,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1522281717170307072",
+      "title": "Quên check-out có bị tính vắng không ạ",
+      "topic_id": "diem_danh",
+      "tag": "Vận hành",
+      "created_at": "2026-07-02T16:44:04+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1522281717170307072",
+      "question": {
+        "message_id": "1522281717170307072",
+        "author_id": "874523901000000016",
+        "author_name": "HV16",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-02T16:44:04+07:00",
+        "content": "hôm qua e về sớm quên ko check-out, v có bị tính là vắng buổi đó ko ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1522294551740547073",
+          "author_id": "874523901000000013",
+          "author_name": "HV13",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-02T17:35:04+07:00",
+          "content": "chắc là có đó bạn, mình cũng đang lo vụ này",
+          "reply_to_message_id": "1522281717170307072",
+          "reaction_count": 0,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1522368790921347074",
+          "author_id": "874523902000000002",
+          "author_name": "Hạnh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-02T22:30:04+07:00",
+          "content": "Thiếu check-out sẽ bị ghi nhận là không hoàn thành buổi đó nhé. Trường hợp có lý do chính đáng thì em tạo ticket ghi rõ ngày và lý do, bên mình sẽ rà lại thủ công.",
+          "reply_to_message_id": null,
+          "reaction_count": 6,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1522368790921347074",
+        "author_id": "874523902000000002",
+        "author_name": "Hạnh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1522368790921347074"
+      },
+      "first_response_minutes": 51,
+      "verified_response_minutes": 346
+    },
+    {
+      "thread_id": "1522304068616323072",
+      "title": "Nhóm còn 3 người có bị trừ điểm không",
+      "topic_id": "roi_nhom",
+      "tag": "Team",
+      "created_at": "2026-07-02T18:12:53+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1522304068616323072",
+      "question": {
+        "message_id": "1522304068616323072",
+        "author_id": "874523901000000013",
+        "author_name": "HV13",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-02T18:12:53+07:00",
+        "content": "nhóm e có 1 bạn nghỉ học luôn rồi ạ, giờ còn 3 người thôi. v khi chấm có bị so sánh với các nhóm 4 5 người ko ạ, tụi e sợ thiệt",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1522320929718403073",
+          "author_id": "874523901000000014",
+          "author_name": "HV14",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-02T19:19:53+07:00",
+          "content": "chắc là ko đâu bạn, mentor cũng biết mà",
+          "reply_to_message_id": "1522304068616323072",
+          "reaction_count": 1,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1522328731123843074",
+          "author_id": "874523901000000022",
+          "author_name": "HV22",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-02T19:50:53+07:00",
+          "content": "up ạ",
+          "reply_to_message_id": null,
+          "reaction_count": 0,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1522544402235523075",
+          "author_id": "874523902000000002",
+          "author_name": "Hạnh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-03T10:07:53+07:00",
+          "content": "Bên mình có ghi nhận số thành viên thực tế của từng nhóm khi chấm nên các em yên tâm. Nhưng vẫn phải tạo ticket báo để bên mình cập nhật lại, không tự động biết được đâu.",
+          "reply_to_message_id": "1522304068616323072",
+          "reaction_count": 7,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 3,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1522544402235523075",
+        "author_id": "874523902000000002",
+        "author_name": "Hạnh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1522544402235523075"
+      },
+      "first_response_minutes": 67,
+      "verified_response_minutes": 955
+    },
+    {
+      "thread_id": "1522903518544003072",
+      "title": "Download slide VLearn chỉ tải được 1 slide",
+      "topic_id": "vlearn_slide",
+      "tag": "Tài nguyên",
+      "created_at": "2026-07-04T09:54:53+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1522903518544003072",
+      "question": {
+        "message_id": "1522903518544003072",
+        "author_id": "874523901000000012",
+        "author_name": "HV12",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-04T09:54:53+07:00",
+        "content": "cái chức năng download slide của vlearn hiện tại chỉ tải được 1 slide, cái này là lỗi hay tính năng ạ?",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1523123216187523073",
+          "author_id": "874523902000000002",
+          "author_name": "Hạnh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-05T00:27:53+07:00",
+          "content": "Tính năng nhé, slide là tài nguyên của trường nên VLearn hạn chế cho mọi người tải toàn bộ về.",
+          "reply_to_message_id": "1522903518544003072",
+          "reaction_count": 9,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1523123216187523073",
+        "author_id": "874523902000000002",
+        "author_name": "Hạnh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1523123216187523073"
+      },
+      "first_response_minutes": 873,
+      "verified_response_minutes": 873
+    },
+    {
+      "thread_id": "1523328296681603072",
+      "title": "Chọn track giai đoạn 2 khi nào",
+      "topic_id": "giai_doan_2",
+      "tag": "Lịch trình",
+      "created_at": "2026-07-05T14:02:48+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1523328296681603072",
+      "question": {
+        "message_id": "1523328296681603072",
+        "author_id": "874523901000000007",
+        "author_name": "HV07",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-05T14:02:48+07:00",
+        "content": "khi nào thì tụi e dc chọn track cho giai đoạn 2 ạ, e muốn chuẩn bị trước",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1523348429340803073",
+          "author_id": "874523901000000002",
+          "author_name": "HV02",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-05T15:22:48+07:00",
+          "content": "chưa có thông báo bạn ơi, chờ btc",
+          "reply_to_message_id": "1523328296681603072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 80,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1523394776400003072",
+      "title": "Chia sẻ link lấy dataset",
+      "topic_id": "dataset",
+      "tag": "Tài nguyên",
+      "created_at": "2026-07-05T18:26:58+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1523394776400003072",
+      "question": {
+        "message_id": "1523394776400003072",
+        "author_id": "874523901000000023",
+        "author_name": "HV23",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-05T18:26:58+07:00",
+        "content": "Mọi người tung các link lấy dataset mà mọi người biết lên đây để anh chị em cùng tham khảo đi?",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1523400564539523073",
+          "author_id": "874523901000000026",
+          "author_name": "HV26",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-05T18:49:58+07:00",
+          "content": "Cứ Kaggle và HuggingFace mà bem thôi bạn. Nếu cả 2 cái này không có thì bạn cứ chat cho AI research. Ưu tiên grok, perplexity vì mình dùng và thấy nó update realtime nhanh hơn các con khác",
+          "reply_to_message_id": "1523394776400003072",
+          "reaction_count": 8,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 23,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1523462501826691072",
+      "title": "Có ai làm về computer vision không ạ",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-07-05T22:56:05+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1523462501826691072",
+      "question": {
+        "message_id": "1523462501826691072",
+        "author_id": "874523901000000012",
+        "author_name": "HV12",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-05T22:56:05+07:00",
+        "content": "có nhóm nào làm mảng cv ko ạ, e muốn trao đổi tí",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [],
+      "reply_count": 0,
+      "resolved": false,
+      "resolved_by": "none",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": null,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1523466717102211072",
+      "title": "Không đổi được leader trên Phoenix",
+      "topic_id": "doi_ten_nhom",
+      "tag": "Team",
+      "created_at": "2026-07-05T23:12:50+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1523466717102211072",
+      "question": {
+        "message_id": "1523466717102211072",
+        "author_id": "874523901000000023",
+        "author_name": "HV23",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-05T23:12:50+07:00",
+        "content": "e vào Đội của tôi mà ko thấy chỗ đổi leader ạ, chỉ có leader mới đổi dc hả mn",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1523477538406531073",
+          "author_id": "874523901000000009",
+          "author_name": "HV09",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-05T23:55:50+07:00",
+          "content": "đúng r bạn, phải leader hiện tại bấm chuyển",
+          "reply_to_message_id": "1523466717102211072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 43,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1523619544957059072",
+      "title": "XP không tăng dù có hoạt động",
+      "topic_id": "xp_diem",
+      "tag": "Điểm số",
+      "created_at": "2026-07-06T09:20:07+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1523619544957059072",
+      "question": {
+        "message_id": "1523619544957059072",
+        "author_id": "874523901000000024",
+        "author_name": "HV24",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-06T09:20:07+07:00",
+        "content": "e chat trong server suốt mà XP ko nhúc nhích, bị lỗi ko ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1523625836413059073",
+          "author_id": "874523901000000022",
+          "author_name": "HV22",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-06T09:45:07+07:00",
+          "content": "chat linh tinh ko tính đâu bạn, phải là mấy kênh liên quan build",
+          "reply_to_message_id": "1523619544957059072",
+          "reaction_count": 5,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 25,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1523985237934211072",
+      "title": "Điền form check-in xong không thấy phản hồi gì",
+      "topic_id": "diem_danh",
+      "tag": "Vận hành",
+      "created_at": "2026-07-07T09:33:15+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1523985237934211072",
+      "question": {
+        "message_id": "1523985237934211072",
+        "author_id": "874523901000000025",
+        "author_name": "HV25",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-07T09:33:15+07:00",
+        "content": "cho e hỏi là e điền form check-in xong nó ko hiện gì hết, ko có mail hay thông báo j cả, v là e đã điểm danh dc chưa a",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1523995304263811073",
+          "author_id": "874523901000000012",
+          "author_name": "HV12",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-07T10:13:15+07:00",
+          "content": "form nó ko gửi confirm đâu bạn, bạn chụp lại màn hình lúc submit thành công là dc",
+          "reply_to_message_id": "1523985237934211072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1524002350694531074",
+          "author_id": "874523901000000008",
+          "author_name": "HV08",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-07T10:41:15+07:00",
+          "content": "e cũng bị v",
+          "reply_to_message_id": "1523985237934211072",
+          "reaction_count": 0,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 40,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1524105065005187072",
+      "title": "Thành viên rời đi có ảnh hưởng build phase không?",
+      "topic_id": "roi_nhom",
+      "tag": "Team",
+      "created_at": "2026-07-07T17:29:24+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1524105065005187072",
+      "question": {
+        "message_id": "1524105065005187072",
+        "author_id": "874523901000000027",
+        "author_name": "HV27",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-07T17:29:24+07:00",
+        "content": "Thành viên trong nhóm rời đi có ảnh hưởng đến build phase không ạ?",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1524116389625987073",
+          "author_id": "874523901000000008",
+          "author_name": "HV08",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-07T18:14:24+07:00",
+          "content": "Bạn tạo ticket hoặc tag mấy a/c lab coach zô nhé",
+          "reply_to_message_id": "1524105065005187072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1524342378725507074",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-08T09:12:24+07:00",
+          "content": "Có ảnh hưởng nhé, vì scope dự án đã chốt theo số người. Nhóm nào bị giảm người thì tạo ticket sớm, bên mình sẽ xem lại scope hoặc bổ sung thành viên tùy trường hợp.",
+          "reply_to_message_id": null,
+          "reaction_count": 9,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1524342378725507074",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1524342378725507074"
+      },
+      "first_response_minutes": 45,
+      "verified_response_minutes": 943
+    },
+    {
+      "thread_id": "1524113243897987072",
+      "title": "Nhóm nên theo quy trình branch nào",
+      "topic_id": "git_workflow",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-07-07T18:01:54+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1524113243897987072",
+      "question": {
+        "message_id": "1524113243897987072",
+        "author_id": "874523901000000020",
+        "author_name": "HV20",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-07T18:01:54+07:00",
+        "content": "nhóm em nên dùng git flow hay là mỗi người 1 branch rồi merge vào main ạ, tụi em 4 người",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1524123561885827073",
+          "author_id": "874523901000000001",
+          "author_name": "HV01",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-07T18:42:54+07:00",
+          "content": "4 người thì đừng git flow làm gì cho mệt, feature branch + PR là đủ",
+          "reply_to_message_id": "1524113243897987072",
+          "reaction_count": 6,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 41,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1524446879809667072",
+      "title": "Mẫu BRD và PRD cho sản phẩm AI",
+      "topic_id": "brd_prd",
+      "tag": "Dự án",
+      "created_at": "2026-07-08T16:07:39+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1524446879809667072",
+      "question": {
+        "message_id": "1524446879809667072",
+        "author_id": "874523901000000027",
+        "author_name": "HV27",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-08T16:07:39+07:00",
+        "content": "mọi người có mẫu BRD và PRD nào mà mọi người thấy hiệu quả khi phát triển sản phẩm AI không ạ? Mọi người có thể chia sẻ không?",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1524458707746947073",
+          "author_id": "874523901000000021",
+          "author_name": "HV21",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-08T16:54:39+07:00",
+          "content": "Với một nhóm 4 người làm dự án AI, tiêu chí quan trọng nhất khi chọn công cụ viết BRD và PRD là nhẹ, nhanh, hợp tác real-time tốt và không tốn thời gian thiết lập. Lựa chọn tối ưu nhất là Notion, đáp ứng tốt cả BRD lẫn PRD nhờ khả năng tùy biến linh hoạt, có thể tạo database quản lý tính năng và link trực tiếp tài liệu với task của từng thành viên. Nếu nhóm quản lý công việc bằng Jira thì Confluence là phương án chuẩn chỉnh. Trường hợp PRD cần chứa các bảng tham số mô hình AI, đo lường Accuracy, Latency, API Cost dạng tương tác thì Coda phù hợp hơn. Ở giai đoạn đầu nên kết hợp thêm Miro hoặc FigJam để phác thảo luồng người dùng trước khi viết thành văn bản. Nên tách rõ BRD tập trung vào bài toán kinh doanh còn PRD tập trung vào kỹ thuật, và phân công một bạn phụ trách chính việc tổng hợp tài liệu.",
+          "reply_to_message_id": "1524446879809667072",
+          "reaction_count": 9,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 47,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1524904692285571072",
+      "title": "Máy yếu có chạy nổi model không",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-07-09T22:26:50+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1524904692285571072",
+      "question": {
+        "message_id": "1524904692285571072",
+        "author_id": "874523901000000029",
+        "author_name": "HV29",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-09T22:26:50+07:00",
+        "content": "laptop e chỉ có 8gb ram thôi ạ, có chạy nổi phần lab tuần này ko",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1524915765248131073",
+          "author_id": "874523901000000028",
+          "author_name": "HV28",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-09T23:10:50+07:00",
+          "content": "dùng colab đi bạn cho lành",
+          "reply_to_message_id": "1524904692285571072",
+          "reaction_count": 6,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1524918533488771074",
+          "author_id": "874523901000000003",
+          "author_name": "HV03",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-09T23:21:50+07:00",
+          "content": "8gb chạy được mà, đừng load model to thôi",
+          "reply_to_message_id": "1524904692285571072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 44,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1524917564604547072",
+      "title": "Giai đoạn 2 học mấy giờ ạ",
+      "topic_id": "giai_doan_2",
+      "tag": "Lịch trình",
+      "created_at": "2026-07-09T23:17:59+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1524917564604547072",
+      "question": {
+        "message_id": "1524917564604547072",
+        "author_id": "874523901000000013",
+        "author_name": "HV13",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-09T23:17:59+07:00",
+        "content": "cho e hỏi lịch học phase 2 là mấy giờ tới mấy giờ ạ, e cần sắp lịch làm thêm",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1524920836161667073",
+          "author_id": "874523901000000010",
+          "author_name": "HV10",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-09T23:30:59+07:00",
+          "content": "9h-13h bạn nhé, chiều tự do",
+          "reply_to_message_id": "1524917564604547072",
+          "reaction_count": 5,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 13,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1525051866218627072",
+      "title": "Xin nguồn học AI cho người từ web chuyển sang",
+      "topic_id": "nguon_hoc_ai",
+      "tag": "Tài nguyên",
+      "created_at": "2026-07-10T08:11:39+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1525051866218627072",
+      "question": {
+        "message_id": "1525051866218627072",
+        "author_id": "874523901000000027",
+        "author_name": "HV27",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-10T08:11:39+07:00",
+        "content": "mình xin một số nguồn học về AI với ạ, trước mình học về web nên chưa có kiến thức về mảng này",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1525163602477187073",
+          "author_id": "874523902000000002",
+          "author_name": "Hạnh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-10T15:35:39+07:00",
+          "content": "Bạn có thể tham khảo các khóa học trên DeepLearning.AI nhé, link được gửi trong tài liệu ở Phoenix.",
+          "reply_to_message_id": "1525051866218627072",
+          "reaction_count": 7,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1525163602477187073",
+        "author_id": "874523902000000002",
+        "author_name": "Hạnh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1525163602477187073"
+      },
+      "first_response_minutes": 444,
+      "verified_response_minutes": 444
+    },
+    {
+      "thread_id": "1525256682471555072",
+      "title": "Số buổi được phép nghỉ là bao nhiêu ạ?",
+      "topic_id": "nghi_hoc",
+      "tag": "Vận hành",
+      "created_at": "2026-07-10T21:45:31+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1525256682471555072",
+      "question": {
+        "message_id": "1525256682471555072",
+        "author_id": "874523901000000018",
+        "author_name": "HV18",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-10T21:45:31+07:00",
+        "content": "cho em hỏi cả khóa mình được nghỉ tối đa mấy buổi ạ, em có việc gia đình nên chắc phải nghỉ 2 buổi",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1525278576738435073",
+          "author_id": "874523901000000015",
+          "author_name": "HV15",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-10T23:12:31+07:00",
+          "content": "mình nhớ trong slide onboarding có ghi mà quên rồi",
+          "reply_to_message_id": "1525256682471555072",
+          "reaction_count": 0,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1525305000853635074",
+          "author_id": "874523902000000002",
+          "author_name": "Hạnh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-11T00:57:31+07:00",
+          "content": "Quy định hiện tại là không vắng quá 20% tổng số buổi nhé em. Nghỉ có phép hay không phép đều tính vào con số này, nên em cân nhắc kỹ trước khi nghỉ.",
+          "reply_to_message_id": "1525256682471555072",
+          "reaction_count": 7,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1525305000853635074",
+        "author_id": "874523902000000002",
+        "author_name": "Hạnh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1525305000853635074"
+      },
+      "first_response_minutes": 87,
+      "verified_response_minutes": 192
+    },
+    {
+      "thread_id": "1525590758785155072",
+      "title": "Có được cấp API key không ạ",
+      "topic_id": "api_key",
+      "tag": "Tài nguyên",
+      "created_at": "2026-07-11T19:53:01+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1525590758785155072",
+      "question": {
+        "message_id": "1525590758785155072",
+        "author_id": "874523901000000015",
+        "author_name": "HV15",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-11T19:53:01+07:00",
+        "content": "cho e hỏi khoá có cấp api key cho các nhóm ko ạ hay tụi e tự mua",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1525603593355395073",
+          "author_id": "874523901000000024",
+          "author_name": "HV24",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-11T20:44:01+07:00",
+          "content": "mình nghĩ tự lo á bạn",
+          "reply_to_message_id": "1525590758785155072",
+          "reaction_count": 1,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1525811966378115074",
+          "author_id": "874523902000000001",
+          "author_name": "Duy | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-12T10:32:01+07:00",
+          "content": "Bên mình có credit hỗ trợ cho từng nhóm ở giai đoạn build nhé, thông tin sẽ gửi qua leader của mỗi nhóm. Trước mắt các em cứ dùng bản free để làm thử nghiệm.",
+          "reply_to_message_id": "1525590758785155072",
+          "reaction_count": 12,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1525811966378115074",
+        "author_id": "874523902000000001",
+        "author_name": "Duy | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1525811966378115074"
+      },
+      "first_response_minutes": 51,
+      "verified_response_minutes": 879
+    },
+    {
+      "thread_id": "1525820426289283072",
+      "title": "Sửa code trong folder /script có ảnh hưởng chấm điểm không?",
+      "topic_id": "ai_log_setup",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-07-12T11:05:38+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1525820426289283072",
+      "question": {
+        "message_id": "1525820426289283072",
+        "author_id": "874523901000000030",
+        "author_name": "HV30",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-12T11:05:38+07:00",
+        "content": "Em đã làm theo các hướng dẫn trong file Build Phase Onboarding và readme đính kèm trong github repo để setup AI-log, nhưng lại gặp khá nhiều lỗi và không adapt được với IDE hay agent em đang xài (VSCode + Codex). Do đó em phải sửa code bên trong folder /script khá nhiều, hiện tại thì đã nhận được log trên phoenix. Anh chị cho em hỏi là việc sửa code bên trong folder /script thì có ảnh hưởng gì đến điểm số hay quá trình chấm điểm sau này không ạ. Em cảm ơn anh chị nhiều.",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1525838797340803073",
+          "author_id": "874523901000000011",
+          "author_name": "HV11",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-12T12:18:38+07:00",
+          "content": "ko sao đâu miễn là log trên dashboard cập nhật là được rồi, phần lớn sửa code do môi trường và hệ điều hành thoi",
+          "reply_to_message_id": "1525820426289283072",
+          "reaction_count": 4,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1525868241354883074",
+          "author_id": "874523902000000001",
+          "author_name": "Duy | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-12T14:15:38+07:00",
+          "content": "Các em hoàn toàn có quyền thay đổi source code nhé, chỉ cần đảm bảo thông tin về các log gửi lên server là minh bạch và rõ ràng, không có sự thao túng là được nè.",
+          "reply_to_message_id": "1525820426289283072",
+          "reaction_count": 11,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1525868241354883074",
+        "author_id": "874523902000000001",
+        "author_name": "Duy | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1525868241354883074"
+      },
+      "first_response_minutes": 73,
+      "verified_response_minutes": 190
+    },
+    {
+      "thread_id": "1525894459949187072",
+      "title": "Điểm cộng trên lớp có quy đổi sang XP không?",
+      "topic_id": "xp_diem",
+      "tag": "Điểm số",
+      "created_at": "2026-07-12T15:59:49+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1525894459949187072",
+      "question": {
+        "message_id": "1525894459949187072",
+        "author_id": "874523901000000015",
+        "author_name": "HV15",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-12T15:59:49+07:00",
+        "content": "Mọi người cho em hỏi là phần điểm cộng trên lớp Lab/Lý thuyết có quy đổi sang XP trong server discord không ạ, hay chỉ được ghi nhận là điểm tích cực hoạt động trong giờ thôi ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1525907294519427073",
+          "author_id": "874523901000000021",
+          "author_name": "HV21",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-12T16:50:49+07:00",
+          "content": "không bạn ơi, điểm cộng bài lab và điểm cộng trên lớp không liên quan gì đến xp cả, xp được tính ở trên discord thui nhé",
+          "reply_to_message_id": "1525894459949187072",
+          "reaction_count": 4,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1525917612507267074",
+          "author_id": "874523901000000026",
+          "author_name": "HV26",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-12T17:31:49+07:00",
+          "content": "mình có hỏi anh chị lab coach thì là không cộng vào XP trong dis nha",
+          "reply_to_message_id": "1525894459949187072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1526018024145027075",
+          "author_id": "874523902000000001",
+          "author_name": "Duy | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-13T00:10:49+07:00",
+          "content": "Không nha, XP là dùng cho hoạt động build để đánh giá tính active của mỗi bạn khi tham gia dự án, còn điểm cộng buổi sáng sẽ được tính cho mỗi ngày học nhé. Nhưng điểm nào ghi nhận lại thì đều ảnh hưởng đến kq đầu ra hết á nghenn",
+          "reply_to_message_id": null,
+          "reaction_count": 12,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 3,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1526018024145027075",
+        "author_id": "874523902000000001",
+        "author_name": "Duy | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1526018024145027075"
+      },
+      "first_response_minutes": 51,
+      "verified_response_minutes": 491
+    },
+    {
+      "thread_id": "1526342734577795072",
+      "title": "Đổi tên nhóm và role Leader được không ạ?",
+      "topic_id": "doi_ten_nhom",
+      "tag": "Team",
+      "created_at": "2026-07-13T21:41:06+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1526342734577795072",
+      "question": {
+        "message_id": "1526342734577795072",
+        "author_id": "874523901000000013",
+        "author_name": "HV13",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-13T21:41:06+07:00",
+        "content": "Dạ BTC cho em hỏi là mình có thể đổi tên nhóm và role Leader được không ạ?",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1526471583596675073",
+          "author_id": "874523902000000002",
+          "author_name": "Hạnh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-14T06:13:06+07:00",
+          "content": "Mình check lại sáng nay thì bạn vào Phoenix rồi chọn Đội của tôi á, là phần dưới cùng nó có hết nha.",
+          "reply_to_message_id": "1526342734577795072",
+          "reaction_count": 5,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1526471583596675073",
+        "author_id": "874523902000000002",
+        "author_name": "Hạnh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1526471583596675073"
+      },
+      "first_response_minutes": 512,
+      "verified_response_minutes": 512
+    },
+    {
+      "thread_id": "1526705227300995072",
+      "title": "Muốn tải hết slide về đọc offline",
+      "topic_id": "vlearn_slide",
+      "tag": "Tài nguyên",
+      "created_at": "2026-07-14T21:41:31+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1526705227300995072",
+      "question": {
+        "message_id": "1526705227300995072",
+        "author_id": "874523901000000010",
+        "author_name": "HV10",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-14T21:41:31+07:00",
+        "content": "e muốn tải hết slide của cả khoá về đọc lúc ko có mạng thì làm sao ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1526723850010755073",
+          "author_id": "874523901000000004",
+          "author_name": "HV04",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-14T22:55:31+07:00",
+          "content": "ko tải hàng loạt dc đâu bạn, phải từng cái một",
+          "reply_to_message_id": "1526705227300995072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 74,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1527025282056323072",
+      "title": "Lịch Mentor Duty tuần này",
+      "topic_id": "mentor_duty",
+      "tag": "Lịch trình",
+      "created_at": "2026-07-15T18:53:18+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1527025282056323072",
+      "question": {
+        "message_id": "1527025282056323072",
+        "author_id": "874523901000000008",
+        "author_name": "HV08",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-15T18:53:18+07:00",
+        "content": "cho e hỏi lịch mentor duty tuần này vào thứ mấy ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1527029560246403073",
+          "author_id": "874523901000000023",
+          "author_name": "HV23",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-15T19:10:18+07:00",
+          "content": "thứ 4 với thứ 6 chiều á bạn",
+          "reply_to_message_id": "1527025282056323072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 17,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1527035558101123072",
+      "title": "Chỗ gửi xe ở đâu ạ",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-07-15T19:34:08+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1527035558101123072",
+      "question": {
+        "message_id": "1527035558101123072",
+        "author_id": "874523901000000015",
+        "author_name": "HV15",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-15T19:34:08+07:00",
+        "content": "e đi xe máy thì gửi ở đâu ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [],
+      "reply_count": 0,
+      "resolved": false,
+      "resolved_by": "none",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": null,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1527058425446531072",
+      "title": "Lỗi font tiếng Việt khi export PDF",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-07-15T21:05:00+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1527058425446531072",
+      "question": {
+        "message_id": "1527058425446531072",
+        "author_id": "874523901000000014",
+        "author_name": "HV14",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-15T21:05:00+07:00",
+        "content": "e export báo cáo ra pdf thì tiếng việt bị vỡ hết font ạ, ai fix dc chưa",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1527062451978371073",
+          "author_id": "874523901000000002",
+          "author_name": "HV02",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-15T21:21:00+07:00",
+          "content": "bạn nhúng font vào lúc export, đừng dùng font mặc định",
+          "reply_to_message_id": "1527058425446531072",
+          "reaction_count": 4,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 16,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1527066021331075072",
+      "title": "Dataset tiếng Việt cho NLP",
+      "topic_id": "dataset",
+      "tag": "Tài nguyên",
+      "created_at": "2026-07-15T21:35:11+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1527066021331075072",
+      "question": {
+        "message_id": "1527066021331075072",
+        "author_id": "874523901000000028",
+        "author_name": "HV28",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-15T21:35:11+07:00",
+        "content": "nhóm e làm bài toán tiếng Việt mà kiếm data khó quá, mn có nguồn nào ko ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1527082379116675073",
+          "author_id": "874523901000000012",
+          "author_name": "HV12",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-15T22:40:11+07:00",
+          "content": "bạn search VLSP với binhvq news corpus thử xem",
+          "reply_to_message_id": "1527066021331075072",
+          "reaction_count": 6,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1527091942129795074",
+          "author_id": "874523901000000002",
+          "author_name": "HV02",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-15T23:18:11+07:00",
+          "content": "huggingface có vài bộ tiếng việt đó bạn",
+          "reply_to_message_id": "1527066021331075072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 65,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1527108878729347072",
+      "title": "Không phải dân IT thì bắt đầu từ đâu",
+      "topic_id": "nguon_hoc_ai",
+      "tag": "Tài nguyên",
+      "created_at": "2026-07-16T00:25:29+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1527108878729347072",
+      "question": {
+        "message_id": "1527108878729347072",
+        "author_id": "874523901000000002",
+        "author_name": "HV02",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-16T00:25:29+07:00",
+        "content": "e học kinh tế, vào khoá này thấy hơi đuối, mn cho e xin lộ trình bắt đầu với ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1527110388678787073",
+          "author_id": "874523901000000026",
+          "author_name": "HV26",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-16T00:31:29+07:00",
+          "content": "bạn cứ bám sát bài lab trước đã, đừng học lan man",
+          "reply_to_message_id": "1527108878729347072",
+          "reaction_count": 5,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1527129011388547074",
+          "author_id": "874523901000000023",
+          "author_name": "HV23",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-16T01:45:29+07:00",
+          "content": "technical book trên phoenix khá ổn đó bạn, đào sâu xem",
+          "reply_to_message_id": "1527108878729347072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 6,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1527387518926979072",
+      "title": "Áo bị sai size thì đổi thế nào",
+      "topic_id": "ao_khoa",
+      "tag": "Vận hành",
+      "created_at": "2026-07-16T18:52:42+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1527387518926979072",
+      "question": {
+        "message_id": "1527387518926979072",
+        "author_id": "874523901000000023",
+        "author_name": "HV23",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-16T18:52:42+07:00",
+        "content": "e đăng ký size L mà nhận dc size M, giờ đổi ở đâu ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1527402115104899073",
+          "author_id": "874523901000000003",
+          "author_name": "HV03",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-16T19:50:42+07:00",
+          "content": "mình cũng bị, đang chờ btc thông báo",
+          "reply_to_message_id": "1527387518926979072",
+          "reaction_count": 1,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 58,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1527407508979843072",
+      "title": "Đề bài có bắt buộc tech stack không",
+      "topic_id": "requirement_project",
+      "tag": "Dự án",
+      "created_at": "2026-07-16T20:12:08+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1527407508979843072",
+      "question": {
+        "message_id": "1527407508979843072",
+        "author_id": "874523901000000023",
+        "author_name": "HV23",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-16T20:12:08+07:00",
+        "content": "đề bài có quy định phải dùng framework nào ko ạ hay nhóm tự chọn",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1527421350183043073",
+          "author_id": "874523901000000019",
+          "author_name": "HV19",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-16T21:07:08+07:00",
+          "content": "tự chọn hết bạn ơi, miễn là bảo vệ được lựa chọn của mình",
+          "reply_to_message_id": "1527407508979843072",
+          "reaction_count": 4,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 55,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1528065612054659072",
+      "title": "Cài xong vẫn báo ModuleNotFoundError",
+      "topic_id": "deps_error",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-07-18T15:47:12+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1528065612054659072",
+      "question": {
+        "message_id": "1528065612054659072",
+        "author_id": "874523901000000007",
+        "author_name": "HV07",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-18T15:47:12+07:00",
+        "content": "e chạy pip install -r requirements.txt xong hết rồi mà import vẫn báo ModuleNotFoundError ạ",
+        "has_code_block": true,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1528071148535939073",
+          "author_id": "874523901000000020",
+          "author_name": "HV20",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-18T16:09:12+07:00",
+          "content": "bạn check xem có đang ở đúng venv ko, mình hay bị vụ này",
+          "reply_to_message_id": "1528065612054659072",
+          "reaction_count": 6,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1528074671751299074",
+          "author_id": "874523901000000003",
+          "author_name": "HV03",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-18T16:23:12+07:00",
+          "content": "which python xem nó trỏ đâu bạn",
+          "reply_to_message_id": "1528065612054659072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 22,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1528144112648323072",
+      "title": "Agent đọc repo bị cháy context",
+      "topic_id": "lam_viec_nhom",
+      "tag": "Dự án",
+      "created_at": "2026-07-18T20:59:08+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1528144112648323072",
+      "question": {
+        "message_id": "1528144112648323072",
+        "author_id": "874523901000000017",
+        "author_name": "HV17",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-18T20:59:08+07:00",
+        "content": "repo nhóm e giờ to rồi, mỗi lần bảo agent làm gì nó đọc lâu kinh khủng rồi quên đầu quên đuôi, mn xử lý sao ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1528154430636163073",
+          "author_id": "874523901000000021",
+          "author_name": "HV21",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-18T21:40:08+07:00",
+          "content": "viết file context ở root rồi chỉ cho nó đọc file đó thôi bạn",
+          "reply_to_message_id": "1528144112648323072",
+          "reaction_count": 7,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1528176324903043074",
+          "author_id": "874523901000000030",
+          "author_name": "HV30",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-18T23:07:08+07:00",
+          "content": "mình chia mỗi module 1 readme riêng",
+          "reply_to_message_id": "1528144112648323072",
+          "reaction_count": 4,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 41,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1528483503145091072",
+      "title": "Push branch bị permission denied",
+      "topic_id": "git_workflow",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-07-19T19:27:45+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1528483503145091072",
+      "question": {
+        "message_id": "1528483503145091072",
+        "author_id": "874523901000000004",
+        "author_name": "HV04",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-19T19:27:45+07:00",
+        "content": "e clone repo nhóm về rồi mà push lên thì báo permission denied ạ, e đã dc add vào team trên github rồi",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1528484258119811073",
+          "author_id": "874523901000000018",
+          "author_name": "HV18",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-19T19:30:45+07:00",
+          "content": "bạn check lại là clone bằng https hay ssh, https thì phải dùng token chứ ko phải password nhé",
+          "reply_to_message_id": "1528483503145091072",
+          "reaction_count": 8,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1528487278018691074",
+          "author_id": "874523901000000013",
+          "author_name": "HV13",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-19T19:42:45+07:00",
+          "content": "mình cũng vậy, dùng gh auth login là xong",
+          "reply_to_message_id": "1528483503145091072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 3,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1528899410329731072",
+      "title": "Chưa rõ requirement project thì hỏi ai ạ",
+      "topic_id": "requirement_project",
+      "tag": "Dự án",
+      "created_at": "2026-07-20T23:00:25+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1528899410329731072",
+      "question": {
+        "message_id": "1528899410329731072",
+        "author_id": "874523901000000018",
+        "author_name": "HV18",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-20T23:00:25+07:00",
+        "content": "Thắc mắc về requirement của project. Nhóm em còn 1 số vấn đề chưa rõ về yêu cầu của project thì tụi em có thể hỏi ai để có thể xin lời giải thích rõ ràng hơn ạ? Tụi em có thể xin contact stakeholder để hỏi giải thích kĩ hơn về requirement không ạ?",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1528912244899971073",
+          "author_id": "874523901000000012",
+          "author_name": "HV12",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-20T23:51:25+07:00",
+          "content": "Requirements, deps mình nghĩ do team tự quyết định thôi. Mình nghĩ mentor sẽ không yêu cầu bắt buộc sẽ dùng deps nào đâu. Tự quyết định sẽ giúp team linh hoạt hơn trong quá trình build",
+          "reply_to_message_id": "1528899410329731072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1528975662776451074",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-21T04:03:25+07:00",
+          "content": "Hãy hỏi trực tiếp mentor trong các buổi Mentor Duty nhé. Còn contact riêng stakeholder thì bên mình không mở, mọi câu hỏi về đề bài đi qua Mentor Duty hoặc ticket.",
+          "reply_to_message_id": "1528899410329731072",
+          "reaction_count": 9,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1528975662776451074",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1528975662776451074"
+      },
+      "first_response_minutes": 51,
+      "verified_response_minutes": 303
+    },
+    {
+      "thread_id": "1529178335740035072",
+      "title": "Nhóm em muốn phỏng vấn người dùng thì tìm ở đâu",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-07-21T17:28:46+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1529178335740035072",
+      "question": {
+        "message_id": "1529178335740035072",
+        "author_id": "874523901000000023",
+        "author_name": "HV23",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-21T17:28:46+07:00",
+        "content": "tụi e cần phỏng vấn khoảng 10 người dùng thật cho đề tài, mà ko biết kiếm ở đâu ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1529218852716675073",
+          "author_id": "874523902000000004",
+          "author_name": "Sơn | Mentor",
+          "author_role": "Mentor",
+          "author_role_id": "1198734600000000003",
+          "is_verified_source": true,
+          "timestamp": "2026-07-21T20:09:46+07:00",
+          "content": "Người dùng của các em nhiều khả năng đang ngồi ngay trong lớp. Trước khi đi tìm bên ngoài thì thử khảo sát chính các bạn cùng khoá, giờ nghỉ hỏi được 20 người là chuyện làm được trong một buổi.",
+          "reply_to_message_id": "1529178335740035072",
+          "reaction_count": 12,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1529218852716675073",
+        "author_id": "874523902000000004",
+        "author_name": "Sơn | Mentor",
+        "author_role": "Mentor",
+        "trust_tag_raw": "(TRUST - MENTOR)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1529218852716675073"
+      },
+      "first_response_minutes": 161,
+      "verified_response_minutes": 161
+    },
+    {
+      "thread_id": "1529239497080963072",
+      "title": "Giai đoạn 2 chia lớp và địa điểm build",
+      "topic_id": "giai_doan_2",
+      "tag": "Lịch trình",
+      "created_at": "2026-07-21T21:31:48+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1529239497080963072",
+      "question": {
+        "message_id": "1529239497080963072",
+        "author_id": "874523901000000010",
+        "author_name": "HV10",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-21T21:31:48+07:00",
+        "content": "Dạ thưa các thầy cô, các anh chị LabCoach, em có một số câu hỏi như sau. Giai đoạn 2 khi chọn 3 định hướng sẽ chia lớp 2 khoá như nào ạ, khác khoá có thể chung lớp khi chung định hướng không ạ? Các buổi chiều giai đoạn 2 chúng em sẽ có thêm thời gian build dự án thì địa điểm vẫn là trường hay được về ạ? Nếu ở trường thì các team có được ngồi với nhau không hay chia lớp ạ? Em cảm ơn các thầy cô và anh chị đã đọc.",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1529408611418243073",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-22T08:43:48+07:00",
+          "content": "Câu hỏi 1: khi gần đến phase 2 BTC sẽ thông báo cho mọi người để chọn track cũng như là học ở phòng nào nhé. Câu hỏi 2: ở giai đoạn 2 thời gian học là 9h đến 13h và sau đó mọi người có quyền tự quyết, mình thấy các bạn khóa 1 và khóa 2 hay ở lại thư viện làm build khá nhiều hoặc mọi người vẫn có thể ngồi tại lớp để làm nhé.",
+          "reply_to_message_id": "1529239497080963072",
+          "reaction_count": 14,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1529408611418243073",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1529408611418243073"
+      },
+      "first_response_minutes": 672,
+      "verified_response_minutes": 672
+    },
+    {
+      "thread_id": "1529643349835907072",
+      "title": "Cách kiểm tra mình đã điểm danh thành công chưa?",
+      "topic_id": "diem_danh",
+      "tag": "Vận hành",
+      "created_at": "2026-07-23T00:16:34+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1529643349835907072",
+      "question": {
+        "message_id": "1529643349835907072",
+        "author_id": "874523901000000006",
+        "author_name": "HV06",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-23T00:16:34+07:00",
+        "content": "Hiện tại việc check-in/check-out được thực hiện qua Microsoft Forms, nhưng sau khi gửi em chưa có cách kiểm tra mình đã điểm danh thành công hay chưa. Vì số buổi nghỉ cho phép khá ít, em hơi lo có thể xảy ra sai sót ngoài ý muốn. Không biết BTC có thể bổ sung cách để học viên tra cứu trạng thái điểm danh của mình được không ạ?",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1529645111443587073",
+          "author_id": "874523901000000025",
+          "author_name": "HV25",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-23T00:23:34+07:00",
+          "content": "Chưa có á bạn, mà hình như BTC cũng k công bố",
+          "reply_to_message_id": "1529643349835907072",
+          "reaction_count": 0,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1529663985811587074",
+          "author_id": "874523901000000014",
+          "author_name": "HV14",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-23T01:38:34+07:00",
+          "content": "Mỗi khi bạn điểm danh xong, bạn lưu lại form qua mail trường, sau lỡ có gì không may thì bạn nói với các anh BTC, trạng thái điểm danh chắc các anh cũng đang làm á",
+          "reply_to_message_id": "1529643349835907072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1529666502393987075",
+          "author_id": "874523901000000007",
+          "author_name": "HV07",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-23T01:48:34+07:00",
+          "content": "save form lại nhé bạn",
+          "reply_to_message_id": "1529643349835907072",
+          "reaction_count": 1,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1529828318642307076",
+          "author_id": "874523902000000003",
+          "author_name": "Minh | LabCoach",
+          "author_role": "LabCoach",
+          "author_role_id": "1198734600000000002",
+          "is_verified_source": true,
+          "timestamp": "2026-07-23T12:31:34+07:00",
+          "content": "Đúng là hiện tại chưa có chỗ tra cứu nha các bạn, bên mình đang làm. Trong lúc chờ thì mọi người cứ giữ lại mail xác nhận của MS Forms sau mỗi lần submit, có gì sai sót thì đưa mail đó ra là được nhé.",
+          "reply_to_message_id": "1529643349835907072",
+          "reaction_count": 8,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 4,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1529828318642307076",
+        "author_id": "874523902000000003",
+        "author_name": "Minh | LabCoach",
+        "author_role": "LabCoach",
+        "trust_tag_raw": "(TRUST - LABCOACH)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1529828318642307076"
+      },
+      "first_response_minutes": 7,
+      "verified_response_minutes": 735
+    },
+    {
+      "thread_id": "1530233945587843072",
+      "title": "Em bị lỗi này ạ",
+      "topic_id": "deps_error",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-07-24T15:23:23+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1530233945587843072",
+      "question": {
+        "message_id": "1530233945587843072",
+        "author_id": "874523901000000006",
+        "author_name": "HV06",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-24T15:23:23+07:00",
+        "content": "e bị lỗi này ko biết fix sao ạ",
+        "has_code_block": false,
+        "has_attachment": true,
+        "attachment_types": [
+          "image/png"
+        ]
+      },
+      "replies": [
+        {
+          "message_id": "1530238223777923073",
+          "author_id": "874523901000000012",
+          "author_name": "HV12",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-24T15:40:23+07:00",
+          "content": "up ạ",
+          "reply_to_message_id": "1530233945587843072",
+          "reaction_count": 0,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 17,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1530302732173443072",
+      "title": "Chia sẻ cách làm việc nhóm và chia task",
+      "topic_id": "lam_viec_nhom",
+      "tag": "Dự án",
+      "created_at": "2026-07-24T19:56:43+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1530302732173443072",
+      "question": {
+        "message_id": "1530302732173443072",
+        "author_id": "874523901000000017",
+        "author_name": "HV17",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-24T19:56:43+07:00",
+        "content": "Mọi người cho em hỏi về cách triển khai đề tài, mọi người có gì hay hoặc tối ưu về cách làm việc nhóm thế nào, chia công việc ra sao, rồi trong quá trình làm thì nên làm những gì để tối ưu nhất mà hợp lý nhất. Mình cũng có vài chia sẻ theo suy nghĩ của mình là nên viết doc prompt, đọc read me rồi chia nhỏ các task ra vì project rất lớn không thể nào mà agent đọc được, nó sẽ bị cháy rất lâu. Mong mọi người chia sẻ rộng rãi.",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1530306255388803073",
+          "author_id": "874523901000000011",
+          "author_name": "HV11",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-24T20:10:43+07:00",
+          "content": "Ý tưởng viết doc README rồi chia nhỏ task của bạn đúng hướng. Cái bạn đang cảm nhận là agent đọc cả project lớn sẽ cháy context là thật, và cách giải là đừng để agent tự đọc toàn bộ repo mỗi lần. Viết 1 file kiểu CLAUDE.md hoặc AGENTS.md ở root ghi rõ kiến trúc tổng quan, quy ước code, cấu trúc thư mục, lệnh build test. Agent đọc file này trước, không cần đọc hết code. Mỗi module nên có README riêng trong thư mục của nó, khi làm task ở module nào thì chỉ point agent vào README và code của module đó. Viết spec trước khi code với input output rõ ràng, schema dữ liệu, acceptance criteria. Chia task theo đơn vị nhỏ độc lập test được riêng, task nhỏ thì agent ít bị lạc mà người review cũng dễ check hơn.",
+          "reply_to_message_id": "1530302732173443072",
+          "reaction_count": 14,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1530344255783043074",
+          "author_id": "874523902000000004",
+          "author_name": "Sơn | Mentor",
+          "author_role": "Mentor",
+          "author_role_id": "1198734600000000003",
+          "is_verified_source": true,
+          "timestamp": "2026-07-24T22:41:43+07:00",
+          "content": "Bổ sung một ý các bạn hay bỏ qua: chốt trước cái gì là định nghĩa của xong. Rất nhiều nhóm cãi nhau không phải vì chia task sai mà vì hai người hiểu khác nhau về việc thế nào là task đã hoàn thành.",
+          "reply_to_message_id": "1530302732173443072",
+          "reaction_count": 11,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1530344255783043074",
+        "author_id": "874523902000000004",
+        "author_name": "Sơn | Mentor",
+        "author_role": "Mentor",
+        "trust_tag_raw": "(TRUST - MENTOR)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1530344255783043074"
+      },
+      "first_response_minutes": 14,
+      "verified_response_minutes": 165
+    },
+    {
+      "thread_id": "1530685173006467072",
+      "title": "Team thiếu người có được tuyển thêm không",
+      "topic_id": "roi_nhom",
+      "tag": "Team",
+      "created_at": "2026-07-25T21:16:24+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1530685173006467072",
+      "question": {
+        "message_id": "1530685173006467072",
+        "author_id": "874523901000000003",
+        "author_name": "HV03",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-25T21:16:24+07:00",
+        "content": "team mình đang 3 người, có dc tuyển thêm bạn nào chưa có nhóm ko ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1530690206171267073",
+          "author_id": "874523901000000027",
+          "author_name": "HV27",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-25T21:36:24+07:00",
+          "content": "mình đang chưa có nhóm nè, inbox mình nhé",
+          "reply_to_message_id": "1530685173006467072",
+          "reaction_count": 3,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 20,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1530689073709187072",
+      "title": "AI-log không chạy với Codex",
+      "topic_id": "ai_log_setup",
+      "tag": "Kỹ thuật",
+      "created_at": "2026-07-25T21:31:54+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1530689073709187072",
+      "question": {
+        "message_id": "1530689073709187072",
+        "author_id": "874523901000000017",
+        "author_name": "HV17",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-25T21:31:54+07:00",
+        "content": "ai dùng codex mà setup dc ai-log chưa ạ chỉ e với, e làm theo readme thì nó chỉ hỗ trợ claude code với cursor thôi",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1530696371798147073",
+          "author_id": "874523901000000019",
+          "author_name": "HV19",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-25T22:00:54+07:00",
+          "content": "mình phải sửa tay trong /script bạn ạ, đổi cái path hook",
+          "reply_to_message_id": "1530689073709187072",
+          "reaction_count": 5,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 1,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 29,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1531043521757315072",
+      "title": "Wifi phòng lab yếu quá",
+      "topic_id": "le_khac",
+      "tag": "Khác",
+      "created_at": "2026-07-26T21:00:21+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1531043521757315072",
+      "question": {
+        "message_id": "1531043521757315072",
+        "author_id": "874523901000000020",
+        "author_name": "HV20",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-26T21:00:21+07:00",
+        "content": "wifi phòng lab hôm nay lag kinh khủng, mn có bị ko ạ",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1531054846378115073",
+          "author_id": "874523901000000018",
+          "author_name": "HV18",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-26T21:45:21+07:00",
+          "content": "có bạn ơi",
+          "reply_to_message_id": "1531043521757315072",
+          "reaction_count": 2,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1531055853011075074",
+          "author_id": "874523901000000001",
+          "author_name": "HV01",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-26T21:49:21+07:00",
+          "content": "mình phải phát 4g",
+          "reply_to_message_id": "1531043521757315072",
+          "reaction_count": 1,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "student",
+      "verified_answer": false,
+      "trust": null,
+      "first_response_minutes": 45,
+      "verified_response_minutes": null
+    },
+    {
+      "thread_id": "1531287546364035072",
+      "title": "Ticket bao lâu thì được xử lý",
+      "topic_id": "ticket",
+      "tag": "Vận hành",
+      "created_at": "2026-07-27T13:10:01+07:00",
+      "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1531287546364035072",
+      "question": {
+        "message_id": "1531287546364035072",
+        "author_id": "874523901000000018",
+        "author_name": "HV18",
+        "author_role": "Learner",
+        "author_role_id": "1198734600000000001",
+        "timestamp": "2026-07-27T13:10:01+07:00",
+        "content": "e tạo ticket từ hôm kia mà chưa thấy ai rep ạ, thường bao lâu thì dc xử lý v",
+        "has_code_block": false,
+        "has_attachment": false,
+        "attachment_types": []
+      },
+      "replies": [
+        {
+          "message_id": "1531304910782595073",
+          "author_id": "874523901000000022",
+          "author_name": "HV22",
+          "author_role": "Learner",
+          "author_role_id": "1198734600000000001",
+          "is_verified_source": false,
+          "timestamp": "2026-07-27T14:19:01+07:00",
+          "content": "mình chờ 2 ngày mới có phản hồi",
+          "reply_to_message_id": "1531287546364035072",
+          "reaction_count": 1,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": false
+        },
+        {
+          "message_id": "1531441812865155074",
+          "author_id": "874523902000000005",
+          "author_name": "BTC AI Thực Chiến",
+          "author_role": "Admin",
+          "author_role_id": "1198734600000000004",
+          "is_verified_source": true,
+          "timestamp": "2026-07-27T23:23:01+07:00",
+          "content": "Bên mình xử lý trong vòng 48h làm việc nhé. Nếu quá thời gian đó mà chưa có phản hồi thì các em tag trực tiếp trong kênh này, mình sẽ check lại.",
+          "reply_to_message_id": "1531287546364035072",
+          "reaction_count": 10,
+          "has_code_block": false,
+          "has_attachment": false,
+          "trust_tag": true
+        }
+      ],
+      "reply_count": 2,
+      "resolved": true,
+      "resolved_by": "labcoach_or_staff",
+      "verified_answer": true,
+      "trust": {
+        "message_id": "1531441812865155074",
+        "author_id": "874523902000000005",
+        "author_name": "BTC AI Thực Chiến",
+        "author_role": "Admin",
+        "trust_tag_raw": "(TRUST - ADMIN)",
+        "link": "https://discord.com/channels/1198734562891034624/1198734789234567890/1531441812865155074"
+      },
+      "first_response_minutes": 69,
+      "verified_response_minutes": 613
+    }
+  ],
+  "duplicate_groups": [
+    {
+      "group_id": "dup_diem_danh",
+      "topic": "Tra cuu trang thai diem danh",
+      "thread_ids": [
+        "1529643349835907072",
+        "1523985237934211072",
+        "1522281717170307072"
+      ],
+      "canonical_thread_id": "1529643349835907072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_nghi_hoc",
+      "topic": "So buoi nghi toi da va cach xin phep",
+      "thread_ids": [
+        "1525256682471555072",
+        "1518409497968771072"
+      ],
+      "canonical_thread_id": "1525256682471555072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_ao_khoa",
+      "topic": "Nhan ao dong phuc khoa",
+      "thread_ids": [
+        "1516150491971715072",
+        "1527387518926979072"
+      ],
+      "canonical_thread_id": "1516150491971715072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_roi_nhom",
+      "topic": "Thanh vien roi nhom / thay doi doi hinh",
+      "thread_ids": [
+        "1524105065005187072",
+        "1516938148708483072",
+        "1522304068616323072",
+        "1530685173006467072"
+      ],
+      "canonical_thread_id": "1524105065005187072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_ghep_team",
+      "topic": "Ghep team cho nguoi chua co nhom",
+      "thread_ids": [
+        "1516157068640387072",
+        "1518745080037507072"
+      ],
+      "canonical_thread_id": "1516157068640387072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_doi_ten_nhom",
+      "topic": "Doi ten nhom va role leader",
+      "thread_ids": [
+        "1526342734577795072",
+        "1523466717102211072"
+      ],
+      "canonical_thread_id": "1526342734577795072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_xp_diem",
+      "topic": "XP tren Discord vs diem cong tren lop",
+      "thread_ids": [
+        "1525894459949187072",
+        "1518345891348611072",
+        "1523619544957059072"
+      ],
+      "canonical_thread_id": "1525894459949187072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_cham_diem",
+      "topic": "Tieu chi cham diem cuoi khoa",
+      "thread_ids": [
+        "1516211212910723072",
+        "1518703711617155072"
+      ],
+      "canonical_thread_id": "1516211212910723072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_ai_log_setup",
+      "topic": "Setup AI-log va sua code trong /script",
+      "thread_ids": [
+        "1525820426289283072",
+        "1517223705313411072",
+        "1530689073709187072"
+      ],
+      "canonical_thread_id": "1525820426289283072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_deps_error",
+      "topic": "Loi cai dependencies",
+      "thread_ids": [
+        "1519032259838083072",
+        "1528065612054659072"
+      ],
+      "canonical_thread_id": "1519032259838083072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_git_workflow",
+      "topic": "Git branch, conflict, quyen push",
+      "thread_ids": [
+        "1528483503145091072",
+        "1519096206196867072",
+        "1524113243897987072"
+      ],
+      "canonical_thread_id": "1519096206196867072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_phoenix_loi",
+      "topic": "Loi truy cap Phoenix",
+      "thread_ids": [
+        "1517506246213763072",
+        "1519120277307523072"
+      ],
+      "canonical_thread_id": "1519120277307523072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_requirement_project",
+      "topic": "Lam ro requirement va lien he stakeholder",
+      "thread_ids": [
+        "1528899410329731072",
+        "1527407508979843072"
+      ],
+      "canonical_thread_id": "1528899410329731072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_de_tai_khoa_truoc",
+      "topic": "Mo rong du an cua khoa truoc",
+      "thread_ids": [
+        "1522274549104771072",
+        "1516044745179267072"
+      ],
+      "canonical_thread_id": "1516044745179267072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_lam_viec_nhom",
+      "topic": "Cach van hanh nhom va chia task cho agent",
+      "thread_ids": [
+        "1530302732173443072",
+        "1518697634070659072",
+        "1528144112648323072"
+      ],
+      "canonical_thread_id": "1530302732173443072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_brd_prd",
+      "topic": "Template BRD PRD cho san pham AI",
+      "thread_ids": [
+        "1524446879809667072",
+        "1517685938585731072"
+      ],
+      "canonical_thread_id": "1524446879809667072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_dataset",
+      "topic": "Nguon dataset",
+      "thread_ids": [
+        "1523394776400003072",
+        "1527066021331075072"
+      ],
+      "canonical_thread_id": "1523394776400003072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_nguon_hoc_ai",
+      "topic": "Nguon hoc AI cho nguoi moi",
+      "thread_ids": [
+        "1525051866218627072",
+        "1527108878729347072",
+        "1520022044278915072"
+      ],
+      "canonical_thread_id": "1525051866218627072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_api_key",
+      "topic": "API key va cong cu tra phi",
+      "thread_ids": [
+        "1525590758785155072",
+        "1518747693088899072"
+      ],
+      "canonical_thread_id": "1525590758785155072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_tai_lieu_buoi_hoc",
+      "topic": "Slide va recording buoi hoc",
+      "thread_ids": [
+        "1516116866236547072",
+        "1520560529997955072"
+      ],
+      "canonical_thread_id": "1520560529997955072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_vlearn_slide",
+      "topic": "Tai slide tren VLearn",
+      "thread_ids": [
+        "1522903518544003072",
+        "1526705227300995072"
+      ],
+      "canonical_thread_id": "1522903518544003072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_giai_doan_2",
+      "topic": "Giai doan 2: chia lop, dia diem, gio hoc",
+      "thread_ids": [
+        "1529239497080963072",
+        "1524917564604547072",
+        "1519450239008899072",
+        "1523328296681603072"
+      ],
+      "canonical_thread_id": "1529239497080963072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_ticket",
+      "topic": "He thong ticket",
+      "thread_ids": [
+        "1518791594868867072",
+        "1531287546364035072"
+      ],
+      "canonical_thread_id": "1531287546364035072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    },
+    {
+      "group_id": "dup_mentor_duty",
+      "topic": "Lich Mentor Duty",
+      "thread_ids": [
+        "1527025282056323072",
+        "1521607424082051072"
+      ],
+      "canonical_thread_id": "1521607424082051072",
+      "note": "Thread canonical la thread co cau tra loi gan nhan TRUST."
+    }
+  ],
+  "test_queries": [
+    {
+      "query_id": "q001",
+      "text": "làm sao biết mình đã được ghi nhận có mặt hôm nay",
+      "query_type": "dien_giai",
+      "topic_id": "diem_danh",
+      "expected_thread_ids": [
+        "1529643349835907072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q002",
+      "text": "submit form xong có nhận được xác nhận không",
+      "query_type": "dien_giai",
+      "topic_id": "diem_danh",
+      "expected_thread_ids": [
+        "1523985237934211072",
+        "1529643349835907072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q003",
+      "text": "về sớm không bấm nút kết thúc buổi học thì sao",
+      "query_type": "dien_giai",
+      "topic_id": "diem_danh",
+      "expected_thread_ids": [
+        "1522281717170307072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q004",
+      "text": "vắng bao nhiêu buổi thì bị loại",
+      "query_type": "dien_giai",
+      "topic_id": "nghi_hoc",
+      "expected_thread_ids": [
+        "1525256682471555072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q005",
+      "text": "bận việc đột xuất không đi học được thì làm thủ tục gì",
+      "query_type": "dien_giai",
+      "topic_id": "nghi_hoc",
+      "expected_thread_ids": [
+        "1518409497968771072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q006",
+      "text": "chưa nhận được đồng phục thì gặp ai",
+      "query_type": "dien_giai",
+      "topic_id": "ao_khoa",
+      "expected_thread_ids": [
+        "1516150491971715072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q007",
+      "text": "một bạn bỏ ngang giữa dự án thì nhóm phải làm gì",
+      "query_type": "dien_giai",
+      "topic_id": "roi_nhom",
+      "expected_thread_ids": [
+        "1524105065005187072",
+        "1522304068616323072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q008",
+      "text": "muốn thoát khỏi team hiện tại",
+      "query_type": "dien_giai",
+      "topic_id": "roi_nhom",
+      "expected_thread_ids": [
+        "1516938148708483072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q009",
+      "text": "nhóm ít người hơn nhóm khác có bị thiệt khi chấm không",
+      "query_type": "dien_giai",
+      "topic_id": "roi_nhom",
+      "expected_thread_ids": [
+        "1522304068616323072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q010",
+      "text": "chưa có team thì có bị bỏ lại không",
+      "query_type": "dien_giai",
+      "topic_id": "ghep_team",
+      "expected_thread_ids": [
+        "1516157068640387072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q011",
+      "text": "muốn sửa lại tên team đã đặt",
+      "query_type": "dien_giai",
+      "topic_id": "doi_ten_nhom",
+      "expected_thread_ids": [
+        "1526342734577795072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q012",
+      "text": "chuyển quyền trưởng nhóm cho bạn khác",
+      "query_type": "dien_giai",
+      "topic_id": "doi_ten_nhom",
+      "expected_thread_ids": [
+        "1523466717102211072",
+        "1526342734577795072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q013",
+      "text": "phát biểu trên lớp có được cộng vào điểm kinh nghiệm không",
+      "query_type": "dien_giai",
+      "topic_id": "xp_diem",
+      "expected_thread_ids": [
+        "1525894459949187072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q014",
+      "text": "chỉ số active trên server để làm gì",
+      "query_type": "dien_giai",
+      "topic_id": "xp_diem",
+      "expected_thread_ids": [
+        "1518345891348611072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q015",
+      "text": "cách tính điểm tổng kết",
+      "query_type": "keyword",
+      "topic_id": "cham_diem",
+      "expected_thread_ids": [
+        "1516211212910723072"
+      ],
+      "keyword_search_hits": true
+    },
+    {
+      "query_id": "q016",
+      "text": "log sử dụng ai có liên quan gì tới kết quả cá nhân không",
+      "query_type": "dien_giai",
+      "topic_id": "cham_diem",
+      "expected_thread_ids": [
+        "1518703711617155072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q017",
+      "text": "chỉnh sửa file trong thư mục script có bị coi là gian lận không",
+      "query_type": "dien_giai",
+      "topic_id": "ai_log_setup",
+      "expected_thread_ids": [
+        "1525820426289283072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q018",
+      "text": "cài xong mà dashboard trống trơn",
+      "query_type": "dien_giai",
+      "topic_id": "ai_log_setup",
+      "expected_thread_ids": [
+        "1517223705313411072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q019",
+      "text": "agent khác claude code thì log có chạy không",
+      "query_type": "dien_giai",
+      "topic_id": "ai_log_setup",
+      "expected_thread_ids": [
+        "1530689073709187072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q020",
+      "text": "thiếu file cấu hình nên không cài được thư viện",
+      "query_type": "dien_giai",
+      "topic_id": "deps_error",
+      "expected_thread_ids": [
+        "1519032259838083072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q021",
+      "text": "import không thấy thư viện dù đã cài",
+      "query_type": "dien_giai",
+      "topic_id": "deps_error",
+      "expected_thread_ids": [
+        "1528065612054659072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q022",
+      "text": "không đẩy code lên repo được",
+      "query_type": "dien_giai",
+      "topic_id": "git_workflow",
+      "expected_thread_ids": [
+        "1528483503145091072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q023",
+      "text": "hai người sửa cùng chỗ thì làm sao",
+      "query_type": "dien_giai",
+      "topic_id": "git_workflow",
+      "expected_thread_ids": [
+        "1519096206196867072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q024",
+      "text": "trang web của khoá bị treo không vào được",
+      "query_type": "dien_giai",
+      "topic_id": "phoenix_loi",
+      "expected_thread_ids": [
+        "1517506246213763072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q025",
+      "text": "muốn hỏi kỹ hơn về yêu cầu đề bài thì gặp ai",
+      "query_type": "dien_giai",
+      "topic_id": "requirement_project",
+      "expected_thread_ids": [
+        "1528899410329731072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q026",
+      "text": "bị ép dùng công nghệ cụ thể không",
+      "query_type": "dien_giai",
+      "topic_id": "requirement_project",
+      "expected_thread_ids": [
+        "1527407508979843072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q027",
+      "text": "kế thừa sản phẩm của khoá trước có được không",
+      "query_type": "dien_giai",
+      "topic_id": "de_tai_khoa_truoc",
+      "expected_thread_ids": [
+        "1522274549104771072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q028",
+      "text": "hai team chọn cùng chủ đề",
+      "query_type": "dien_giai",
+      "topic_id": "de_tai_khoa_truoc",
+      "expected_thread_ids": [
+        "1516044745179267072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q029",
+      "text": "nhóm mới thành lập nên bắt đầu từ việc gì",
+      "query_type": "dien_giai",
+      "topic_id": "lam_viec_nhom",
+      "expected_thread_ids": [
+        "1518697634070659072",
+        "1530302732173443072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q030",
+      "text": "agent quên context khi project lớn",
+      "query_type": "dien_giai",
+      "topic_id": "lam_viec_nhom",
+      "expected_thread_ids": [
+        "1528144112648323072",
+        "1530302732173443072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q031",
+      "text": "kinh nghiệm phân chia công việc trong team 4 người",
+      "query_type": "dien_giai",
+      "topic_id": "lam_viec_nhom",
+      "expected_thread_ids": [
+        "1530302732173443072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q032",
+      "text": "tài liệu đặc tả sản phẩm nên viết bằng công cụ gì",
+      "query_type": "dien_giai",
+      "topic_id": "brd_prd",
+      "expected_thread_ids": [
+        "1524446879809667072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q033",
+      "text": "một bản mô tả yêu cầu tối thiểu gồm những phần nào",
+      "query_type": "dien_giai",
+      "topic_id": "brd_prd",
+      "expected_thread_ids": [
+        "1517685938585731072",
+        "1524446879809667072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q034",
+      "text": "tìm dữ liệu ở đâu để train model",
+      "query_type": "dien_giai",
+      "topic_id": "dataset",
+      "expected_thread_ids": [
+        "1523394776400003072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q035",
+      "text": "kiếm data tiếng việt",
+      "query_type": "dien_giai",
+      "topic_id": "dataset",
+      "expected_thread_ids": [
+        "1527066021331075072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q036",
+      "text": "người mới chuyển ngành nên học gì trước",
+      "query_type": "dien_giai",
+      "topic_id": "nguon_hoc_ai",
+      "expected_thread_ids": [
+        "1527108878729347072",
+        "1525051866218627072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q037",
+      "text": "tài liệu tham khảo cho người chưa biết gì về máy học",
+      "query_type": "dien_giai",
+      "topic_id": "nguon_hoc_ai",
+      "expected_thread_ids": [
+        "1525051866218627072",
+        "1527108878729347072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q038",
+      "text": "khoá có tài trợ chi phí gọi model không",
+      "query_type": "dien_giai",
+      "topic_id": "api_key",
+      "expected_thread_ids": [
+        "1525590758785155072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q039",
+      "text": "gói miễn phí có bị giới hạn nhiều không",
+      "query_type": "dien_giai",
+      "topic_id": "api_key",
+      "expected_thread_ids": [
+        "1518747693088899072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q040",
+      "text": "xem lại bài giảng đã bỏ lỡ",
+      "query_type": "dien_giai",
+      "topic_id": "tai_lieu_buoi_hoc",
+      "expected_thread_ids": [
+        "1520560529997955072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q041",
+      "text": "tài liệu bài học được đăng ở chỗ nào",
+      "query_type": "dien_giai",
+      "topic_id": "tai_lieu_buoi_hoc",
+      "expected_thread_ids": [
+        "1516116866236547072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q042",
+      "text": "tải toàn bộ tài liệu về máy",
+      "query_type": "dien_giai",
+      "topic_id": "vlearn_slide",
+      "expected_thread_ids": [
+        "1526705227300995072",
+        "1522903518544003072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q043",
+      "text": "nút tải xuống trên vlearn không hoạt động đúng",
+      "query_type": "dien_giai",
+      "topic_id": "vlearn_slide",
+      "expected_thread_ids": [
+        "1522903518544003072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q044",
+      "text": "phase 2 mấy giờ vào học",
+      "query_type": "keyword",
+      "topic_id": "giai_doan_2",
+      "expected_thread_ids": [
+        "1524917564604547072",
+        "1529239497080963072"
+      ],
+      "keyword_search_hits": true
+    },
+    {
+      "query_id": "q045",
+      "text": "buổi chiều có phải lên trường không",
+      "query_type": "dien_giai",
+      "topic_id": "giai_doan_2",
+      "expected_thread_ids": [
+        "1519450239008899072",
+        "1529239497080963072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q046",
+      "text": "khi nào đăng ký định hướng",
+      "query_type": "dien_giai",
+      "topic_id": "giai_doan_2",
+      "expected_thread_ids": [
+        "1523328296681603072",
+        "1529239497080963072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q047",
+      "text": "gửi yêu cầu hỗ trợ ở chỗ nào",
+      "query_type": "dien_giai",
+      "topic_id": "ticket",
+      "expected_thread_ids": [
+        "1518791594868867072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q048",
+      "text": "chờ phản hồi bao lâu là bình thường",
+      "query_type": "dien_giai",
+      "topic_id": "ticket",
+      "expected_thread_ids": [
+        "1531287546364035072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q049",
+      "text": "muốn nói chuyện với mentor thì làm thế nào",
+      "query_type": "dien_giai",
+      "topic_id": "mentor_duty",
+      "expected_thread_ids": [
+        "1521607424082051072",
+        "1527025282056323072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q050",
+      "text": "nhóm cần tìm người dùng để phỏng vấn",
+      "query_type": "dien_giai",
+      "topic_id": "le_khac",
+      "expected_thread_ids": [
+        "1529178335740035072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q051",
+      "text": "cấu hình máy tối thiểu để làm bài lab",
+      "query_type": "dien_giai",
+      "topic_id": "le_khac",
+      "expected_thread_ids": [
+        "1524904692285571072"
+      ],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q052",
+      "text": "deadline nộp sản phẩm cuối cùng là ngày nào",
+      "query_type": "khong_co_dap_an",
+      "topic_id": null,
+      "expected_thread_ids": [],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q053",
+      "text": "lễ trao giải tổ chức ở đâu",
+      "query_type": "khong_co_dap_an",
+      "topic_id": null,
+      "expected_thread_ids": [],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q054",
+      "text": "có được mang người ngoài khoá vào nhóm không",
+      "query_type": "khong_co_dap_an",
+      "topic_id": null,
+      "expected_thread_ids": [],
+      "keyword_search_hits": false
+    },
+    {
+      "query_id": "q055",
+      "text": "học phí khoá này bao nhiêu",
+      "query_type": "khong_co_dap_an",
+      "topic_id": null,
+      "expected_thread_ids": [],
+      "keyword_search_hits": false
+    }
+  ]
+}
