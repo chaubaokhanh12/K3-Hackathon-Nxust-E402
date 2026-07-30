@@ -1,0 +1,946 @@
+TRUSTQA — AI AGENT TÌM KIẾM VÀ ĐỀ XUẤT CÂU TRẢ LỜI THEO NGỮ NGHĨA, CHỦ ĐỀ VÀ ĐỘ TIN CẬY NGUỒN
+
+============================================================
+1. NGỮ CẢNH BÀI TOÁN
+============================================================
+
+Trong nền tảng học tập hiện tại, mục hỏi đáp chứa nhiều bài đăng và cuộc trò chuyện được tạo bởi học viên, Lab Coach, Admin và giảng viên.
+
+Khi gặp vấn đề trong quá trình học hoặc thực hành lab, học viên thường thực hiện quy trình:
+
+Gặp vấn đề
+→ Mở mục hỏi đáp
+→ Nhập từ khóa tìm kiếm
+→ Đọc các bài có tiêu đề liên quan
+→ Nếu không tìm thấy thì tạo câu hỏi mới
+→ Chờ Lab Coach hoặc Admin trả lời
+
+Tuy nhiên, chức năng tìm kiếm hiện tại chủ yếu dựa trên keyword matching. Hệ thống chỉ tìm tốt khi câu hỏi mới sử dụng từ ngữ giống với bài đăng cũ.
+
+Ví dụ, hệ thống đã có bài viết:
+
+“Node.js không nhận biến môi trường OPENAI_API_KEY.”
+
+Nhưng học viên tìm kiếm:
+
+“Em đã cấu hình API key nhưng chương trình vẫn báo Missing credentials.”
+
+Mặc dù hai câu mô tả cùng một vấn đề, chúng sử dụng từ ngữ khác nhau. Tìm kiếm dựa trên keyword có thể không nhận ra mối liên hệ này.
+
+Điều đó dẫn đến các vấn đề:
+
+- Học viên không tìm thấy câu trả lời đã tồn tại.
+- Học viên phải tạo bài hỏi đáp mới.
+- Lab Coach và Admin phải trả lời các câu hỏi lặp lại.
+- Học viên phải chờ hỗ trợ dù vấn đề đã từng được giải quyết.
+- Kiến thức bị phân tán trong nhiều thread tương tự.
+- Số lượng câu hỏi tăng lên khiến việc tìm kiếm ngày càng khó khăn.
+
+Vấn đề cốt lõi không hẳn là hệ thống thiếu câu trả lời, mà là:
+
+“Hệ thống chưa có khả năng tìm kiếm, phân loại và tái sử dụng câu trả lời dựa trên ngữ nghĩa, chủ đề và độ tin cậy của nguồn.”
+
+============================================================
+2. Ý TƯỞNG GIẢI PHÁP
+============================================================
+
+Xây dựng một AI Agent có khả năng:
+
+1. Phân tích câu hỏi của học viên.
+2. Xác định vấn đề, ý định và chủ đề liên quan.
+3. Tìm các thread có nội dung tương đồng về ngữ nghĩa.
+4. Phân biệt:
+   - Thread giải quyết trực tiếp cùng vấn đề.
+   - Thread không trả lời trực tiếp nhưng thuộc cùng chủ đề.
+5. Ưu tiên câu trả lời từ nguồn đã xác minh.
+6. Hiển thị câu trả lời cộng đồng với cảnh báo phù hợp.
+7. Luôn cung cấp link đến cuộc trò chuyện gốc.
+8. Hỗ trợ tạo câu hỏi mới hoặc chuyển Lab Coach khi chưa tìm được lời giải.
+
+Tên đề tài:
+
+TrustQA – AI Agent tìm kiếm và đề xuất câu trả lời theo ngữ nghĩa, chủ đề và độ tin cậy của nguồn.
+
+============================================================
+3. ĐỐI TƯỢNG SỬ DỤNG
+============================================================
+
+3.1. Học viên
+
+- Tìm câu hỏi tương tự.
+- Xem câu trả lời đã được xác minh.
+- Tham khảo các bài cùng chủ đề.
+- Phản hồi giải pháp có hữu ích hay không.
+- Tạo câu hỏi mới khi chưa có lời giải.
+
+3.2. Lab Coach và Admin
+
+- Giảm số lượng câu hỏi trùng lặp.
+- Nhận các câu hỏi đã được chuẩn hóa thông tin.
+- Xác minh câu trả lời từ cộng đồng.
+- Theo dõi những vấn đề chưa được giải quyết.
+
+============================================================
+4. PHÂN LOẠI KẾT QUẢ TÌM KIẾM
+============================================================
+
+Agent không nên chỉ phân loại kết quả thành “phù hợp” hoặc “không phù hợp”. Nên chia thành ba tầng.
+
+4.1. DIRECT MATCH
+
+Thread mô tả cùng vấn đề và có khả năng giải quyết trực tiếp câu hỏi.
+
+Ví dụ:
+
+Câu hỏi mới:
+“Đã set OPENAI_API_KEY nhưng Node vẫn báo Missing credentials.”
+
+Thread cũ:
+“Node.js không nhận biến môi trường sau khi dùng setx.”
+
+Kết quả này có thể được dùng để tổng hợp câu trả lời trực tiếp.
+
+4.2. TOPIC REFERENCE
+
+Thread không trả lời đúng câu hỏi hiện tại nhưng chứa kiến thức thuộc cùng chủ đề.
+
+Ví dụ:
+
+Câu hỏi mới:
+“Có thể sử dụng EEG để nhận diện cảm xúc trong Lab 1 không?”
+
+Thread liên quan:
+“Một số mô hình thường dùng trong bài toán nhận diện cảm xúc.”
+
+Thread này không xác nhận EEG có phù hợp với Lab 1 hay không, nhưng vẫn hữu ích để học viên tham khảo chủ đề “Nhận diện cảm xúc”.
+
+4.3. UNRELATED
+
+Thread không đủ tương đồng cả về vấn đề và chủ đề. Không nên hiển thị để tránh gây nhiễu.
+
+============================================================
+5. PHÂN LOẠI ĐỘ TIN CẬY CỦA NGUỒN
+============================================================
+
+5.1. Nguồn đã xác minh
+
+Bao gồm:
+
+- Tài liệu chính thức.
+- Câu trả lời của Admin.
+- Câu trả lời của Lab Coach.
+- Câu trả lời được đánh dấu accepted.
+- Câu trả lời cộng đồng đã được xác minh.
+
+Hiển thị:
+
+✅ Nguồn đã xác minh
+
+5.2. Nguồn chưa xác minh
+
+Bao gồm các giải pháp do học viên chia sẻ nhưng chưa được Admin hoặc Lab Coach xác nhận.
+
+Hiển thị:
+
+⚠️ Chia sẻ từ cộng đồng — chưa được xác minh
+
+5.3. Thứ tự ưu tiên tổng thể
+
+1. Cùng vấn đề + nguồn đã xác minh
+2. Cùng vấn đề + nguồn cộng đồng
+3. Cùng chủ đề + nguồn đã xác minh
+4. Cùng chủ đề + nguồn cộng đồng
+
+============================================================
+6. KIẾN TRÚC TỔNG THỂ
+============================================================
+
+Học viên nhập câu hỏi
+        ↓
+detect_question_topics
+        ↓
+search_qa_threads
+        ↓
+┌─────────────────────────────────┐
+│ Direct matches                  │
+│ Topic references                │
+└─────────────────────────────────┘
+        ↓
+get_qa_thread
+        ↓
+Chọn tối đa 1–2 câu trả lời/thread
+        ↓
+Tổng hợp câu trả lời và dẫn nguồn
+        ↓
+Học viên phản hồi
+        ↓
+record_answer_feedback
+        ↓
+Nếu chưa giải quyết
+        ↓
+create_question_draft
+hoặc escalate_to_labcoach
+
+============================================================
+7. TOOL 1 — detect_question_topics
+============================================================
+
+7.1. Mục đích
+
+Phân tích câu hỏi đầu vào để xác định:
+
+- Topic chính.
+- Các subtopic.
+- Ý định của người hỏi.
+- Câu hỏi được chuẩn hóa để tìm kiếm.
+
+Tool này giúp hệ thống tìm được các tài liệu cùng chủ đề ngay cả khi không có thread trả lời trực tiếp.
+
+7.2. Khi nào được gọi?
+
+Luôn được gọi đầu tiên khi học viên gửi một câu hỏi mới.
+
+7.3. Input
+
+{
+  "question": "Em muốn dùng EEG để nhận diện cảm xúc trong Lab 1 có được không?"
+}
+
+7.4. Output
+
+{
+  "primary_topic": {
+    "id": "emotion-recognition",
+    "name": "Nhận diện cảm xúc",
+    "confidence": 0.94
+  },
+  "subtopics": [
+    {
+      "id": "eeg",
+      "name": "Tín hiệu EEG",
+      "confidence": 0.89
+    },
+    {
+      "id": "assignment",
+      "name": "Yêu cầu bài tập",
+      "confidence": 0.78
+    }
+  ],
+  "intent": "PROJECT_SCOPE",
+  "normalized_query": "Lab 1 có cho phép sử dụng mô hình nhận diện cảm xúc từ tín hiệu EEG không?"
+}
+
+7.5. Cách triển khai
+
+Nên chuẩn bị một taxonomy topic cố định.
+
+Ví dụ:
+
+{
+  "agent": "AI Agent",
+  "prompt-engineering": "Prompt Engineering",
+  "api-key": "API key và biến môi trường",
+  "streamlit": "Streamlit",
+  "rag": "Retrieval-Augmented Generation",
+  "embedding": "Embedding",
+  "emotion": "Cảm xúc",
+  "emotion-recognition": "Nhận diện cảm xúc",
+  "eeg": "Tín hiệu EEG",
+  "assignment": "Yêu cầu bài tập",
+  "course-policy": "Quy định khóa học",
+  "other": "Khác"
+}
+
+Model chỉ được phép chọn topic từ taxonomy này, không tự sinh topic mới.
+
+Không nên để xuất hiện các nhãn không đồng nhất như:
+
+- Emotion Detection
+- Cảm xúc
+- Emotion Recognition
+- Phân tích cảm xúc
+
+7.6. Logic xử lý
+
+Nhận câu hỏi
+→ Chuẩn hóa văn bản
+→ Gửi taxonomy và câu hỏi cho LLM
+→ Yêu cầu structured output
+→ Kiểm tra topic có nằm trong taxonomy
+→ Nếu không hợp lệ thì gán "other"
+
+7.7. Xử lý lỗi
+
+Nếu model không xác định được topic:
+
+{
+  "primary_topic": {
+    "id": "other",
+    "name": "Khác",
+    "confidence": 0.3
+  },
+  "subtopics": [],
+  "intent": "OTHER",
+  "normalized_query": "Nội dung câu hỏi gốc"
+}
+
+Tool không được tự loại bỏ câu hỏi chỉ vì không xác định được topic.
+
+============================================================
+8. TOOL 2 — search_qa_threads
+============================================================
+
+8.1. Mục đích
+
+Tìm các thread dựa trên:
+
+- Độ tương đồng ngữ nghĩa.
+- Topic trùng khớp.
+- Độ tin cậy của nguồn.
+- Phản hồi hữu ích từ người dùng trước.
+- Trạng thái đã xác minh.
+
+Đây là tool cốt lõi của hệ thống.
+
+8.2. Input
+
+{
+  "query": "Lab 1 có cho phép sử dụng mô hình nhận diện cảm xúc từ EEG không?",
+  "topics": [
+    "emotion-recognition",
+    "eeg",
+    "assignment"
+  ],
+  "search_mode": "hybrid",
+  "top_k": 5
+}
+
+Các chế độ tìm kiếm:
+
+- direct: tập trung tìm cùng vấn đề.
+- topic: tập trung tìm nội dung cùng chủ đề.
+- hybrid: tìm cả direct match và topic reference.
+
+8.3. Output
+
+{
+  "direct_matches": [],
+  "topic_matches": [
+    {
+      "thread_id": "thread_90",
+      "title": "Xây dựng mô hình phân loại cảm xúc",
+      "problem_similarity": 0.53,
+      "topic_similarity": 0.91,
+      "matched_topics": [
+        "emotion-recognition"
+      ],
+      "has_verified_answer": true,
+      "thread_url": "/qa/thread_90"
+    },
+    {
+      "thread_id": "thread_145",
+      "title": "Các loại dữ liệu cho bài toán nhận diện cảm xúc",
+      "problem_similarity": 0.47,
+      "topic_similarity": 0.83,
+      "matched_topics": [
+        "emotion-recognition",
+        "eeg"
+      ],
+      "has_verified_answer": false,
+      "thread_url": "/qa/thread_145"
+    }
+  ]
+}
+
+8.4. Cách triển khai semantic search
+
+Khi import dữ liệu, tạo embedding cho mỗi thread dựa trên:
+
+Tiêu đề
++ Câu hỏi gốc
++ Tóm tắt vấn đề
++ Tóm tắt giải pháp
++ Topic
+
+Ví dụ:
+
+Tiêu đề: Node.js không nhận OPENAI_API_KEY
+Câu hỏi: Đã chạy setx nhưng chương trình vẫn báo Missing credentials
+Tóm tắt: Terminal hiện tại chưa nhận biến môi trường mới
+Topic: api-key, javascript
+
+Embedding có thể lưu trong:
+
+- PostgreSQL + pgvector.
+- ChromaDB.
+- FAISS.
+- Qdrant.
+
+Với khoảng 1.261 bài hỏi đáp, PostgreSQL + pgvector hoặc ChromaDB là đủ.
+
+8.5. Các loại điểm
+
+Không nên chỉ dùng một similarity_score.
+
+Nên có:
+
+{
+  "problem_similarity": 0.91,
+  "topic_similarity": 0.75,
+  "source_trust": 1.0,
+  "helpfulness_score": 0.86
+}
+
+problem_similarity:
+Mức độ hai thread mô tả cùng một vấn đề.
+
+topic_similarity:
+Mức độ trùng khớp topic.
+
+Có thể dùng Jaccard similarity:
+
+Số topic chung / Tổng số topic khác nhau
+
+source_trust ví dụ:
+
+- Tài liệu chính thức: 1.00
+- Admin: 1.00
+- Lab Coach: 0.95
+- Học viên đã xác minh: 0.85
+- Học viên chưa xác minh: 0.40
+
+helpfulness_score:
+
+helpfulness_score =
+(SOLVED + 0.5 × PARTIALLY_SOLVED) / tổng feedback
+
+8.6. Quy tắc phân loại mẫu
+
+problem_similarity >= 0.78
+→ DIRECT_MATCH
+
+problem_similarity < 0.78
+và topic_similarity >= 0.50
+và problem_similarity >= 0.40
+→ TOPIC_REFERENCE
+
+Các trường hợp còn lại
+→ Loại bỏ
+
+Các ngưỡng cần được kiểm thử và điều chỉnh bằng dữ liệu thực tế.
+
+8.7. Quy tắc quan trọng
+
+Không được để source_trust biến một kết quả không liên quan thành direct match.
+
+Ví dụ:
+
+Thread của Admin nhưng chỉ liên quan 20%
+
+không được đứng trước:
+
+Thread của học viên liên quan 92%
+
+Nên phân loại độ liên quan trước, sau đó mới ưu tiên độ tin cậy trong từng nhóm.
+
+============================================================
+9. TOOL 3 — get_qa_thread
+============================================================
+
+9.1. Mục đích
+
+Lấy thông tin đầy đủ của một thread và chọn các câu trả lời tốt nhất để Agent sử dụng.
+
+Semantic search thường chỉ trả về tiêu đề, đoạn trích và metadata. Agent cần đọc nội dung chi tiết trước khi kết luận.
+
+9.2. Input
+
+{
+  "thread_id": "thread_102",
+  "max_answers": 2
+}
+
+9.3. Output
+
+{
+  "found": true,
+  "thread_id": "thread_102",
+  "title": "Node.js không nhận OPENAI_API_KEY sau khi dùng setx",
+  "question": "Tôi đã sử dụng setx nhưng chương trình vẫn báo Missing credentials.",
+  "topics": [
+    "api-key",
+    "javascript"
+  ],
+  "selected_answers": [
+    {
+      "answer_id": "answer_501",
+      "content": "Lệnh setx không cập nhật terminal hiện tại. Hãy đóng terminal và mở lại.",
+      "author_role": "LAB_COACH",
+      "is_verified": true,
+      "is_accepted": true,
+      "verification_label": "VERIFIED"
+    },
+    {
+      "answer_id": "answer_508",
+      "content": "Bạn cũng có thể dùng file .env kết hợp với dotenv.",
+      "author_role": "STUDENT",
+      "is_verified": false,
+      "is_accepted": false,
+      "verification_label": "COMMUNITY_UNVERIFIED"
+    }
+  ],
+  "thread_url": "/qa/thread_102"
+}
+
+9.4. Số câu trả lời nên lấy
+
+Mặc định:
+
+- Một câu trả lời chính.
+- Một câu trả lời bổ sung.
+
+Tối đa ba câu khi:
+
+- Có nhiều phương án khác nhau.
+- Các câu trả lời có xung đột.
+- Cần hiển thị ý kiến chính thức và phương án cộng đồng.
+
+9.5. Quy tắc xếp hạng câu trả lời
+
+1. Accepted answer.
+2. Câu trả lời đã xác minh.
+3. Câu trả lời của Admin.
+4. Câu trả lời của Lab Coach.
+5. Câu có nhiều SOLVED.
+6. Câu trả lời cộng đồng hữu ích.
+
+9.6. Loại bỏ nội dung nhiễu
+
+Không nên trả về:
+
+- “Mình cũng bị.”
+- “Bạn gửi code đi.”
+- “Đã sửa được rồi.”
+- Câu hỏi bổ sung không chứa giải pháp.
+- Câu trả lời đã bị Admin bác bỏ.
+- Nhiều câu trả lời có nội dung giống nhau.
+
+Có thể dùng similarity giữa nội dung các answer để loại bỏ câu trùng lặp.
+
+9.7. Fail-closed
+
+Nếu thread không tồn tại:
+
+{
+  "found": false,
+  "error": "THREAD_NOT_FOUND",
+  "thread_id": "thread_102"
+}
+
+Agent không được tự tạo nội dung của thread.
+
+============================================================
+10. TOOL 4 — record_answer_feedback
+============================================================
+
+10.1. Mục đích
+
+Ghi lại việc câu trả lời có giúp học viên giải quyết vấn đề hay không.
+
+Feedback giúp:
+
+- Cải thiện thứ tự xếp hạng.
+- Phát hiện câu trả lời lỗi thời.
+- Xác định thread hiệu quả.
+- Biết khi nào cần chuyển Lab Coach.
+
+10.2. Giao diện
+
+- Đã giải quyết.
+- Giải quyết một phần.
+- Chưa giải quyết.
+- Không liên quan.
+
+10.3. Input
+
+{
+  "answer_id": "answer_501",
+  "user_id": "student_294",
+  "feedback": "SOLVED",
+  "note": "Mở terminal mới đã giải quyết được lỗi."
+}
+
+10.4. Output
+
+{
+  "success": true,
+  "answer_id": "answer_501",
+  "feedback": "SOLVED",
+  "aggregate": {
+    "total": 37,
+    "solved": 34,
+    "partially_solved": 1,
+    "not_solved": 2,
+    "not_relevant": 0
+  }
+}
+
+10.5. Tại sao lưu theo answer_id?
+
+Một thread có thể chứa hai giải pháp:
+
+- Giải pháp của Lab Coach.
+- Giải pháp bổ sung của học viên.
+
+Nếu chỉ lưu theo thread_id, hệ thống sẽ không biết giải pháp cụ thể nào hữu ích.
+
+10.6. Quy tắc dữ liệu
+
+Mỗi người chỉ nên có một feedback hiện tại trên một answer:
+
+UNIQUE(answer_id, user_id)
+
+Nếu người dùng đổi lựa chọn, record cũ được cập nhật thay vì tạo thêm.
+
+============================================================
+11. TOOL 5 — create_question_draft
+============================================================
+
+11.1. Mục đích
+
+Khi không tìm thấy câu trả lời trực tiếp, Agent hỗ trợ học viên tạo một câu hỏi mới đầy đủ thông tin.
+
+Tool chỉ tạo bản nháp, không tự đăng thay người dùng.
+
+11.2. Khi nào gọi?
+
+- Không có direct match.
+- Topic reference không giải quyết được vấn đề.
+- Học viên chọn “Tạo câu hỏi mới”.
+- Học viên đã thử các giải pháp cũ nhưng không thành công.
+
+11.3. Input
+
+{
+  "user_id": "student_294",
+  "problem": "Node.js vẫn báo Missing credentials dù biến môi trường đã tồn tại.",
+  "environment": {
+    "os": "Windows 11",
+    "terminal": "PowerShell",
+    "node_version": "22.4.0",
+    "sdk": "OpenAI Node SDK"
+  },
+  "attempted_steps": [
+    "Đã chạy setx OPENAI_API_KEY",
+    "Đã mở terminal mới",
+    "Đã kiểm tra biến môi trường",
+    "Đã chạy lại chương trình"
+  ],
+  "error_message": "Missing credentials",
+  "related_thread_ids": [
+    "thread_102",
+    "thread_287"
+  ]
+}
+
+11.4. Output
+
+{
+  "draft_id": "draft_701",
+  "title": "Node.js vẫn báo Missing credentials dù OPENAI_API_KEY đã tồn tại",
+  "content": "## Vấn đề\n...\n## Môi trường\n...\n## Các bước đã thử\n...",
+  "status": "DRAFT",
+  "edit_url": "/questions/drafts/draft_701"
+}
+
+11.5. Cấu trúc bản nháp
+
+- Tiêu đề.
+- Mô tả vấn đề.
+- Môi trường.
+- Thông báo lỗi.
+- Các bước đã thử.
+- Kết quả mong đợi.
+- Các thread đã tham khảo.
+
+11.6. Lợi ích
+
+Lab Coach không cần hỏi lại:
+
+- Bạn dùng Windows hay macOS?
+- Phiên bản Node là bao nhiêu?
+- Bạn đã thử cách nào?
+- Thông báo lỗi đầy đủ là gì?
+
+============================================================
+12. TOOL 6 — escalate_to_labcoach
+============================================================
+
+12.1. Mục đích
+
+Chuyển vấn đề cho Lab Coach khi Agent không thể giải quyết đáng tin cậy.
+
+12.2. Khi nào gọi?
+
+- Không có direct match đủ mạnh.
+- Học viên đã thử câu trả lời được xác minh nhưng vẫn thất bại.
+- Các nguồn hiện tại mâu thuẫn.
+- Câu hỏi liên quan đến quy định hoặc phạm vi bài tập cần người có thẩm quyền xác nhận.
+- Học viên chủ động yêu cầu gặp Lab Coach.
+
+12.3. Input
+
+{
+  "user_id": "student_294",
+  "question": "Node.js vẫn báo Missing credentials dù OPENAI_API_KEY đã tồn tại.",
+  "category": "TECHNICAL_ERROR",
+  "attempted_steps": [
+    "Đã cấu hình API key",
+    "Đã mở terminal mới",
+    "Đã kiểm tra biến môi trường",
+    "Đã thử file .env"
+  ],
+  "related_thread_ids": [
+    "thread_102",
+    "thread_287"
+  ],
+  "reason": "Các giải pháp đã tìm thấy đều không giải quyết được vấn đề."
+}
+
+12.4. Output
+
+{
+  "created": true,
+  "ticket_id": "ticket_902",
+  "status": "OPEN",
+  "assigned_queue": "LAB_COACH_QUEUE",
+  "ticket_url": "/support/tickets/ticket_902"
+}
+
+12.5. Tránh tạo ticket trùng
+
+Nên tạo fingerprint dựa trên:
+
+user_id
++ câu hỏi đã chuẩn hóa
++ category
+
+Nếu người dùng gửi lại cùng một vấn đề trong thời gian ngắn, tool trả về ticket đang tồn tại:
+
+{
+  "created": false,
+  "duplicate": true,
+  "ticket_id": "ticket_902",
+  "status": "OPEN"
+}
+
+12.6. MVP một ngày
+
+Không cần tích hợp Discord hoặc email thật. Chỉ cần:
+
+- Tạo record trong database.
+- Hiển thị ticket ID.
+- Cho Lab Coach xem danh sách ticket mock.
+
+============================================================
+13. TOOL MỞ RỘNG — verify_community_answer
+============================================================
+
+13.1. Mục đích
+
+Cho Admin hoặc Lab Coach xác minh câu trả lời của học viên.
+
+13.2. Input
+
+{
+  "answer_id": "answer_508",
+  "status": "VERIFIED",
+  "note": "Giải pháp phù hợp với phiên bản OpenAI SDK hiện tại."
+}
+
+Các trạng thái:
+
+- VERIFIED
+- REJECTED
+- NEEDS_REVISION
+
+13.3. Output
+
+{
+  "success": true,
+  "answer_id": "answer_508",
+  "verification_status": "VERIFIED"
+}
+
+Backend phải kiểm tra quyền từ tài khoản đăng nhập. Không được tin role do Agent hoặc frontend truyền lên.
+
+============================================================
+14. KỊCH BẢN HOẠT ĐỘNG HOÀN CHỈNH
+============================================================
+
+14.1. Trường hợp có câu trả lời trực tiếp
+
+Học viên hỏi:
+
+“Em đã set API key nhưng Node vẫn báo Missing credentials.”
+
+Agent thực hiện:
+
+detect_question_topics
+→ Topic: API key, Node.js
+→ Intent: TECHNICAL_ERROR
+
+search_qa_threads
+→ Tìm thấy thread_102, problem similarity 94%
+→ Có câu trả lời đã xác minh
+
+get_qa_thread
+→ Lấy câu trả lời của Lab Coach
+→ Lấy thêm một giải pháp cộng đồng
+
+Kết quả hiển thị:
+
+✅ Câu trả lời đã xác minh
+
+Lệnh setx không cập nhật terminal hiện tại. Hãy đóng terminal,
+mở terminal mới và kiểm tra lại biến OPENAI_API_KEY.
+
+Xem cuộc trò chuyện gốc: /qa/thread_102
+
+⚠️ Giải pháp bổ sung từ cộng đồng
+
+Có thể sử dụng file .env kết hợp với dotenv.
+
+Xem chi tiết: /qa/thread_287
+
+14.2. Trường hợp chỉ có bài cùng chủ đề
+
+Học viên hỏi:
+
+“Có thể sử dụng EEG để nhận diện cảm xúc cho Lab 1 không?”
+
+Agent thực hiện:
+
+detect_question_topics
+→ emotion-recognition, eeg, assignment
+
+search_qa_threads
+→ Không có direct match
+→ Có hai topic reference
+
+Kết quả:
+
+Tôi chưa tìm thấy cuộc thảo luận trả lời trực tiếp việc EEG có phù hợp với yêu cầu Lab 1 hay không.
+
+Bạn có thể tham khảo các bài cùng chủ đề:
+
+1. Xây dựng mô hình phân loại cảm xúc
+   Chủ đề liên quan: Nhận diện cảm xúc
+   Xem cuộc trò chuyện: /qa/thread_90
+
+2. Các loại dữ liệu cho bài toán nhận diện cảm xúc
+   Chủ đề liên quan: Nhận diện cảm xúc, EEG
+   Xem cuộc trò chuyện: /qa/thread_145
+
+Lưu ý: Các bài trên chỉ mang tính tham khảo, chưa xác nhận phạm vi đề tài của Lab 1.
+
+Sau đó Agent đề xuất:
+
+- Tạo câu hỏi mới.
+- Chuyển Lab Coach.
+
+============================================================
+15. NGUYÊN TẮC TRONG SYSTEM PROMPT
+============================================================
+
+1. Luôn phân tích topic trước khi tìm kiếm.
+
+2. Luôn gọi search_qa_threads trước khi trả lời câu hỏi liên quan đến nội dung khóa học.
+
+3. Không sử dụng topic match như một câu trả lời trực tiếp.
+
+4. Luôn gọi get_qa_thread trước khi tóm tắt nội dung của một thread.
+
+5. Ưu tiên nguồn đã xác minh trong cùng một nhóm độ liên quan.
+
+6. Không trình bày câu trả lời của học viên như thông tin chính thức.
+
+7. Mỗi nguồn phải kèm thread_url.
+
+8. Mỗi thread mặc định chỉ sử dụng một câu trả lời chính và tối đa một câu trả lời bổ sung.
+
+9. Nếu không đủ bằng chứng, phải nói rõ hệ thống chưa tìm được câu trả lời đáng tin cậy.
+
+10. Không tự tạo thông tin về nội dung thread, người trả lời hoặc trạng thái xác minh.
+
+11. Chỉ tạo draft hoặc ticket sau khi người dùng xác nhận.
+
+12. Không tự động đăng câu hỏi hoặc gửi ticket ngoài hệ thống mà không có hành động xác nhận từ người dùng.
+
+============================================================
+16. PHẠM VI MVP TRONG MỘT NGÀY
+============================================================
+
+16.1. Bắt buộc
+
+- detect_question_topics
+- search_qa_threads
+- get_qa_thread
+
+Ba tool này đủ để demo:
+
+- Tìm kiếm theo ngữ nghĩa.
+- Phân loại direct match và topic reference.
+- Ưu tiên nguồn đã xác minh.
+- Dẫn link về thread gốc.
+
+16.2. Nên có
+
+- record_answer_feedback
+- create_question_draft
+
+Hai tool này giúp tạo vòng lặp cải thiện và hỗ trợ người dùng khi chưa tìm được đáp án.
+
+16.3. Có thể mock
+
+- escalate_to_labcoach
+- verify_community_answer
+
+Không cần tích hợp thật với Discord hoặc hệ thống quản trị trong MVP.
+
+============================================================
+17. GIÁ TRỊ KHÁC BIỆT CỦA ĐỀ TÀI
+============================================================
+
+Hệ thống không chỉ là một chatbot RAG trả lời từ dữ liệu có sẵn. Agent có ba khả năng riêng biệt:
+
+Tìm câu trả lời trực tiếp
+→ Gợi ý kiến thức cùng chủ đề
+→ Hỗ trợ tạo câu hỏi hoặc chuyển người phụ trách
+
+Điểm nổi bật nhất của giải pháp là:
+
+“Agent không chỉ tìm nội dung giống về từ khóa, mà còn hiểu vấn đề, xác định chủ đề, đánh giá độ tin cậy của nguồn và giúp học viên tiếp tục hành động khi chưa có đáp án trực tiếp.”
+
+============================================================
+18. YÊU CẦU CODEx KHI TRIỂN KHAI
+============================================================
+
+Hãy triển khai theo nguyên tắc:
+
+- Ưu tiên kiến trúc đơn giản, đủ chạy được MVP trong một ngày.
+- Tách từng tool thành function độc lập.
+- Mỗi tool có input/output schema rõ ràng.
+- Sử dụng structured output cho detect_question_topics.
+- Sử dụng semantic search cho search_qa_threads.
+- Không để LLM tự quyết định trạng thái verified.
+- Không dùng topic match làm câu trả lời trực tiếp.
+- Luôn trả về thread_url cho các kết quả hiển thị.
+- Giới hạn mỗi thread ở 1 câu trả lời chính và tối đa 1 câu bổ sung.
+- Có xử lý lỗi fail-closed.
+- Không tự đăng câu hỏi hoặc tự tạo ticket nếu chưa có xác nhận của người dùng.
+- Viết code dễ đọc, có type hints, validation và error handling.
+- Chuẩn bị dữ liệu mẫu để demo ít nhất ba trường hợp:
+  1. Có direct match đã xác minh.
+  2. Chỉ có community answer chưa xác minh.
+  3. Không có direct match nhưng có topic reference.
