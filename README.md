@@ -2,6 +2,66 @@
 
 **SPEC → Prototype → Demo.** Đây không phải cuộc thi code — đây là cuộc thi **tư duy sản phẩm AI**.
 
+## Chạy prototype DupBot đã tích hợp
+
+Luồng hiện tại đã nối end-to-end:
+
+```text
+React UI → FastAPI → bot.answer()
+         → detect_question_topics → search_qa_threads → get_qa_thread
+         → guardrails → resolve/escalate → UI
+```
+
+### Cài đặt lần đầu
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r src\tools\requirements.txt
+Set-Location frontend
+npm install
+Set-Location ..
+```
+
+Để dùng OpenAI Embeddings thật, đặt key trong terminal trước khi chạy:
+
+```powershell
+$env:OPENAI_API_KEY = "..."
+```
+
+Không có key, app vẫn chạy bằng fallback cục bộ trên corpus để demo và hiển thị rõ
+chế độ này trong phản hồi. Fallback không sinh câu trả lời mới; mọi trích đoạn vẫn
+lấy nguyên văn từ `data/discord_qa_mock.json`.
+
+### Chạy development
+
+```powershell
+.\start-dev.ps1
+```
+
+Script khởi động backend tại `http://127.0.0.1:8000`, frontend tại
+`http://127.0.0.1:5173`, và tự dừng backend khi frontend dừng.
+
+### Build/chạy một server
+
+```powershell
+Set-Location frontend
+npm run build
+Set-Location ..
+.\.venv\Scripts\python.exe -m uvicorn app:app --app-dir src --host 127.0.0.1 --port 8000
+```
+
+Mở `http://127.0.0.1:8000`. API health ở `/api/health`, OpenAPI ở `/docs`.
+
+### Kiểm tra
+
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -m pytest -q
+Set-Location frontend
+npm test
+npm run build
+```
+
 - Thời lượng: **1,5 ngày** (một ngày build + một buổi demo)
 - Nhóm: **4-5 người** · zone tối đa 5 nhóm · thi theo lớp
 

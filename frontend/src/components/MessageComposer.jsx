@@ -5,19 +5,19 @@ import { PlusCircle, Gift, Emoji, ArrowRight } from './Icons.jsx'
 const EXAMPLES = [
   {
     path: 'Khớp cao',
-    text: 'Mình không đăng nhập được vào hệ thống học, quên mất pass rồi',
+    text: 'làm sao biết mình đã được ghi nhận có mặt hôm nay',
   },
   {
     path: 'Khớp cao',
-    text: 'Gọi API liên tục bị chặn báo quota exceeded thì fix sao ạ',
+    text: 'phát biểu trên lớp có được cộng vào điểm kinh nghiệm không',
   },
   {
     path: 'Chưa chắc',
-    text: 'Lỗi khi lưu tiến độ train',
+    text: 'chỉ số active trên server để làm gì',
   },
   {
     path: 'Không thấy',
-    text: 'Cho em hỏi wifi phòng lab mật khẩu là gì ạ',
+    text: 'deadline nộp sản phẩm cuối cùng là ngày nào',
   },
 ]
 

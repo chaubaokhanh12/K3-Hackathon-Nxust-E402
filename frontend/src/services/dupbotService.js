@@ -6,29 +6,79 @@
  * chữ ký (tham số vào, Promise trả ra) giữ nguyên nên App.jsx và mọi
  * component không cần sửa gì.
  *
- * Bật cờ USE_MOCK = false (hoặc set VITE_USE_MOCK=false trong .env) khi
- * đã có backend thật để chuyển sang gọi API.
+ * Backend thật là mặc định. Test có thể dùng mock bằng VITE_USE_MOCK=true.
  */
 
 import { searchSimilar } from '../lib/semanticSearch.js'
 
-export const USE_MOCK = import.meta.env.VITE_USE_MOCK !== 'false'
+const mockSetting = import.meta.env.VITE_USE_MOCK
+export const USE_MOCK = mockSetting === 'true' || (!mockSetting && import.meta.env.MODE === 'test')
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
+
+const COPY = {
+  high: {
+    headline: 'Mình tìm thấy câu hỏi tương tự đã có lời giải',
+    note: 'Đọc trước các thread này, phần lớn trường hợp là cùng một nguyên nhân.',
+  },
+  low: {
+    headline: 'Mình chỉ tìm được kết quả gần đúng',
+    note: 'Độ khớp không cao nên đây chỉ là tài liệu tham khảo cùng chủ đề.',
+  },
+  none: {
+    headline: 'Chưa có thread nào tương tự trong lịch sử kênh',
+    note: 'Đây là câu hỏi mới. Mình đã chuyển trực tiếp cho LabCoach, bạn không cần làm gì thêm.',
+  },
+}
+
+function normalizeMockResult(result) {
+  const suggestions = result.matches.map((thread, index) => ({
+    thread_id: thread.id,
+    rank: index + 1,
+    title: thread.title,
+    similarity: thread.similarity,
+    relevance: 'direct',
+    excerpt: thread.excerpt,
+    thread_url: thread.url,
+    source_tier: 'VERIFIED',
+    author_name: thread.answeredBy,
+    author_role: 'LabCoach',
+    replies: thread.replies,
+    answered_at: thread.answeredAt,
+  }))
+  const renderButtons = result.confidence !== 'none'
+  return {
+    ...result,
+    ...COPY[result.confidence],
+    suggestions,
+    render_buttons: renderButtons,
+    buttons: renderButtons ? [{ id: 'resolve' }, { id: 'escalate' }] : [],
+    escalated_to_labcoach: result.confidence === 'none',
+    retrieval_mode: 'browser-mock',
+  }
+}
+
+async function readJson(res, operation) {
+  const body = await res.json().catch(() => null)
+  if (!res.ok) {
+    const detail = body?.detail ? `: ${body.detail}` : ''
+    throw new Error(`${operation} thất bại (${res.status})${detail}`)
+  }
+  return body
+}
 
 /**
  * Tìm thread tương tự cho một câu hỏi mới.
- * Thật: POST {API_BASE}/threads/search { query, topK } -> { confidence, matches }
+ * Thật: POST {API_BASE}/threads/search -> guardrail-safe BotResponse.
  */
 export async function findSimilarThreads(query, { topK = 3 } = {}) {
-  if (USE_MOCK) return searchSimilar(query, { topK })
+  if (USE_MOCK) return normalizeMockResult(await searchSimilar(query, { topK }))
 
   const res = await fetch(`${API_BASE}/threads/search`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, topK }),
   })
-  if (!res.ok) throw new Error(`findSimilarThreads failed: ${res.status}`)
-  return res.json()
+  return readJson(res, 'Tìm thread tương tự')
 }
 
 /**
@@ -43,8 +93,7 @@ export async function markThreadResolved(threadId) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status: 'resolved' }),
   })
-  if (!res.ok) throw new Error(`markThreadResolved failed: ${res.status}`)
-  return res.json()
+  return readJson(res, 'Đánh dấu đã giải quyết')
 }
 
 /**
@@ -66,10 +115,13 @@ export async function escalateToLabCoach(threadId, { query, rejected, reason }) 
   const res = await fetch(`${API_BASE}/threads/${threadId}/escalate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, rejectedThreadIds: rejected.map((t) => t.id), reason }),
+    body: JSON.stringify({
+      query,
+      rejectedThreadIds: rejected.map((t) => t.thread_id ?? t.id),
+      reason,
+    }),
   })
-  if (!res.ok) throw new Error(`escalateToLabCoach failed: ${res.status}`)
-  return res.json()
+  return readJson(res, 'Chuyển LabCoach')
 }
 
 /**
@@ -86,6 +138,5 @@ export async function postMessage(channelId, message) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(message),
   })
-  if (!res.ok) throw new Error(`postMessage failed: ${res.status}`)
-  return res.json()
+  return readJson(res, 'Đăng câu hỏi')
 }

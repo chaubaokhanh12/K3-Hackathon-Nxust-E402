@@ -1,3 +1,4 @@
+import { test } from 'vitest'
 import { JSDOM } from 'jsdom'
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"></div></body></html>', {
@@ -16,6 +17,7 @@ function assert(cond, msg) {
   console.log(`PASS: ${msg}`)
 }
 
+test('các kênh và luồng DupBot hoạt động cùng nhau', async () => {
 render(React.createElement(App))
 
 assert(screen.getByText(/Chào mừng tới #hoi-dap/i), 'mặc định mở #hoi-dap')
@@ -51,10 +53,12 @@ assert(screen.getByText(/nằm ngoài lát cắt prototype/i), 'kênh chưa buil
 fireEvent.click(screen.getByText('hoi-dap'))
 assert(screen.getByText(/Chào mừng tới #hoi-dap/i), 'quay lại #hoi-dap vẫn còn nguyên')
 
-const chip = screen.getByTitle('Mình không đăng nhập được vào hệ thống học, quên mất pass rồi')
-fireEvent.click(chip)
+const qaInput = screen.getByPlaceholderText('Nhắn tin tới #hoi-dap')
+fireEvent.change(qaInput, { target: { value: 'Mình không đăng nhập được vào hệ thống học, quên mất pass rồi' } })
+fireEvent.click(screen.getByLabelText('Gửi tin nhắn'))
 await waitFor(() => screen.getAllByText(/DupBot/i).length > 0, { timeout: 2000 })
 await waitFor(() => screen.getByText(/Đã giải quyết được/i), { timeout: 2000 })
 assert(true, 'DupBot flow vẫn hoạt động đúng sau khi refactor thành router nhiều kênh')
 
 console.log('\nALL INTERACTION CHECKS PASSED')
+}, 10000)

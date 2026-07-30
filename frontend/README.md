@@ -5,10 +5,18 @@ trong kênh `#hoi-dap` của khoá.
 
 ## Chạy
 
+Chạy cả backend và frontend từ project root:
+
+```powershell
+.\start-dev.ps1
+```
+
+Hoặc chỉ chạy UI bằng mock browser:
+
 ```bash
-cd demo
+cd frontend
 npm install
-npm run dev
+VITE_USE_MOCK=true npm run dev
 ```
 
 Mở http://localhost:5173
@@ -25,9 +33,9 @@ Học viên không phải học thêm thao tác nào — vẫn gõ câu hỏi nh
 
 | Đường đi | Điều kiện | Bot làm gì |
 |---|---|---|
-| Happy | similarity ≥ 42% | Đưa tối đa 3 thread kèm trích đoạn câu trả lời + 2 nút |
-| Low-confidence | 20% ≤ similarity < 42% | Nói rõ "chỉ tìm được kết quả gần đúng" trước khi đưa gợi ý |
-| Failure | similarity < 20% | Không đoán, chuyển LabCoach ngay, không bắt học viên bấm gì |
+| Happy | Có direct match đã xác minh | Đưa tối đa 3 thread kèm trích đoạn nguồn + 2 nút |
+| Low-confidence | Direct chưa xác minh hoặc chỉ cùng topic | Cảnh báo rõ; topic-only không được trình như lời giải |
+| Failure | Không có direct/topic đủ ngưỡng | Không đoán, chuyển LabCoach ngay, không bắt học viên bấm gì |
 | Correction | học viên bấm "Chưa đúng ý tôi" | Tag `@LabCoach` kèm câu hỏi gốc + danh sách thread đã bị loại + lý do |
 
 Bốn câu mẫu ứng với bốn đường đi có sẵn dưới ô nhập tin.
@@ -83,25 +91,15 @@ Bấm vào tiêu đề bài đăng dưới `#chia-se` trong sidebar mở thẳng
 forum channel thật). Toàn bộ data ở các kênh này là giả, sinh riêng cho demo — không
 phải nội dung thật của học viên/giảng viên.
 
-## Nối embedding thật
+## Backend thật
 
-Chỉ cần thay thân hàm `searchSimilar` trong `src/lib/semanticSearch.js` — chữ ký
-`async (query, { topK }) => { confidence, matches }` giữ nguyên nên UI không phải sửa:
+`src/services/dupbotService.js` mặc định gọi `/api`. Vite proxy endpoint này sang
+FastAPI ở port 8000. `src/lib/semanticSearch.js` chỉ còn là fallback khi bật
+`VITE_USE_MOCK=true`; nó không được dùng trong demo tích hợp.
 
-```js
-export async function searchSimilar(query, { topK = 3 } = {}) {
-  const res = await fetch('/api/similar', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, topK }),
-  })
-  return res.json()
-}
-```
-
-Backend: embed câu hỏi → cosine search trên vector store (pgvector / Qdrant) →
-map score sang `confidence` bằng đúng hai ngưỡng `HIGH_THRESHOLD` / `LOW_THRESHOLD`
-đang khai báo trong file này.
+Backend dùng OpenAI Embeddings khi có `OPENAI_API_KEY`. Nếu thiếu key, backend dùng
+fallback corpus cục bộ và trả `retrieval_mode=local-corpus-fallback` để UI không
+nhận nhầm đây là lượt gọi AI thật.
 
 ## Lưu ý
 
