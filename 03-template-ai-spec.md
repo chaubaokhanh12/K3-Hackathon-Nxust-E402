@@ -1,5 +1,4 @@
-# AI SPEC — Semantic Duplicate Detection Bot for Discord Q&A · Nhóm XX · Zone X
-
+# AI SPEC — Semantic Duplicate Detection Bot for Discord Q&A ·
 Hướng: ☑ B — Trợ lý Học viên
 Loại: ☑ Tính năng mới
 
