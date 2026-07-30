@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #1e1f22;
+  color: #dbdee1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dc-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #1a1b1e transparent;
+}
+.dc-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.dc-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dc-scroll::-webkit-scrollbar-thumb {
+  background: #1a1b1e;
+  border-radius: 4px;
+}
