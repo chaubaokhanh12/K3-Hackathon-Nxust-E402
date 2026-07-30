@@ -14,6 +14,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
+from agent.routing import classify_scope, route_escalation
 from bot import answer
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -112,11 +113,26 @@ def update_thread_status(thread_id: str, payload: StatusRequest) -> dict[str, An
 def escalate_thread(
     thread_id: str, payload: EscalationRequest
 ) -> dict[str, Any]:
+    # Học viên bấm "Chưa đúng ý tôi": chuyển theo địa hạt câu hỏi (Admin / Mentor /
+    # LabCoach) thay vì luôn gọi LabCoach.
+    decision = route_escalation(
+        question=payload.query,
+        scope=classify_scope(payload.query),
+        learner_requested=True,
+    )
+    if not decision.tagged:
+        # Câu ngoài phạm vi khoá học không có nút escalate, nên đây là lời gọi sai.
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Câu hỏi nằm ngoài phạm vi khoá học, không chuyển cho người thật.",
+        )
     with _state_lock:
         _thread_statuses[thread_id] = "escalated"
         _escalations.append(
             {
                 "threadId": thread_id,
+                "targetRole": decision.target.value,
+                "slaMinutes": decision.sla_minutes,
                 **payload.model_dump(),
             }
         )
@@ -126,7 +142,8 @@ def escalate_thread(
         "threadId": thread_id,
         "status": "escalated",
         "queuePosition": queue_position,
-        "slaMinutes": 25,
+        "targetRole": decision.target.value,
+        "slaMinutes": decision.sla_minutes,
     }
 
 

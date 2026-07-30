@@ -49,6 +49,14 @@ def test_prompt_lists_verified_roles():
     assert "BTC" in SYSTEM_PROMPT
 
 
+def test_prompt_contains_routing_table():
+    # Prompt phải nói rõ ba địa hạt, nếu không LLM lại mặc định gọi LabCoach.
+    assert "ĐỊNH TUYẾN NGƯỜI THẬT" in SYSTEM_PROMPT
+    assert "unverified_source" in SYSTEM_PROMPT
+    assert "out_of_scope" in SYSTEM_PROMPT
+    assert "làm bài thay" in SYSTEM_PROMPT
+
+
 def test_prompt_requires_tool_order():
     assert "detect_question_topics" in SYSTEM_PROMPT
     assert "search_qa_threads" in SYSTEM_PROMPT

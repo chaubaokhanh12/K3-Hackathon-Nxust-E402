@@ -33,6 +33,20 @@ from agent.guardrails import (
     should_escalate,
     thread_source_tier,
 )
+from agent.routing import (
+    ESCALATION_SLA_MINUTES,
+    SCOPE_COPY,
+    SOURCE_WARNING,
+    EscalationDecision,
+    EscalationReason,
+    EscalationTarget,
+    EscalationViolation,
+    Scope,
+    classify_scope,
+    has_verified_source,
+    route_escalation,
+    validate_escalation,
+)
 from agent.system_prompt import SYSTEM_PROMPT, build_system_prompt
 
 __all__ = [
@@ -43,6 +57,12 @@ __all__ = [
     "ConfidenceTier",
     "SourceTier",
     "Relevance",
+    "Scope",
+    "EscalationTarget",
+    "EscalationReason",
+    "ESCALATION_SLA_MINUTES",
+    "SCOPE_COPY",
+    "SOURCE_WARNING",
     "MAX_SUGGESTED_THREADS",
     "BOT_COPY",
     "BUTTONS",
@@ -53,7 +73,13 @@ __all__ = [
     "ButtonSpec",
     "BotResponse",
     "GuardrailViolation",
+    "EscalationDecision",
+    "EscalationViolation",
     # decision functions
+    "classify_scope",
+    "route_escalation",
+    "has_verified_source",
+    "validate_escalation",
     "classify_relevance",
     "answer_source_tier",
     "thread_source_tier",

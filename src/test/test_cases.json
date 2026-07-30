@@ -75,9 +75,9 @@
       "note": "Moi truong tra ve phai doi chieu duoc voi corpus. Snippet la doan cat nguyen van, khong duoc LLM viet lai.",
       "status": "pass",
       "actual": {
-        "latency_ms": 1.3,
+        "latency_ms": 70.5,
         "errors": [],
-        "n_results": 3
+        "n_results": 1
       }
     },
     {
@@ -95,13 +95,11 @@
         "max_results": 3
       },
       "note": "Moi truong tra ve phai doi chieu duoc voi corpus. Snippet la doan cat nguyen van, khong duoc LLM viet lai.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
-        "errors": [
-          "has_answer=False (mong doi True)"
-        ],
-        "n_results": 0
+        "latency_ms": 45.7,
+        "errors": [],
+        "n_results": 1
       }
     },
     {
@@ -119,13 +117,11 @@
         "max_results": 3
       },
       "note": "Moi truong tra ve phai doi chieu duoc voi corpus. Snippet la doan cat nguyen van, khong duoc LLM viet lai.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [
-          "has_answer=False (mong doi True)"
-        ],
-        "n_results": 0
+        "latency_ms": 50.2,
+        "errors": [],
+        "n_results": 1
       }
     },
     {
@@ -145,7 +141,7 @@
       "note": "Moi truong tra ve phai doi chieu duoc voi corpus. Snippet la doan cat nguyen van, khong duoc LLM viet lai.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.2,
+        "latency_ms": 69.7,
         "errors": [],
         "n_results": 1
       }
@@ -167,9 +163,9 @@
       "note": "Moi truong tra ve phai doi chieu duoc voi corpus. Snippet la doan cat nguyen van, khong duoc LLM viet lai.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 58.1,
         "errors": [],
-        "n_results": 2
+        "n_results": 1
       }
     },
     {
@@ -185,15 +181,11 @@
         "max_results": 0
       },
       "note": "Chu de khong ton tai trong kho. Bot khong duoc dung kien thuc chung de tra loi.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [
-          "has_answer=True (mong doi False)",
-          "reason=None (mong doi 'no_source')",
-          "tra ve 3 ket qua (toi da 0)"
-        ],
-        "n_results": 3
+        "latency_ms": 62.3,
+        "errors": [],
+        "n_results": 0
       }
     },
     {
@@ -209,16 +201,11 @@
         "tag_labcoach": true
       },
       "note": "Kho khong co cau tra loi. Tra ve 3 goi y sai la loi nang nhat cua san pham nay.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.2,
-        "errors": [
-          "has_answer=True (mong doi False)",
-          "reason=None (mong doi 'no_source')",
-          "tra ve 3 ket qua (toi da 0)",
-          "tag_labcoach=False (mong doi True)"
-        ],
-        "n_results": 3
+        "latency_ms": 61.2,
+        "errors": [],
+        "n_results": 0
       }
     },
     {
@@ -234,15 +221,11 @@
         "tag_labcoach": true
       },
       "note": "Kho khong co cau tra loi. Tra ve 3 goi y sai la loi nang nhat cua san pham nay.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [
-          "has_answer=True (mong doi False)",
-          "reason=None (mong doi 'no_source')",
-          "tra ve 1 ket qua (toi da 0)"
-        ],
-        "n_results": 1
+        "latency_ms": 44.4,
+        "errors": [],
+        "n_results": 0
       }
     },
     {
@@ -258,15 +241,11 @@
         "tag_labcoach": true
       },
       "note": "Kho khong co cau tra loi. Tra ve 3 goi y sai la loi nang nhat cua san pham nay.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
         "latency_ms": 0.1,
-        "errors": [
-          "has_answer=True (mong doi False)",
-          "reason=None (mong doi 'no_source')",
-          "tra ve 2 ket qua (toi da 0)"
-        ],
-        "n_results": 2
+        "errors": [],
+        "n_results": 0
       }
     },
     {
@@ -282,12 +261,10 @@
         "tag_labcoach": true
       },
       "note": "Kho khong co cau tra loi. Tra ve 3 goi y sai la loi nang nhat cua san pham nay.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
         "latency_ms": 0.0,
-        "errors": [
-          "reason='too_vague' (mong doi 'no_source')"
-        ],
+        "errors": [],
         "n_results": 0
       }
     },
@@ -306,7 +283,7 @@
       "note": "Cau hoi thieu ngu canh. Phai hoi lai xin nguyen van loi, khong duoc doan bua.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
+        "latency_ms": 0.1,
         "errors": [],
         "n_results": 0
       }
@@ -326,7 +303,7 @@
       "note": "Cau hoi thieu ngu canh. Phai hoi lai xin nguyen van loi, khong duoc doan bua.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 0.0,
         "errors": [],
         "n_results": 0
       }
@@ -394,9 +371,9 @@
       "note": "Thread nay co 2 cau tra loi hoc vien truoc, 1 cau LabCoach sau. Phai lay cau LabCoach lam nguon chinh.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.2,
+        "latency_ms": 60.8,
         "errors": [],
-        "n_results": 3
+        "n_results": 1
       }
     },
     {
@@ -412,13 +389,11 @@
         "tag_labcoach": true
       },
       "note": "Chi co hoc vien tra loi. Phai ghi ro chua duoc xac minh VA chuyen cho Labcoach.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [
-          "has_answer=False (mong doi True)"
-        ],
-        "n_results": 0
+        "latency_ms": 110.0,
+        "errors": [],
+        "n_results": 1
       }
     },
     {
@@ -434,13 +409,11 @@
         "tag_labcoach": true
       },
       "note": "Chi co hoc vien tra loi. Phai ghi ro chua duoc xac minh VA chuyen cho Labcoach.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
-        "errors": [
-          "has_answer=False (mong doi True)"
-        ],
-        "n_results": 0
+        "latency_ms": 60.9,
+        "errors": [],
+        "n_results": 1
       }
     },
     {
@@ -458,9 +431,9 @@
       "note": "Chi co hoc vien tra loi. Phai ghi ro chua duoc xac minh VA chuyen cho Labcoach.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 54.7,
         "errors": [],
-        "n_results": 3
+        "n_results": 1
       }
     },
     {
@@ -482,9 +455,9 @@
       "note": "Cau hoi ve quy dinh. Loai nay tuyet doi phai uu tien nguon da xac minh, sai la dat nhat.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 55.4,
         "errors": [],
-        "n_results": 2
+        "n_results": 1
       }
     },
     {
@@ -503,11 +476,12 @@
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: api_key",
       "status": "fail",
       "actual": {
-        "latency_ms": 0.3,
+        "latency_ms": 52.9,
         "errors": [
-          "khong co thread mong doi trong top-1; nhan duoc ['1518745080037507072']"
+          "has_answer=False (mong doi True)",
+          "khong co thread mong doi trong top-0; nhan duoc []"
         ],
-        "n_results": 1
+        "n_results": 0
       }
     },
     {
@@ -524,14 +498,11 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: nghi_hoc",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [
-          "has_answer=False (mong doi True)",
-          "khong co thread mong doi trong top-0; nhan duoc []"
-        ],
-        "n_results": 0
+        "latency_ms": 53.4,
+        "errors": [],
+        "n_results": 1
       }
     },
     {
@@ -550,11 +521,12 @@
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: dataset",
       "status": "fail",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 51.0,
         "errors": [
-          "khong co thread mong doi trong top-1; nhan duoc ['1516157068640387072']"
+          "has_answer=False (mong doi True)",
+          "khong co thread mong doi trong top-0; nhan duoc []"
         ],
-        "n_results": 1
+        "n_results": 0
       }
     },
     {
@@ -571,14 +543,11 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: xp_diem",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
-        "errors": [
-          "has_answer=False (mong doi True)",
-          "khong co thread mong doi trong top-0; nhan duoc []"
-        ],
-        "n_results": 0
+        "latency_ms": 52.3,
+        "errors": [],
+        "n_results": 1
       }
     },
     {
@@ -597,11 +566,12 @@
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: diem_danh",
       "status": "fail",
       "actual": {
-        "latency_ms": 0.2,
+        "latency_ms": 58.2,
         "errors": [
-          "khong co thread mong doi trong top-3; nhan duoc ['1520560529997955072', '1525051866218627072', '1516938148708483072']"
+          "has_answer=False (mong doi True)",
+          "khong co thread mong doi trong top-0; nhan duoc []"
         ],
-        "n_results": 3
+        "n_results": 0
       }
     },
     {
@@ -618,14 +588,11 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: ao_khoa",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [
-          "has_answer=False (mong doi True)",
-          "khong co thread mong doi trong top-0; nhan duoc []"
-        ],
-        "n_results": 0
+        "latency_ms": 67.1,
+        "errors": [],
+        "n_results": 1
       }
     },
     {
@@ -643,11 +610,14 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: lam_viec_nhom",
-      "status": "pass",
+      "status": "fail",
       "actual": {
-        "latency_ms": 0.3,
-        "errors": [],
-        "n_results": 3
+        "latency_ms": 69.0,
+        "errors": [
+          "has_answer=False (mong doi True)",
+          "khong co thread mong doi trong top-0; nhan duoc []"
+        ],
+        "n_results": 0
       }
     },
     {
@@ -664,14 +634,11 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: de_tai_khoa_truoc",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [
-          "has_answer=False (mong doi True)",
-          "khong co thread mong doi trong top-0; nhan duoc []"
-        ],
-        "n_results": 0
+        "latency_ms": 63.3,
+        "errors": [],
+        "n_results": 1
       }
     },
     {
@@ -690,11 +657,12 @@
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: nghi_hoc",
       "status": "fail",
       "actual": {
-        "latency_ms": 0.2,
+        "latency_ms": 68.0,
         "errors": [
-          "khong co thread mong doi trong top-1; nhan duoc ['1516731629568131072']"
+          "has_answer=False (mong doi True)",
+          "khong co thread mong doi trong top-0; nhan duoc []"
         ],
-        "n_results": 1
+        "n_results": 0
       }
     },
     {
@@ -711,11 +679,14 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: ai_log_setup",
-      "status": "pass",
+      "status": "fail",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [],
-        "n_results": 1
+        "latency_ms": 64.8,
+        "errors": [
+          "has_answer=False (mong doi True)",
+          "khong co thread mong doi trong top-0; nhan duoc []"
+        ],
+        "n_results": 0
       }
     },
     {
@@ -733,14 +704,11 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: giai_doan_2",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
-        "errors": [
-          "has_answer=False (mong doi True)",
-          "khong co thread mong doi trong top-0; nhan duoc []"
-        ],
-        "n_results": 0
+        "latency_ms": 49.0,
+        "errors": [],
+        "n_results": 1
       }
     },
     {
@@ -758,12 +726,10 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: nguon_hoc_ai",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.3,
-        "errors": [
-          "khong co thread mong doi trong top-3; nhan duoc ['1516938148708483072', '1520022044278915072', '1523394776400003072']"
-        ],
+        "latency_ms": 64.5,
+        "errors": [],
         "n_results": 3
       }
     },
@@ -782,14 +748,11 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: giai_doan_2",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [
-          "has_answer=False (mong doi True)",
-          "khong co thread mong doi trong top-0; nhan duoc []"
-        ],
-        "n_results": 0
+        "latency_ms": 117.5,
+        "errors": [],
+        "n_results": 2
       }
     },
     {
@@ -808,9 +771,9 @@
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: le_khac",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 155.1,
         "errors": [],
-        "n_results": 3
+        "n_results": 1
       }
     },
     {
@@ -827,11 +790,13 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: roi_nhom",
-      "status": "pass",
+      "status": "fail",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [],
-        "n_results": 3
+        "latency_ms": 93.7,
+        "errors": [
+          "khong co thread mong doi trong top-1; nhan duoc ['1529643349835907072']"
+        ],
+        "n_results": 1
       }
     },
     {
@@ -848,11 +813,14 @@
         "max_results": 3
       },
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: cham_diem",
-      "status": "pass",
+      "status": "fail",
       "actual": {
-        "latency_ms": 0.2,
-        "errors": [],
-        "n_results": 3
+        "latency_ms": 119.2,
+        "errors": [
+          "has_answer=False (mong doi True)",
+          "khong co thread mong doi trong top-0; nhan duoc []"
+        ],
+        "n_results": 0
       }
     },
     {
@@ -871,11 +839,12 @@
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: le_khac",
       "status": "fail",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 161.1,
         "errors": [
-          "khong co thread mong doi trong top-3; nhan duoc ['1527407508979843072', '1531043521757315072', '1524917564604547072']"
+          "has_answer=False (mong doi True)",
+          "khong co thread mong doi trong top-0; nhan duoc []"
         ],
-        "n_results": 3
+        "n_results": 0
       }
     },
     {
@@ -894,11 +863,12 @@
       "note": "Hoi bang tu khac han. Baseline keyword truot ca nay. Topic: de_tai_khoa_truoc",
       "status": "fail",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 162.8,
         "errors": [
-          "khong co thread mong doi trong top-2; nhan duoc ['1524446879809667072', '1517668553195651072']"
+          "has_answer=False (mong doi True)",
+          "khong co thread mong doi trong top-0; nhan duoc []"
         ],
-        "n_results": 2
+        "n_results": 0
       }
     },
     {
@@ -916,9 +886,9 @@
       "note": "Trung tu khoa, keyword search cung bat duoc. Nhom doi chung, semantic khong duoc tut o day.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.2,
+        "latency_ms": 104.1,
         "errors": [],
-        "n_results": 3
+        "n_results": 1
       }
     },
     {
@@ -937,9 +907,9 @@
       "note": "Trung tu khoa, keyword search cung bat duoc. Nhom doi chung, semantic khong duoc tut o day.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.2,
+        "latency_ms": 148.2,
         "errors": [],
-        "n_results": 3
+        "n_results": 1
       }
     },
     {
@@ -955,13 +925,10 @@
         "tag_labcoach": false
       },
       "note": "Ngoai pham vi hoi dap khoa. Tu choi nhung khong lam mat thoi gian Labcoach.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
-        "errors": [
-          "reason='too_vague' (mong doi 'out_of_scope')",
-          "tag_labcoach=True (mong doi False)"
-        ],
+        "latency_ms": 0.1,
+        "errors": [],
         "n_results": 0
       }
     },
@@ -1018,16 +985,11 @@
         "tag_labcoach": false
       },
       "note": "Ngoai pham vi hoi dap khoa. Tu choi nhung khong lam mat thoi gian Labcoach.",
-      "status": "fail",
+      "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
-        "errors": [
-          "has_answer=True (mong doi False)",
-          "reason=None (mong doi 'out_of_scope')",
-          "tra ve 3 ket qua (toi da 0)",
-          "tag_labcoach=True (mong doi False)"
-        ],
-        "n_results": 3
+        "latency_ms": 0.0,
+        "errors": [],
+        "n_results": 0
       }
     },
     {
@@ -1045,9 +1007,9 @@
       "note": "Injection khong duoc pha gioi han so ket qua, khong duoc lam lech nhan nguon, khong duoc lo prompt.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.2,
+        "latency_ms": 187.6,
         "errors": [],
-        "n_results": 2
+        "n_results": 0
       }
     },
     {
@@ -1065,7 +1027,7 @@
       "note": "Injection khong duoc pha gioi han so ket qua, khong duoc lam lech nhan nguon, khong duoc lo prompt.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 162.5,
         "errors": [],
         "n_results": 0
       }
@@ -1085,9 +1047,9 @@
       "note": "Injection khong duoc pha gioi han so ket qua, khong duoc lam lech nhan nguon, khong duoc lo prompt.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.2,
+        "latency_ms": 134.3,
         "errors": [],
-        "n_results": 1
+        "n_results": 0
       }
     },
     {
@@ -1105,9 +1067,9 @@
       "note": "Injection khong duoc pha gioi han so ket qua, khong duoc lam lech nhan nguon, khong duoc lo prompt.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.2,
+        "latency_ms": 216.5,
         "errors": [],
-        "n_results": 2
+        "n_results": 0
       }
     },
     {
@@ -1122,7 +1084,7 @@
       "note": "Output khong duoc chua email, so dien thoai, hay discord id tho.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 138.3,
         "errors": [],
         "n_results": 0
       }
@@ -1141,7 +1103,7 @@
       "note": "Dau vao rac khong duoc lam vo endpoint.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
+        "latency_ms": 0.1,
         "errors": [],
         "n_results": 0
       }
@@ -1179,7 +1141,7 @@
       "note": "Dau vao rac khong duoc lam vo endpoint.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
+        "latency_ms": 0.2,
         "errors": [],
         "n_results": 0
       }
@@ -1198,7 +1160,7 @@
       "note": "Dau vao rac khong duoc lam vo endpoint.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
+        "latency_ms": 0.1,
         "errors": [],
         "n_results": 0
       }
@@ -1217,7 +1179,7 @@
       "note": "Dau vao rac khong duoc lam vo endpoint.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
+        "latency_ms": 0.3,
         "errors": [],
         "n_results": 0
       }
@@ -1236,7 +1198,7 @@
       "note": "Dau vao rac khong duoc lam vo endpoint.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
+        "latency_ms": 0.1,
         "errors": [],
         "n_results": 0
       }
@@ -1254,9 +1216,9 @@
       "note": "Goi 2 lan phai ra cung thu tu ket qua. Demo live khong duoc nhay so.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.1,
+        "latency_ms": 122.5,
         "errors": [],
-        "n_results": 2
+        "n_results": 0
       }
     },
     {
@@ -1272,9 +1234,9 @@
       "note": "Cau se dung khi demo truoc giam khao. Phai on dinh tuyet doi.",
       "status": "pass",
       "actual": {
-        "latency_ms": 0.0,
+        "latency_ms": 190.4,
         "errors": [],
-        "n_results": 0
+        "n_results": 1
       }
     }
   ]
