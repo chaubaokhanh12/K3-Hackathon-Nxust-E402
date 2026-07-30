@@ -101,6 +101,32 @@ Backend dùng OpenAI Embeddings khi có `OPENAI_API_KEY`. Nếu thiếu key, bac
 fallback corpus cục bộ và trả `retrieval_mode=local-corpus-fallback` để UI không
 nhận nhầm đây là lượt gọi AI thật.
 
+## Tính năng @ mention
+
+Gõ `@` trong bất kỳ ô nhập tin nào (MessageComposer của #hoi-dap, SimpleComposer của
+các kênh khác) sẽ mở dropdown gợi ý thành viên — lọc theo ký tự gõ tiếp theo, điều
+hướng bằng phím lên/xuống, Enter/Tab để chọn, Esc để đóng. Chọn xong chèn token
+`@[Tên]` đúng vị trí con trỏ; khi hiển thị, token này được `MentionText.jsx` render
+thành pill giống mention thật của Discord.
+
+- `data/mentionable.js` gộp danh sách người có thể tag từ mọi file data (threads,
+  generalChat, forumPosts, lessons) — dedupe theo tên, kể cả role đặc biệt
+  `@everyone`, `@LabCoach`, `@Mod`.
+- `hooks/useMentionAutocomplete.js` chứa toàn bộ logic phát hiện trigger, lọc gợi ý,
+  điều hướng bàn phím — dùng chung cho mọi composer thay vì lặp code.
+- `lib/mentions.js` định nghĩa định dạng lưu trữ `@[Tên]` và hàm parse thành segment
+  text/mention để render.
+
+## Trang trí thêm cho giống Discord thật
+
+- Category trong sidebar bấm được để thu gọn/mở rộng (chevron xoay), giống hành vi
+  thật của Discord.
+- Bottom user panel có icon mic (bấm để mute/unmute, đổi màu đỏ khi tắt), tai nghe,
+  cài đặt — giống thanh trạng thái người dùng thật.
+- Server rail có badge số tin chưa đọc trên icon server.
+- Tin nhắn hỗ trợ preview "đang trả lời" (reply reference) phía trên nội dung, xem ví
+  dụ trong `data/generalChat.js`.
+
 ## Lưu ý
 
 Toàn bộ nội dung thread, tên người và số liệu trong `data/threads.js` là **data giả

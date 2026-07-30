@@ -60,5 +60,53 @@ await waitFor(() => screen.getAllByText(/DupBot/i).length > 0, { timeout: 2000 }
 await waitFor(() => screen.getByText(/Đã giải quyết được/i), { timeout: 2000 })
 assert(true, 'DupBot flow vẫn hoạt động đúng sau khi refactor thành router nhiều kênh')
 
+// --- Tính năng @ mention ---
+fireEvent.click(screen.getByText('chung'))
+assert(screen.getByText('@Nam Khánh'), 'seed message có sẵn "@[Nam Khánh]" render thành pill @Nam Khánh')
+
+const mentionInput = screen.getByPlaceholderText('Nhắn tin tới #chung')
+fireEvent.change(mentionInput, { target: { value: 'chào @Gia' } })
+await waitFor(() => screen.getByText(/Thành viên khớp/i))
+assert(true, 'gõ @ + text -> dropdown gợi ý thành viên hiện ra')
+
+const suggestion = await waitFor(() => {
+  const match = screen.getAllByText('Gia Hân').find((el) => el.closest('button'))
+  if (!match) throw new Error('not found yet')
+  return match
+})
+fireEvent.mouseDown(suggestion)
+await waitFor(() => {
+  if (mentionInput.value !== 'chào @[Gia Hân] ') throw new Error(`chưa đúng, đang là "${mentionInput.value}"`)
+})
+assert(true, `chọn gợi ý -> chèn token đúng vị trí, giữ nguyên "chào " phía trước: "${mentionInput.value}"`)
+
+fireEvent.change(mentionInput, { target: { value: mentionInput.value + 'kiểm tra tính năng tag nhé' } })
+fireEvent.keyDown(mentionInput, { key: 'Enter' })
+await waitFor(() => {
+  if (screen.getAllByText('@Gia Hân').length < 1) throw new Error('chưa thấy pill mention trong tin nhắn đã gửi')
+})
+assert(true, 'gửi tin có mention -> hiển thị pill @Gia Hân trong tin nhắn vừa gửi')
+
+fireEvent.change(mentionInput, { target: { value: '@' } })
+await waitFor(() => screen.getByText(/Thành viên khớp/i))
+fireEvent.keyDown(mentionInput, { key: 'ArrowDown' })
+fireEvent.keyDown(mentionInput, { key: 'Enter' })
+await waitFor(() => {
+  if (!mentionInput.value.startsWith('@[')) throw new Error(`chưa chèn xong, đang là "${mentionInput.value}"`)
+})
+assert(true, 'điều hướng dropdown mention bằng bàn phím (ArrowDown + Enter) hoạt động')
+
+// --- Trang trí sidebar: thu gọn category, mic mute ---
+fireEvent.click(screen.getByText('Cộng đồng'))
+await waitFor(() => {
+  if (screen.queryByText('bai-hoc') !== null) throw new Error('nhóm kênh chưa thu gọn')
+})
+assert(true, 'bấm chevron category -> thu gọn nhóm kênh')
+fireEvent.click(screen.getByText('Cộng đồng'))
+assert(screen.getByText('bai-hoc'), 'bấm lại -> mở rộng nhóm kênh')
+
+fireEvent.click(screen.getByLabelText('Tắt mic'))
+assert(screen.getByLabelText('Bật mic'), 'bấm icon mic -> chuyển trạng thái mute')
+
 console.log('\nALL INTERACTION CHECKS PASSED')
-}, 10000)
+}, 15000)

@@ -1,7 +1,8 @@
 const SERVERS = [
   { id: 'ai', label: 'AI', active: true, tooltip: 'AI Thực Chiến' },
-  { id: 'hv', label: 'HV', tooltip: 'Cộng đồng học viên' },
+  { id: 'hv', label: 'HV', tooltip: 'Cộng đồng học viên', unread: 3 },
   { id: 'gv', label: 'GV', tooltip: 'Phòng giảng viên' },
+  { id: 'k12', label: 'K12', tooltip: 'Lớp K12 offline', unread: 12 },
 ]
 
 export default function ServerRail() {
@@ -27,6 +28,11 @@ export default function ServerRail() {
           >
             {s.label}
           </button>
+          {s.unread > 0 && (
+            <span className="pointer-events-none absolute -bottom-1 right-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-dc-red px-1 text-[10px] font-bold text-white">
+              {s.unread}
+            </span>
+          )}
           {i === 0 && <span className="pointer-events-none absolute -bottom-2 h-0.5 w-8 rounded bg-dc-border" />}
         </div>
       ))}
