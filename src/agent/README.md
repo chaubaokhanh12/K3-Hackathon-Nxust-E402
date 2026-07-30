@@ -6,8 +6,10 @@ Package này biến tài liệu `Bot_System_Instructions.md` thành **code chạ
 src/agent/
 ├── __init__.py          ← re-export API công khai
 ├── guardrails.py        ← logic quyết định + validator cứng (lấy ngưỡng từ tools)
+├── routing.py           ← cổng phạm vi + định tuyến Admin/Mentor/LabCoach
 ├── system_prompt.py     ← SYSTEM_PROMPT + build_system_prompt() (inject ngưỡng thật)
 ├── test_guardrails.py
+├── test_routing.py
 └── test_system_prompt.py
 ```
 
@@ -81,6 +83,33 @@ Gửi `SYSTEM_PROMPT` (hoặc `build_system_prompt()`) làm system message cho L
 | §5.3: thứ tự verified-direct > community > topic | `rank_for_display` |
 | §6: tier HIGH/LOW/NONE theo verified | `decide_confidence` |
 | §8: nút chỉ khi pending ∧ tier∈{HIGH,LOW} | `decide_buttons` |
+| §10: ngoài phạm vi / nhờ làm bài thay → từ chối | `classify_scope` |
+| §11: chuyển đúng địa hạt Admin/Mentor/LabCoach | `route_escalation` |
+| B.5 G6–G10: không gọi người khi không cần, không im khi cần | `validate_escalation` |
+
+### Định tuyến người thật (`routing.py`)
+
+Trước đây mọi lần bot bí đều `tag_labcoach=true`, kể cả câu hỏi tỷ số bóng đá. Nay:
+
+```python
+from agent.routing import Scope, classify_scope, route_escalation, validate_escalation
+
+scope = classify_scope(question)          # IN_SCOPE | OFF_TOPIC | INTEGRITY
+decision = validate_escalation(
+    route_escalation(
+        question=question, scope=scope, tier=response.confidence,
+        primary_topic_id=detected["primary_topic"]["id"],
+        intent=detected["intent"], suggestions=payload["suggestions"],
+    ),
+    scope=scope, tier=response.confidence, suggestions=payload["suggestions"],
+)
+decision.target        # EscalationTarget.ADMIN | MENTOR | LABCOACH | NONE
+decision.reason        # no_source | unverified_source | learner_request | not_needed
+decision.tagged        # tương ứng trường tag_labcoach cũ trong payload
+```
+
+Bảng địa hạt (`ADMIN_TOPICS` / `MENTOR_TOPICS` / `LABCOACH_TOPICS`) import trực tiếp
+từ `tools.detect_question_topics.tool`, nên thêm topic mới trong tool là routing đi theo.
 
 ## 5. Chạy test
 
@@ -95,4 +124,5 @@ Không cần `OPENAI_API_KEY` (test dùng dict mô phỏng output tool; import t
 
 - Cần `PYTHONPATH=src` (giống `tools`).
 - `build_bot_response` không gọi tool — nó chỉ xử lý output đã có. Việc gọi tool thuộc về adapter (mục 3).
-- Khi `enforce` raise, **không** in payload lỗi: rơi về `BotResponse` tier NONE (tin "chưa có, đã chuyển LabCoach") để an toàn.
+- Khi `enforce` raise, **không** in payload lỗi: rơi về `BotResponse` tier NONE (tin "chưa có, đã chuyển người phụ trách") để an toàn.
+- `classify_scope` chạy **trước** mọi tool call: câu ngoài phạm vi không được tiêu tốn lượt embedding và không bao giờ được chuyển cho người thật.

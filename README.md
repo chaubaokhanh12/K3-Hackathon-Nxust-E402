@@ -22,15 +22,34 @@ npm install
 Set-Location ..
 ```
 
-Để dùng OpenAI Embeddings thật, đặt key trong terminal trước khi chạy:
+### Cấu hình API key (`.env`)
+
+Để dùng OpenAI Embeddings thật, dán key vào file `.env` ở gốc repo:
 
 ```powershell
-$env:OPENAI_API_KEY = "..."
+Copy-Item .env.example .env    # neu chua co
+notepad .env                   # dan key vao dong OPENAI_API_KEY=
 ```
 
-Không có key, app vẫn chạy bằng fallback cục bộ trên corpus để demo và hiển thị rõ
-chế độ này trong phản hồi. Fallback không sinh câu trả lời mới; mọi trích đoạn vẫn
-lấy nguyên văn từ `data/discord_qa_mock.json`.
+```dotenv
+OPENAI_API_KEY=sk-...
+```
+
+`.env` **không được commit** (đã nằm trong `.gitignore`); `.env.example` là mẫu
+để chia sẻ. File được nạp tự động khi import `bot.py` (xem `src/env_file.py`) nên
+backend, `run_cases.py` và pytest đều thấy key — không cần set tay từng terminal.
+Biến đã có sẵn trong terminal vẫn thắng file:
+
+```powershell
+$env:OPENAI_API_KEY = "..."    # tuy chon, de dan cho mot lan chay
+```
+
+Không có key (hoặc `OPENAI_API_KEY=` để trống), app vẫn chạy bằng fallback cục bộ
+trên corpus để demo và hiển thị rõ chế độ này trong phản hồi
+(`retrieval_mode = "local-corpus-fallback"`, kiểm tra nhanh ở `/api/health`).
+Fallback không sinh câu trả lời mới; mọi trích đoạn vẫn lấy nguyên văn từ
+`data/discord_qa_mock.json`. Đổi lại, nó **không làm được tìm kiếm diễn giải** —
+đó là 10 case còn đỏ trong `eval/test_summary.md`.
 
 ### Chạy development
 

@@ -517,7 +517,7 @@ def _iter_suggestions(response: BotResponse) -> Iterable[SuggestedThread]:
 
 
 def validate_links_present(response: BotResponse) -> None:
-    """G3/G7: mỗi đề xuất phải có thread_url gốc, không rỗng."""
+    """G1/G3: mỗi đề xuất phải có thread_url gốc, không rỗng."""
     for s in response.suggestions:
         if not s.thread_url:
             raise GuardrailViolation(

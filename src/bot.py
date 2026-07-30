@@ -12,12 +12,24 @@ import importlib
 import logging
 import os
 import re
-import unicodedata
 from collections.abc import Callable, Mapping
 from difflib import SequenceMatcher
 from typing import Any
 
 from agent import BOT_COPY, ConfidenceTier, build_bot_response, enforce
+from agent.routing import (
+    SCOPE_COPY,
+    SOURCE_WARNING,
+    EscalationDecision,
+    EscalationReason,
+    EscalationTarget,
+    Scope,
+    ascii_fold,
+    classify_scope,
+    route_escalation,
+    validate_escalation,
+)
+from env_file import load_env
 from tools._shared.embeddings import CachedEmbedder, Embedder, OpenAIEmbedder
 from tools._shared.repository import CorpusRepository
 from tools.detect_question_topics import detect_question_topics
@@ -26,6 +38,10 @@ from tools.search_qa_threads import search_qa_threads
 from tools.search_qa_threads.tool import ROLE_TRUST
 
 LOGGER = logging.getLogger(__name__)
+
+# Nạp .env một lần khi import: mọi consumer (app.py, run_cases.py, pytest) đều
+# thấy OPENAI_API_KEY mà không phải set tay từng terminal.
+load_env()
 
 MAX_RESULTS = 3
 TOO_VAGUE_PATTERNS = {
@@ -39,6 +55,10 @@ CLARIFYING_QUESTION = (
     "Bạn gửi giúp mình nguyên văn thông báo lỗi, thao tác vừa làm và môi trường "
     "đang dùng nhé?"
 )
+EMPTY_INPUT_QUESTION = "Bạn nhập câu hỏi giúp mình nhé, mình chưa thấy nội dung nào."
+#: Chủ đề corpus chắc chắn không có thread nào (kiểm tra tay trên
+#: ``data/discord_qa_mock.json``). Chặn sớm để không bao giờ ghép gợi ý gần đúng
+#: cho những câu mà trả lời sai gây hậu quả thật (học phí, thành viên ngoài khoá).
 UNSUPPORTED_SOURCE_PHRASES = (
     "hoc phi",
     "nguoi ngoai khoa",
@@ -94,15 +114,8 @@ DOMAIN_PATTERNS = tuple(
 )
 
 
-def _ascii_fold(value: str) -> str:
-    decomposed = unicodedata.normalize("NFD", value.lower())
-    return "".join(
-        char for char in decomposed if unicodedata.category(char) != "Mn"
-    ).replace("đ", "d")
-
-
 def _fold_text(value: str) -> str:
-    folded = _ascii_fold(value)
+    folded = ascii_fold(value)
     for pattern, concept in DOMAIN_PATTERNS:
         folded = pattern.sub(f" {concept} ", folded)
     return re.sub(r"[^a-z0-9]+", " ", folded).strip()
@@ -295,16 +308,43 @@ def _detected_result(
     }
 
 
+def _escalation_fields(decision: EscalationDecision) -> dict[str, Any]:
+    """Trường định tuyến dùng chung cho mọi payload.
+
+    ``tag_labcoach`` giữ nguyên tên vì bộ chấm (``src/test/test_cases.json``) định
+    nghĩa nó là "có chuyển cho người thật hay không". Vai trò đích thật nằm ở
+    ``escalation.target_role``.
+    """
+    tagged = decision.tagged
+    return {
+        "escalated_to_labcoach": tagged,
+        "tag_labcoach": tagged,
+        "escalation": {
+            "target_role": decision.target.value if tagged else None,
+            "reason": decision.reason.value,
+            "sla_minutes": decision.sla_minutes,
+            "note": decision.note,
+        },
+    }
+
+
+def _no_escalation() -> EscalationDecision:
+    return EscalationDecision(
+        target=EscalationTarget.NONE, reason=EscalationReason.NOT_NEEDED
+    )
+
+
 def _safe_empty_payload(
     *,
     reason: str,
     headline: str,
     note: str,
+    escalation: EscalationDecision | None = None,
     clarifying_question: str | None = None,
-    tag_labcoach: bool = False,
     retrieval_mode: str = "input-guardrail",
     warning: str | None = None,
 ) -> dict[str, Any]:
+    decision = escalation or _no_escalation()
     payload: dict[str, Any] = {
         "confidence": ConfidenceTier.NONE.value,
         "headline": headline,
@@ -312,13 +352,12 @@ def _safe_empty_payload(
         "suggestions": [],
         "render_buttons": False,
         "buttons": [],
-        "escalated_to_labcoach": tag_labcoach,
         "retrieval_mode": retrieval_mode,
         "has_answer": False,
         "reason": reason,
         "results": [],
         "clarifying_question": clarifying_question,
-        "tag_labcoach": tag_labcoach,
+        **_escalation_fields(decision),
     }
     if warning:
         payload["warning"] = warning
@@ -351,7 +390,7 @@ def _is_too_vague(question: str) -> bool:
 
 
 def _is_known_out_of_corpus_scope(question: str) -> bool:
-    folded = _ascii_fold(question)
+    folded = ascii_fold(question)
     return any(phrase in folded for phrase in UNSUPPORTED_SOURCE_PHRASES)
 
 
@@ -369,9 +408,32 @@ def answer(
     """Answer one learner question using retrieval, source ranking and guardrails."""
 
     normalized_question = re.sub(r"\s+", " ", question).strip()
-    if not normalized_question:
-        raise ValueError("question must contain non-whitespace text")
     top_k = max(1, min(MAX_RESULTS, int(top_k)))
+
+    # Input rỗng / toàn khoảng trắng: hỏi lại, không nổ exception (TC-049, TC-050).
+    if not normalized_question:
+        return _safe_empty_payload(
+            reason="too_vague",
+            headline="Mình chưa nhận được câu hỏi nào",
+            note=EMPTY_INPUT_QUESTION,
+            clarifying_question=EMPTY_INPUT_QUESTION,
+        )
+
+    # Cổng phạm vi chạy TRƯỚC retrieval: câu ngoài phạm vi không được tiêu tốn
+    # lượt tra cứu, và tuyệt đối không được chuyển cho người thật.
+    scope = classify_scope(normalized_question)
+    if scope is not Scope.IN_SCOPE:
+        copy = SCOPE_COPY[scope]
+        return _safe_empty_payload(
+            reason="out_of_scope",
+            headline=copy["headline"],
+            note=copy["note"],
+            escalation=validate_escalation(
+                route_escalation(question=normalized_question, scope=scope),
+                scope=scope,
+                tier=ConfidenceTier.NONE,
+            ),
+        )
 
     if _is_known_out_of_corpus_scope(normalized_question):
         copy = BOT_COPY[ConfidenceTier.NONE]
@@ -379,7 +441,11 @@ def answer(
             reason="no_source",
             headline=copy["headline"],
             note=copy["note"],
-            tag_labcoach=True,
+            escalation=route_escalation(
+                question=normalized_question,
+                scope=scope,
+                tier=ConfidenceTier.NONE,
+            ),
         )
 
     if _is_too_vague(normalized_question):
@@ -459,6 +525,24 @@ def answer(
     payload = response.model_dump(mode="json")
     suggestions = payload["suggestions"]
     has_answer = bool(suggestions) and payload["confidence"] != "none"
+
+    # Định tuyến theo địa hạt, không mặc định LabCoach. Ba lý do chuyển: corpus
+    # rỗng, chỉ có học viên trả lời (cần xác minh), học viên bấm "Chưa đúng ý tôi"
+    # (do frontend gọi /escalate, không tính ở đây).
+    decision = validate_escalation(
+        route_escalation(
+            question=normalized_question,
+            scope=scope,
+            tier=response.confidence,
+            primary_topic_id=detected["primary_topic"]["id"],
+            intent=detected["intent"],
+            suggestions=suggestions,
+        ),
+        scope=scope,
+        tier=response.confidence,
+        suggestions=suggestions,
+    )
+
     payload.update(
         {
             "retrieval_mode": retrieval_mode,
@@ -471,9 +555,12 @@ def answer(
             "reason": None if has_answer else "no_source",
             "results": _legacy_results(suggestions),
             "clarifying_question": None,
-            "tag_labcoach": bool(payload["escalated_to_labcoach"]),
+            **_escalation_fields(decision),
         }
     )
+    if decision.reason is EscalationReason.UNVERIFIED_SOURCE:
+        # Vẫn hiển thị gợi ý, nhưng dán nhãn để không ai đọc nhầm là chính thức.
+        payload["source_warning"] = SOURCE_WARNING
     if warning:
         payload["warning"] = warning
     return payload

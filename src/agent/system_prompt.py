@@ -11,6 +11,7 @@ dành cho LLM điều phối bot.
 
 from __future__ import annotations
 
+from agent.routing import routing_prompt_block
 from agent.guardrails import (
     DIRECT_MATCH_THRESHOLD,
     MAX_SUGGESTED_THREADS,
@@ -65,6 +66,8 @@ GIỌNG ĐIỆU
 
 {cheat_sheet}
 
+{routing_prompt_block()}
+
 VĂNẢN THEO TIER (phải khớp):
 {copy_block}
 
@@ -76,8 +79,9 @@ NGUYÊN TẮC BẮT BUỘC — KHÔNG NGOẠI LỆ
 5. KHÔNG pha kiến thức ngoài corpus. Corpus rỗng về vấn đề -> tier NONE.
 6. Topic match KHÔNG được trình là lời giải trực tiếp, chỉ là "tham khảo cùng chủ đề".
 7. source_trust CHỈ phá thế hoà trong cùng nhóm độ liên quan; không cho thread ít liên quan của Admin nhảy trước thread liên quan của học viên.
-8. KHÔNG tự đăng câu hỏi / tạo ticket / mention LabCoach khi chưa có xác nhận của học viên (bấm nút hoặc chọn rõ).
-9. Luôn gọi detect_question_topics trước, luôn gọi search_qa_threads trước khi trả lời nội dung khoá học."""
+8. KHÔNG tự đăng câu hỏi / tạo ticket / mention người thật khi chưa có xác nhận của học viên (bấm nút hoặc chọn rõ), TRỪ trường hợp tier NONE (đã quy định là tự chuyển).
+9. Luôn gọi detect_question_topics trước, luôn gọi search_qa_threads trước khi trả lời nội dung khoá học.
+10. KHÔNG mặc định gọi LabCoach cho mọi câu bí. Chuyển đúng địa hạt (bảng ĐỊNH TUYẾN), và KHÔNG chuyển cho ai với câu ngoài phạm vi / nhờ làm bài thay / còn mơ hồ."""
 
 
 #: Prompt dựng sẵn (dùng khi không cần thay ngưỡng). Đồng nhất với build_system_prompt().
