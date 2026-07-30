@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react'
 import { PlusCircle, Gift, Emoji, ArrowRight } from './Icons.jsx'
+import MentionSuggestions from './MentionSuggestions.jsx'
+import { useMentionAutocomplete } from '../hooks/useMentionAutocomplete.js'
 
 /** Bốn câu mẫu tương ứng bốn đường đi trải nghiệm, để demo được trong 5 phút. */
 const EXAMPLES = [
@@ -30,6 +32,7 @@ const PATH_STYLE = {
 export default function MessageComposer({ onSend, disabled }) {
   const [value, setValue] = useState('')
   const inputRef = useRef(null)
+  const mention = useMentionAutocomplete({ value, setValue, inputRef })
 
   function submit(text) {
     const trimmed = text.trim()
@@ -48,7 +51,13 @@ export default function MessageComposer({ onSend, disabled }) {
 
   return (
     <div className="shrink-0 px-4 pb-6 pt-1">
-      <div className="flex items-center gap-3 rounded-lg bg-dc-input px-4">
+      <div className="relative flex items-center gap-3 rounded-lg bg-dc-input px-4">
+        <MentionSuggestions
+          options={mention.options}
+          activeIndex={mention.activeIndex}
+          onSelect={mention.selectMember}
+          onHover={mention.setActiveIndex}
+        />
         <button className="text-dc-muted hover:text-dc-text" aria-label="Thêm tệp">
           <PlusCircle size={22} />
         </button>
@@ -56,8 +65,10 @@ export default function MessageComposer({ onSend, disabled }) {
           ref={inputRef}
           value={value}
           disabled={disabled}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={mention.handleChange}
+          onBlur={mention.close}
           onKeyDown={(e) => {
+            if (mention.handleKeyDown(e)) return
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault()
               submit(value)

@@ -1,9 +1,13 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { PlusCircle, Gift, Emoji, ArrowRight } from './Icons.jsx'
+import MentionSuggestions from './MentionSuggestions.jsx'
+import { useMentionAutocomplete } from '../hooks/useMentionAutocomplete.js'
 
 /** Composer dùng cho các kênh không có DupBot — chỉ echo tin nhắn vào state cục bộ. */
 export default function SimpleComposer({ placeholder, onSend, disabled }) {
   const [value, setValue] = useState('')
+  const inputRef = useRef(null)
+  const mention = useMentionAutocomplete({ value, setValue, inputRef })
 
   function submit() {
     const trimmed = value.trim()
@@ -14,15 +18,24 @@ export default function SimpleComposer({ placeholder, onSend, disabled }) {
 
   return (
     <div className="shrink-0 px-4 pb-6 pt-1">
-      <div className="flex items-center gap-3 rounded-lg bg-dc-input px-4">
+      <div className="relative flex items-center gap-3 rounded-lg bg-dc-input px-4">
+        <MentionSuggestions
+          options={mention.options}
+          activeIndex={mention.activeIndex}
+          onSelect={mention.selectMember}
+          onHover={mention.setActiveIndex}
+        />
         <button className="text-dc-muted hover:text-dc-text" aria-label="Thêm tệp">
           <PlusCircle size={22} />
         </button>
         <input
+          ref={inputRef}
           value={value}
           disabled={disabled}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={mention.handleChange}
+          onBlur={mention.close}
           onKeyDown={(e) => {
+            if (mention.handleKeyDown(e)) return
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault()
               submit()
