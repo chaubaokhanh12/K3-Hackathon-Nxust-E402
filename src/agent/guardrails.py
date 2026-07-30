@@ -1,0 +1,580 @@
+"""Executable guardrails cho DupBot.
+
+Module này mã hoá các quy tắc trong ``Bot_System_Instructions.md`` phần B thành
+logic Python xác định, thay vì để LLM tự diễn. Có ba nhóm hàm:
+
+1. **Phân loại / quyết định** — :func:`classify_relevance`, :func:`decide_confidence`,
+   :func:`decide_buttons`, :func:`rank_for_display`.
+2. **Tổng hợp phản hồi** — :func:`build_bot_response` dựng payload JSON sẵn sàng cho
+   frontend/API.
+3. **Validator cứng** — :func:`enforce` kiểm các bất biến (không bịa, NONE phải rỗng,
+   giới hạn số lượng, link bắt buộc, topic match không được trình là lời giải).
+
+Ngưỡng được **import trực tiếp** từ ``tools.*`` (single source of truth): nếu sau này
+đổi threshold trong tool thì guardrail đi theo, không cần sửa hai chỗ.
+
+Yêu cầu ``PYTHONPATH=src`` (giống ``tools``).
+"""
+
+from __future__ import annotations
+
+from enum import Enum
+from typing import Any, Iterable, Mapping
+
+from pydantic import BaseModel, ConfigDict, Field
+
+# Single source of truth: ngưỡng thật nằm trong tools, import về để không drift.
+from tools.detect_question_topics.tool import PRIMARY_TOPIC_THRESHOLD
+from tools.get_qa_thread.tool import ROLE_PRIORITY
+from tools.search_qa_threads.tool import (
+    DIRECT_MATCH_THRESHOLD,
+    TOPIC_REFERENCE_PROBLEM_THRESHOLD,
+    TOPIC_REFERENCE_TOPIC_THRESHOLD,
+)
+
+__all__ = [
+    # constants
+    "VERIFIED_ROLES",
+    "MAX_SUGGESTED_THREADS",
+    "MAX_MAIN_ANSWERS",
+    "MAX_SUPPLEMENTARY_ANSWERS",
+    "BOT_COPY",
+    "BUTTONS",
+    "ANSWER_SOURCE_TIER",
+    "SOURCE_TRUST_NOTE",
+    # enums
+    "ConfidenceTier",
+    "SourceTier",
+    "Relevance",
+    # exceptions
+    "GuardrailViolation",
+    # models
+    "AnswerSummary",
+    "SuggestedThread",
+    "ButtonSpec",
+    "BotResponse",
+    # decision functions
+    "classify_relevance",
+    "answer_source_tier",
+    "thread_source_tier",
+    "rank_for_display",
+    "select_suggestions",
+    "decide_confidence",
+    "decide_buttons",
+    "should_escalate",
+    "build_bot_response",
+    "enforce",
+]
+
+
+# ---------------------------------------------------------------------------
+# Phân tầng nguồn (spec §5 + data/SCHEMA.md)
+# ---------------------------------------------------------------------------
+
+#: Vai trò được coi là nguồn đã xác minh — priority >= 3 trong ROLE_PRIORITY
+#: của get_qa_thread (Admin 5 / Mentor 4 / BTC 4 / LabCoach 3). Learner = 1 -> loại.
+VERIFIED_ROLES: frozenset[str] = frozenset(
+    role for role, priority in ROLE_PRIORITY.items() if priority >= 3
+)
+
+#: Ánh xạ verification_label của get_qa_thread -> SourceTier.
+ANSWER_SOURCE_TIER: dict[str, "SourceTier"] = {}  # điền sau khi định nghĩa enum
+
+
+# ---------------------------------------------------------------------------
+# Giới hạn trình bày
+# ---------------------------------------------------------------------------
+
+MAX_SUGGESTED_THREADS = 3
+MAX_MAIN_ANSWERS = 1
+MAX_SUPPLEMENTARY_ANSWERS = 1
+#: Số câu trả lời tối đa cần lấy khi gọi get_qa_thread (1 chính + 1 bổ sung).
+DEFAULT_MAX_ANSWERS = MAX_MAIN_ANSWERS + MAX_SUPPLEMENTARY_ANSWERS
+
+
+# ---------------------------------------------------------------------------
+# Enum
+# ---------------------------------------------------------------------------
+
+
+class ConfidenceTier(str, Enum):
+    """Ba tầng độ chắc chắn, đồng bộ với ``frontend/src/components/BotMessage.jsx``."""
+
+    HIGH = "high"  #: có direct match đã xác minh -> đề xuất trực tiếp
+    LOW = "low"  #: gần đúng (direct chưa xác minh, hoặc chỉ topic)
+    NONE = "none"  #: không có gì đủ liên quan -> nói "không biết", tự escalate
+
+
+class SourceTier(str, Enum):
+    VERIFIED = "VERIFIED"  #: ✅ nguồn đã xác minh (LabCoach/Mentor/Admin/BTC)
+    COMMUNITY_UNVERIFIED = "COMMUNITY_UNVERIFIED"  #: ⚠️ học viên, chưa xác minh
+
+
+class Relevance(str, Enum):
+    DIRECT = "direct"  #: cùng vấn đề (problem_similarity >= 0.78)
+    TOPIC = "topic"  #: cùng chủ đề (không giải quyết trực tiếp)
+
+
+ANSWER_SOURCE_TIER = {
+    "VERIFIED": SourceTier.VERIFIED,
+    "COMMUNITY_UNVERIFIED": SourceTier.COMMUNITY_UNVERIFIED,
+}
+
+
+# ---------------------------------------------------------------------------
+# Copy (headline/note) — phản chiếu BotMessage.jsx, không đổi tinh thần
+# ---------------------------------------------------------------------------
+
+BOT_COPY: dict[ConfidenceTier, dict[str, str]] = {
+    ConfidenceTier.HIGH: {
+        "headline": "Mình tìm thấy câu hỏi tương tự đã có lời giải",
+        "note": "Đọc trước các thread này, phần lớn trường hợp là cùng một nguyên nhân.",
+    },
+    ConfidenceTier.LOW: {
+        "headline": "Mình chỉ tìm được kết quả gần đúng",
+        "note": (
+            "Độ khớp không cao nên có thể không đúng ý bạn. Nếu không giải quyết được, "
+            "bấm nút bên dưới để mình gọi LabCoach."
+        ),
+    },
+    ConfidenceTier.NONE: {
+        "headline": "Chưa có thread nào tương tự trong lịch sử kênh",
+        "note": (
+            "Đây là câu hỏi mới. Mình đã chuyển trực tiếp cho LabCoach, "
+            "bạn không cần làm gì thêm."
+        ),
+    },
+}
+
+#: Ghi chú độ tin cậy để inject vào System Prompt. Phản chiếu ROLE_TRUST trong
+#: tools/search_qa_threads. Chỉ dùng để HƯỚNG dẫn LLM, KHÔNG để LLM tự xếp hạng
+#: (việc xếp hạng đã làm ở code).
+SOURCE_TRUST_NOTE: str = (
+    "- Độ tin cậy (source_trust; CHỈ phá thế hoà trong cùng nhóm độ liên quan, "
+    "không đảo thứ tự liên quan): Admin/Mentor/BTC=1.0, LabCoach=0.95, "
+    "học viên đã xác minh=0.85, học viên chưa xác minh=0.40."
+)
+
+
+class ButtonSpec(BaseModel):
+    """Một nút bấm ở cuối tin nhắn bot (tương ứng dupbotService.js)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(description="Định danh nút, dùng cho handler frontend.")
+    label: str = Field(description="Text hiển thị.")
+    action: str = Field(description="Tên hàm trong dupbotService.js.")
+    style: str = Field(description="'green' | 'secondary'.")
+
+
+#: Hai nút cố định. Thứ tự: resolve trước, escalate sau (giống BotMessage.jsx).
+RESOLVE_BUTTON = ButtonSpec(
+    id="resolve",
+    label="Đã giải quyết được",
+    action="markThreadResolved",
+    style="green",
+)
+ESCALATE_BUTTON = ButtonSpec(
+    id="escalate",
+    label="Chưa đúng ý tôi",
+    action="escalateToLabCoach",
+    style="secondary",
+)
+BUTTONS: tuple[ButtonSpec, ButtonSpec] = (RESOLVE_BUTTON, ESCALATE_BUTTON)
+
+
+# ---------------------------------------------------------------------------
+# Models đầu ra
+# ---------------------------------------------------------------------------
+
+
+class AnswerSummary(BaseModel):
+    """Tóm tắt một câu trả lời để hiển thị, kèm nhãn nguồn."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    answer_id: str
+    content: str = Field(description="Nguyên văn từ get_qa_thread, không diễn ý.")
+    author_name: str
+    author_role: str
+    source_tier: SourceTier
+    is_verified: bool
+
+
+class SuggestedThread(BaseModel):
+    """Một thread đề xuất trong danh sách kết quả."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    thread_id: str
+    rank: int = Field(ge=1, le=MAX_SUGGESTED_THREADS)
+    title: str
+    similarity: int = Field(ge=0, le=100, description="problem_similarity * 100.")
+    relevance: Relevance
+    excerpt: str = Field(description="Trích đoạn nguyên văn: câu trả lời hoặc câu hỏi gốc.")
+    thread_url: str = Field(description="Link gốc từ tool, KHÔNG tự tạo.")
+    source_tier: SourceTier
+    author_name: str | None = None
+    author_role: str | None = None
+    #: Chỉ direct match mới có lời giải. Topic match PHẢI là None (guardrail).
+    main_answer: AnswerSummary | None = None
+    supplementary_answer: AnswerSummary | None = None
+
+
+class BotResponse(BaseModel):
+    """Payload hoàn chỉnh bot trả về cho frontend / Discord."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    confidence: ConfidenceTier
+    headline: str
+    note: str
+    suggestions: list[SuggestedThread] = Field(default_factory=list)
+    render_buttons: bool = False
+    buttons: list[ButtonSpec] = Field(default_factory=list)
+    escalated_to_labcoach: bool = False
+
+
+# ---------------------------------------------------------------------------
+# Exception
+# ---------------------------------------------------------------------------
+
+
+class GuardrailViolation(Exception):
+    """Bất biến guardrail bị phá. Bot phải từ chối in payload này."""
+
+
+# ---------------------------------------------------------------------------
+# Hàm quyết định (deterministic)
+# ---------------------------------------------------------------------------
+
+
+def classify_relevance(
+    problem_similarity: float, topic_similarity: float
+) -> Relevance | None:
+    """Re-validate cách phân loại của ``search_qa_threads`` tại lớp guardrail.
+
+    Trả về ``None`` nếu thread phải bị loại (không đủ liên quan). Hàm này **phản chiếu**
+    logic trong ``tools/search_qa_threads/tool.py`` — giữ ở đây để guardrail có thể
+    chặn lại bất kỳ kết quả nào bị tool xếp nhầm do thay đổi ngưỡng.
+    """
+    if problem_similarity >= DIRECT_MATCH_THRESHOLD:
+        return Relevance.DIRECT
+    if (
+        problem_similarity >= TOPIC_REFERENCE_PROBLEM_THRESHOLD
+        and topic_similarity >= TOPIC_REFERENCE_TOPIC_THRESHOLD
+    ):
+        return Relevance.TOPIC
+    return None
+
+
+def answer_source_tier(answer: Mapping[str, Any]) -> SourceTier:
+    """Xác định SourceTier của một câu trả lời từ get_qa_thread."""
+    label = str(answer.get("verification_label") or "").upper()
+    if label in ANSWER_SOURCE_TIER:
+        return ANSWER_SOURCE_TIER[label]
+    # Fallback: dựa vào cờ is_verified / vai trò tác giả.
+    if answer.get("is_verified") is True:
+        return SourceTier.VERIFIED
+    role = str(answer.get("author_role") or "")
+    if role in VERIFIED_ROLES:
+        return SourceTier.VERIFIED
+    return SourceTier.COMMUNITY_UNVERIFIED
+
+
+def thread_source_tier(match: Mapping[str, Any]) -> SourceTier:
+    """SourceTier cấp thread, dùng khi chưa đọc chi tiết câu trả lời."""
+    if match.get("has_verified_answer") is True:
+        return SourceTier.VERIFIED
+    if float(match.get("source_trust") or 0.0) >= 0.85:
+        return SourceTier.VERIFIED
+    return SourceTier.COMMUNITY_UNVERIFIED
+
+
+def rank_for_display(
+    direct_matches: Iterable[Mapping[str, Any]],
+    topic_matches: Iterable[Mapping[str, Any]] | None = None,
+) -> list[tuple[Relevance, Mapping[str, Any]]]:
+    """Trộn direct + topic theo thứ tự ưu tiên spec §5.3.
+
+    Thứ tự: direct+verified > direct+community > topic+verified > topic+community.
+    Trong từng nhóm con: ``problem_similarity`` giảm, rồi ``source_trust`` giảm.
+    Trả về list (Relevance, match) để :func:`select_suggestions` cắt top-N.
+    """
+    topic_matches = list(topic_matches or [])
+
+    def group_key(relevance: Relevance, match: Mapping[str, Any]) -> tuple[Any, ...]:
+        verified = thread_source_tier(match) is SourceTier.VERIFIED
+        # direct (0) trước topic (1); verified (0) trước community (1).
+        return (
+            0 if relevance is Relevance.DIRECT else 1,
+            0 if verified else 1,
+            -float(match.get("problem_similarity") or 0.0),
+            -float(match.get("source_trust") or 0.0),
+            str(match.get("thread_id") or ""),
+        )
+
+    combined: list[tuple[Relevance, Mapping[str, Any]]] = [
+        (Relevance.DIRECT, m) for m in direct_matches
+    ] + [(Relevance.TOPIC, m) for m in topic_matches]
+    combined.sort(key=lambda item: group_key(item[0], item[1]))
+    return combined
+
+
+def decide_confidence(
+    direct_matches: Iterable[Mapping[str, Any]],
+    topic_matches: Iterable[Mapping[str, Any]] | None = None,
+) -> ConfidenceTier:
+    """Chọn tier confidence theo bảng tra trong Bot_System_Instructions §6.
+
+    - HIGH : có direct match có câu trả lời đã xác minh.
+    - LOW  : có direct match nhưng chưa xác minh, HOẶC chỉ có topic match.
+    - NONE : cả direct và topic rỗng.
+    """
+    direct = list(direct_matches)
+    topic = list(topic_matches or [])
+    if any(m.get("has_verified_answer") for m in direct):
+        return ConfidenceTier.HIGH
+    if direct or topic:
+        return ConfidenceTier.LOW
+    return ConfidenceTier.NONE
+
+
+def decide_buttons(tier: ConfidenceTier, status: str) -> list[ButtonSpec]:
+    """Hai nút chỉ xuất hiện khi ``pending`` và tier ∈ {HIGH, LOW}.
+
+    Tier NONE đã tự escalate nên không sinh nút (spec §8).
+    """
+    if status != "pending":
+        return []
+    if tier is ConfidenceTier.NONE:
+        return []
+    return list(BUTTONS)
+
+
+def should_escalate(tier: ConfidenceTier) -> bool:
+    """Tier NONE tự động chuyển LabCoach."""
+    return tier is ConfidenceTier.NONE
+
+
+# ---------------------------------------------------------------------------
+# Tổng hợp phản hồi
+# ---------------------------------------------------------------------------
+
+
+def _to_answer_summary(answer: Mapping[str, Any]) -> AnswerSummary:
+    return AnswerSummary(
+        answer_id=str(answer.get("answer_id") or ""),
+        content=str(answer.get("content") or ""),
+        author_name=str(answer.get("author_name") or ""),
+        author_role=str(answer.get("author_role") or ""),
+        source_tier=answer_source_tier(answer),
+        is_verified=bool(answer.get("is_verified")),
+    )
+
+
+def _pick_answers(
+    thread_detail: Mapping[str, Any],
+    *,
+    max_main: int = MAX_MAIN_ANSWERS,
+    max_supp: int = MAX_SUPPLEMENTARY_ANSWERS,
+) -> tuple[AnswerSummary | None, AnswerSummary | None]:
+    """Chọn 1 câu chính (ưu tiên verified/accepted) + tối đa 1 câu bổ sung.
+
+    Bổ sung phải là community và khác nội dung với câu chính — để bổ sung góc nhìn,
+    không lặp. Nếu không có câu chính verified, lấy câu đầu tiên làm chính.
+    """
+    answers = list(thread_detail.get("selected_answers") or [])
+    main: AnswerSummary | None = None
+    supp: AnswerSummary | None = None
+
+    for raw in answers:
+        summary = _to_answer_summary(raw)
+        if main is None and summary.source_tier is SourceTier.VERIFIED:
+            main = summary
+        elif (
+            supp is None
+            and summary.source_tier is SourceTier.COMMUNITY_UNVERIFIED
+            and summary.answer_id != (main.answer_id if main else None)
+            and summary.content != (main.content if main else None)
+        ):
+            supp = summary
+        if main and (supp or max_supp <= 0):
+            break
+
+    if main is None and answers:
+        main = _to_answer_summary(answers[0])
+    return main, supp
+
+
+def select_suggestions(
+    ranked: Iterable[tuple[Relevance, Mapping[str, Any]]],
+    thread_details: Mapping[str, Mapping[str, Any]],
+    *,
+    max_threads: int = MAX_SUGGESTED_THREADS,
+) -> list[SuggestedThread]:
+    """Cắt top-N thread từ danh sách đã xếp và đính kèm lời giải (nếu direct)."""
+    suggestions: list[SuggestedThread] = []
+    for relevance, match in ranked:
+        if len(suggestions) >= max_threads:
+            break
+        thread_id = str(match.get("thread_id") or "")
+        detail = thread_details.get(thread_id) or {}
+        similarity = round(float(match.get("problem_similarity") or 0.0) * 100)
+
+        if relevance is Relevance.DIRECT:
+            main, supp = _pick_answers(detail)
+            excerpt = (main.content if main else str(detail.get("question") or "")) or str(
+                match.get("title") or ""
+            )
+            source_tier = main.source_tier if main else thread_source_tier(match)
+            author_name = main.author_name if main else None
+            author_role = main.author_role if main else None
+        else:
+            # Topic match: KHÔNG trình lời giải, chỉ tham khảo chủ đề.
+            main = supp = None
+            excerpt = str(detail.get("question") or match.get("title") or "")
+            source_tier = thread_source_tier(match)
+            author_name = author_role = None
+
+        suggestions.append(
+            SuggestedThread(
+                thread_id=thread_id,
+                rank=len(suggestions) + 1,
+                title=str(match.get("title") or detail.get("title") or ""),
+                similarity=similarity,
+                relevance=relevance,
+                excerpt=excerpt,
+                thread_url=str(match.get("thread_url") or detail.get("thread_url") or ""),
+                source_tier=source_tier,
+                author_name=author_name,
+                author_role=author_role,
+                main_answer=main,
+                supplementary_answer=supp,
+            )
+        )
+    return suggestions
+
+
+def build_bot_response(
+    search_result: Mapping[str, Any],
+    thread_details: Mapping[str, Mapping[str, Any]] | None = None,
+    *,
+    status: str = "pending",
+    max_threads: int = MAX_SUGGESTED_THREADS,
+) -> BotResponse:
+    """Dựng :class:`BotResponse` từ output của hai tool search + get_qa_thread.
+
+    Tham số
+    ----------
+    search_result
+        Output của ``search_qa_threads`` (có ``direct_matches`` / ``topic_matches``).
+    thread_details
+        Ánh xạ ``{thread_id: get_qa_thread(thread_id)}`` cho các direct match cần
+        trích lời giải. Topic match không bắt buộc có chi tiết.
+    status
+        ``"pending"`` | ``"resolved"`` | ``"escalated"`` — quyết định có sinh nút.
+    """
+    direct = list(search_result.get("direct_matches") or [])
+    topic = list(search_result.get("topic_matches") or [])
+    details = thread_details or {}
+
+    tier = decide_confidence(direct, topic)
+    copy = BOT_COPY[tier]
+
+    if tier is ConfidenceTier.NONE:
+        return BotResponse(
+            confidence=tier,
+            headline=copy["headline"],
+            note=copy["note"],
+            suggestions=[],
+            render_buttons=False,
+            buttons=[],
+            escalated_to_labcoach=True,
+        )
+
+    ranked = rank_for_display(direct, topic)
+    suggestions = select_suggestions(ranked, details, max_threads=max_threads)
+    buttons = decide_buttons(tier, status)
+    return BotResponse(
+        confidence=tier,
+        headline=copy["headline"],
+        note=copy["note"],
+        suggestions=suggestions,
+        render_buttons=bool(buttons),
+        buttons=buttons,
+        escalated_to_labcoach=should_escalate(tier),
+    )
+
+
+# ---------------------------------------------------------------------------
+# Validator cứng — chạy trước khi in payload
+# ---------------------------------------------------------------------------
+
+
+def _iter_suggestions(response: BotResponse) -> Iterable[SuggestedThread]:
+    return response.suggestions
+
+
+def validate_links_present(response: BotResponse) -> None:
+    """G3/G7: mỗi đề xuất phải có thread_url gốc, không rỗng."""
+    for s in response.suggestions:
+        if not s.thread_url:
+            raise GuardrailViolation(
+                f"Thread {s.thread_id} thiếu thread_url — không được hiển thị."
+            )
+
+
+def validate_answer_limits(response: BotResponse) -> None:
+    """§8/C.4: mỗi thread tối đa 1 câu chính + 1 câu bổ sung."""
+    for s in response.suggestions:
+        main_count = 1 if s.main_answer else 0
+        supp_count = 1 if s.supplementary_answer else 0
+        if main_count > MAX_MAIN_ANSWERS or supp_count > MAX_SUPPLEMENTARY_ANSWERS:
+            raise GuardrailViolation(
+                f"Thread {s.thread_id} vượt giới hạn câu trả lời "
+                f"({main_count} chính / {supp_count} bổ sung)."
+            )
+
+
+def validate_none_is_empty(response: BotResponse) -> None:
+    """B.2 (lỗi nặng nhất): tier NONE phải không có gợi ý — không bịa."""
+    if response.confidence is ConfidenceTier.NONE and response.suggestions:
+        raise GuardrailViolation(
+            "Tier NONE nhưng vẫn có gợi ý — vi phạm 'không bịa khi không biết'."
+        )
+
+
+def validate_topic_not_solution(response: BotResponse) -> None:
+    """G/spec §15.3: topic match không được trình main_answer như lời giải."""
+    for s in response.suggestions:
+        if s.relevance is Relevance.TOPIC and s.main_answer is not None:
+            raise GuardrailViolation(
+                f"Thread {s.thread_id} là topic match nhưng lại có lời giải — "
+                "topic reference không được dùng làm câu trả lời trực tiếp."
+            )
+
+
+def validate_no_fabrication(response: BotResponse) -> None:
+    """G1: mọi đề xuất phải có thread_id; trích đoạn phải đến từ tool."""
+    for s in response.suggestions:
+        if not s.thread_id:
+            raise GuardrailViolation("Phát hiện đề xuất không có thread_id (bịa).")
+        if not s.excerpt:
+            raise GuardrailViolation(
+                f"Thread {s.thread_id} có trích đoạn rỗng — không in nội dung bịa."
+            )
+
+
+def enforce(response: BotResponse) -> BotResponse:
+    """Chạy toàn bộ validator. Raise :class:`GuardrailViolation` nếu vi phạm.
+
+    Gọi hàm này ngay trước khi serialize payload ra frontend/Discord. Nếu raise,
+    bot phải rơi về tin nhắn an toàn (tier NONE) thay vì in payload lỗi.
+    """
+    validate_links_present(response)
+    validate_answer_limits(response)
+    validate_none_is_empty(response)
+    validate_topic_not_solution(response)
+    validate_no_fabrication(response)
+    return response
