@@ -7,7 +7,6 @@ import SystemMessage from './SystemMessage.jsx'
 import TypingIndicator from './TypingIndicator.jsx'
 import MessageComposer from './MessageComposer.jsx'
 import { SEED_MESSAGES } from '../data/threads.js'
-import { CONFIDENCE } from '../lib/semanticSearch.js'
 import { findSimilarThreads, markThreadResolved, escalateToLabCoach, postMessage } from '../services/dupbotService.js'
 
 const CHANNEL_ID = 'hoi-dap'
@@ -41,11 +40,13 @@ export default function HoiDapChannel({ onResolvedCountChange, onThreadResolvedC
       body: text,
     }
     setMessages((prev) => [...prev, userMsg])
-    postMessage(CHANNEL_ID, userMsg).catch(() => {})
 
     setThinking(true)
     let result
+    let questionId = userMsg.id
     try {
+      const posted = await postMessage(CHANNEL_ID, userMsg)
+      questionId = posted.id ?? questionId
       result = await findSimilarThreads(text, { topK: 3 })
     } catch (err) {
       setThinking(false)
@@ -63,51 +64,87 @@ export default function HoiDapChannel({ onResolvedCountChange, onThreadResolvedC
       {
         id: botId,
         kind: 'bot',
+        questionId,
         query: text,
         result,
-        status: result.confidence === CONFIDENCE.NONE ? 'escalated' : 'pending',
+        status: result.escalated_to_labcoach ? 'escalating' : 'pending',
       },
     ])
 
-    if (result.confidence === CONFIDENCE.NONE) {
-      escalate(botId, text, [], 'Không có thread nào vượt ngưỡng tương đồng 20%.')
+    if (result.escalated_to_labcoach) {
+      await escalate(
+        botId,
+        questionId,
+        text,
+        [],
+        result.reason === 'no_source'
+          ? 'Không có thread nào đủ liên quan trong corpus.'
+          : result.note,
+      )
     }
   }
 
-  async function handleResolve(botId) {
-    await markThreadResolved(botId)
-    setMessages((prev) => prev.map((m) => (m.id === botId ? { ...m, status: 'resolved' } : m)))
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: nextId(),
-        kind: 'system',
-        variant: 'resolved',
-        body: 'DupBot đã gắn nhãn “Đã xử lý” cho thread này và bỏ khỏi hàng chờ của LabCoach.',
-      },
-    ])
-    onThreadResolvedChange(true)
-    onResolvedCountChange((c) => c + 1)
+  async function handleResolve(botId, questionId) {
+    try {
+      await markThreadResolved(questionId)
+      setMessages((prev) => prev.map((m) => (m.id === botId ? { ...m, status: 'resolved' } : m)))
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: nextId(),
+          kind: 'system',
+          variant: 'resolved',
+          body: 'DupBot đã gắn nhãn “Đã xử lý” cho thread này và bỏ khỏi hàng chờ của LabCoach.',
+        },
+      ])
+      onThreadResolvedChange(true)
+      onResolvedCountChange((c) => c + 1)
+    } catch (err) {
+      appendActionError(err)
+    }
   }
 
-  async function handleEscalate(botId, query, matches) {
-    setMessages((prev) => prev.map((m) => (m.id === botId ? { ...m, status: 'escalated' } : m)))
-    await escalate(botId, query, matches, 'Học viên đã đọc các thread trên và xác nhận không đúng vấn đề của mình.')
+  async function handleEscalate(botId, questionId, query, matches) {
+    await escalate(
+      botId,
+      questionId,
+      query,
+      matches,
+      'Học viên đã đọc các thread trên và xác nhận không đúng vấn đề của mình.',
+    )
   }
 
-  async function escalate(botId, query, rejected, reason) {
-    const res = await escalateToLabCoach(botId, { query, rejected, reason })
+  async function escalate(botId, questionId, query, rejected, reason) {
+    try {
+      const res = await escalateToLabCoach(questionId, { query, rejected, reason })
+      setMessages((prev) => prev.map((m) => (m.id === botId ? { ...m, status: 'escalated' } : m)))
+      setMessages((prev) => [
+        ...prev,
+        { id: nextId(), kind: 'escalation', query, rejected, reason },
+        {
+          id: nextId(),
+          kind: 'system',
+          variant: 'tag',
+          body: `Thread được gắn nhãn "Chờ LabCoach" (vị trí #${res.queuePosition} trong hàng chờ).`,
+        },
+      ])
+      onThreadResolvedChange(false)
+    } catch (err) {
+      setMessages((prev) => prev.map((m) => (m.id === botId ? { ...m, status: 'pending' } : m)))
+      appendActionError(err)
+    }
+  }
+
+  function appendActionError(err) {
     setMessages((prev) => [
       ...prev,
-      { id: nextId(), kind: 'escalation', query, rejected, reason },
       {
         id: nextId(),
         kind: 'system',
         variant: 'tag',
-        body: `Thread được gắn nhãn "Chờ LabCoach" (vị trí #${res.queuePosition} trong hàng chờ).`,
+        body: `Chưa thể cập nhật thread: ${err.message}. Bạn có thể thử lại.`,
       },
     ])
-    onThreadResolvedChange(false)
   }
 
   return (
@@ -130,8 +167,8 @@ export default function HoiDapChannel({ onResolvedCountChange, onThreadResolvedC
               key={m.id}
               result={m.result}
               status={m.status}
-              onResolve={() => handleResolve(m.id)}
-              onEscalate={() => handleEscalate(m.id, m.query, m.result.matches)}
+              onResolve={() => handleResolve(m.id, m.questionId)}
+              onEscalate={() => handleEscalate(m.id, m.questionId, m.query, m.result.suggestions)}
             />
           )
         })}

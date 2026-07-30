@@ -26,9 +26,20 @@ function BotAvatar() {
 }
 
 export default function BotMessage({ result, status, onResolve, onEscalate }) {
-  const { confidence, matches } = result
-  const copy = COPY[confidence]
+  const { confidence } = result
+  const matches = result.suggestions ?? result.matches ?? []
+  const copy = {
+    headline: result.headline ?? COPY[confidence]?.headline ?? 'DupBot đã xử lý câu hỏi',
+    note: result.note ?? COPY[confidence]?.note ?? '',
+  }
   const isNone = confidence === CONFIDENCE.NONE
+  const showButtons = status === 'pending' && result.render_buttons !== false && !isNone
+  const retrievalLabel =
+    result.retrieval_mode === 'openai-embeddings'
+      ? 'OpenAI Embeddings + corpus TrustQA'
+      : result.retrieval_mode === 'browser-mock'
+        ? 'dữ liệu mô phỏng trong trình duyệt'
+        : 'tìm kiếm cục bộ trên corpus TrustQA'
 
   return (
     <div className="animate-fade-up px-4 py-2 hover:bg-[#2e3035]">
@@ -47,7 +58,7 @@ export default function BotMessage({ result, status, onResolve, onEscalate }) {
             <p className="text-[15px] font-semibold text-white">{copy.headline}</p>
             <p className="mt-0.5 text-[14px] leading-relaxed text-dc-muted">{copy.note}</p>
 
-            {!isNone && (
+            {matches.length > 0 && (
               <>
                 <div className="mt-3 space-y-2">
                   {matches.map((t, i) => (
@@ -55,14 +66,16 @@ export default function BotMessage({ result, status, onResolve, onEscalate }) {
                   ))}
                 </div>
                 <p className="mt-2.5 text-[12px] leading-relaxed text-dc-muted">
-                  Cách mình tìm: so ngữ nghĩa câu hỏi của bạn với {' '}
-                  <span className="font-mono text-dc-text">toàn bộ thread đã giải</span> bằng embedding,
-                  không so từ khoá — nên cách bạn diễn đạt khác vẫn khớp.
+                  Nguồn tìm kiếm: <span className="font-mono text-dc-text">{retrievalLabel}</span>.
                 </p>
               </>
             )}
 
-            {status === 'pending' && (
+            {result.warning && (
+              <p className="mt-2 text-[12px] text-dc-yellow">{result.warning}</p>
+            )}
+
+            {showButtons && (
               <div className="mt-3 flex flex-wrap gap-2 border-t border-dc-border pt-3">
                 <button
                   onClick={onResolve}

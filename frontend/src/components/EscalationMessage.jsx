@@ -43,14 +43,15 @@ export default function EscalationMessage({ query, rejected, reason }) {
                   </dt>
                   <dd className="mt-1 space-y-1">
                     {rejected.map((t) => (
-                      <div key={t.id} className="flex items-baseline gap-2 text-[13px]">
+                      <div key={t.thread_id ?? t.id} className="flex items-baseline gap-2 text-[13px]">
                         <span className="shrink-0 font-mono text-[11px] text-dc-muted">{t.similarity}%</span>
                         <a
-                          href={t.url}
-                          onClick={(e) => e.preventDefault()}
+                          href={t.thread_url ?? t.url}
+                          target="_blank"
+                          rel="noreferrer"
                           className="text-dc-link hover:underline"
                         >
-                          {t.id} — {t.title}
+                          {t.thread_id ?? t.id} — {t.title}
                         </a>
                       </div>
                     ))}

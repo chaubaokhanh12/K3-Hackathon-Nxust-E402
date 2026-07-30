@@ -15,7 +15,7 @@ from bot import load_impl
 
 HERE = Path(__file__).parent
 answer = load_impl()
-D = json.load(open(HERE / "discord_qa_mock.json", encoding="utf-8"))
+D = json.load(open(HERE.parents[1] / "data" / "discord_qa_mock.json", encoding="utf-8"))
 THREADS = {t["thread_id"]: t for t in D["threads"]}
 LINK = re.compile(r"^https://discord\.com/channels/\d+/\d+/(\d+)$")
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
