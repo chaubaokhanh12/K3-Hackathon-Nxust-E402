@@ -1,8 +1,5 @@
 # Feedback Log — DupBot (Validation với user)
 
-> **Khung điền sẵn.** Thay mọi ô `[…]` bằng dữ liệu thật từ vòng user test. Xoá các
-> dòng ví dụ (đánh dấu _(ví dụ — xoá khi nộp)_) trước khi nộp.
-
 ## Yêu cầu đạt điểm (R6 — 8đ, chấm trên file này)
 
 - [ ] **≥ 5 mẩu feedback** từ **≥ 5 người NGOÀI nhóm**.
@@ -19,9 +16,7 @@
   2. Sau khi xem gợi ý, bạn có còn muốn đăng câu hỏi mới không?
   3. Bạn mong bot cải thiện điều gì?
 - Ghi **nguyên văn** câu trả lời, không diễn giải lại.
-
 ---
-
 ## Bảng feedback
 
 | # | Ngày | Người góp ý (tên) | Vai / Lớp | Ngoài nhóm? | Willing từ CP1? | Câu hỏi đã thử | Quote nguyên văn | Đề xuất cải thiện | Hành động (đổi/giữ) |
@@ -37,14 +32,12 @@
 > | 0 | 12/07 | Nguyễn Văn A | Học viên K3 (ngoài nhóm) | ✅ | ✅ | "phoenix ko load dc phan doi" | "Nó ra đúng thread cũ luôn, nhưng mình hơi sợ khúc 'chưa xác minh' — không biết có tin được không." | Làm rõ nhãn nguồn chưa xác minh | → đổi #1 (thêm cảnh báo nguồn rõ hơn) |
 
 ---
-
 ## Người ghi log
 
 - **[TÊN THÀNH VIÊN]** — [vai trò].
 - **[TÊN THÀNH VIÊN]** — [vai trò].
 
 ---
-
 ## Changelog từ feedback *(bắt buộc ≥1 dòng, trỏ về mẩu feedback nào)*
 
 | # | Đổi gì (hoặc GIỮ NGUYÊN) | Vì sao — trỏ về mẩu feedback | File/chỗ đã sửa |
