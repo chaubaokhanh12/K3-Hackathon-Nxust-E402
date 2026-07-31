@@ -25,9 +25,15 @@ def test_prompt_contains_persona_and_role():
 
 def test_prompt_contains_real_thresholds():
     # Ngưỡng phải được inject từ tools, không phải hardcode ước lượng.
-    assert "0.78" in SYSTEM_PROMPT
-    assert "0.40" in SYSTEM_PROMPT
-    assert "0.50" in SYSTEM_PROMPT
+    from tools.search_qa_threads.tool import (
+        DIRECT_MATCH_THRESHOLD,
+        TOPIC_REFERENCE_PROBLEM_THRESHOLD,
+        TOPIC_REFERENCE_TOPIC_THRESHOLD,
+    )
+
+    assert f"{DIRECT_MATCH_THRESHOLD:.2f}" in SYSTEM_PROMPT
+    assert f"{TOPIC_REFERENCE_PROBLEM_THRESHOLD:.2f}" in SYSTEM_PROMPT
+    assert f"{TOPIC_REFERENCE_TOPIC_THRESHOLD:.2f}" in SYSTEM_PROMPT
 
 
 def test_prompt_contains_three_tiers_and_buttons():

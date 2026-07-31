@@ -17,6 +17,12 @@ DESCRIPTION = (
     "when the thread does not exist."
 )
 
+#: Vai trò từ mức này trở lên là nhân sự khoá học -> câu trả lời của họ là nguồn
+#: đã xác minh, kể cả khi corpus quên bật cờ ``is_verified_source``. Trước đây
+#: nhãn chỉ dựa vào cờ, nên một câu của Mentor bị gắn "chưa xác minh" -> tier bị
+#: hạ và bot đi làm phiền người thật một cách vô ích.
+VERIFIED_ROLE_MIN_PRIORITY = 3
+
 ROLE_PRIORITY = {
     "Admin": 5,
     "Mentor": 4,
@@ -121,15 +127,18 @@ def _selected_answers(
         is_trusted_answer = bool(
             trust_message_id and answer_id == trust_message_id
         )
+        role = str(reply.get("author_role") or "")
         is_verified = bool(
-            reply.get("is_verified_source") is True or is_trusted_answer
+            reply.get("is_verified_source") is True
+            or is_trusted_answer
+            or ROLE_PRIORITY.get(role, 0) >= VERIFIED_ROLE_MIN_PRIORITY
         )
         selected.append(
             {
                 "answer_id": answer_id,
                 "content": content,
                 "author_name": str(reply.get("author_name") or ""),
-                "author_role": str(reply.get("author_role") or ""),
+                "author_role": role,
                 "is_verified": is_verified,
                 "is_accepted": bool(
                     is_trusted_answer or (resolved_by and answer_id == resolved_by)

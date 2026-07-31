@@ -7,7 +7,15 @@ import pytest
 from pydantic import ValidationError
 
 from tools._shared.repository import CorpusRepository
-from tools.search_qa_threads.tool import search_qa_threads
+from tools.search_qa_threads.tool import (
+    DIRECT_MATCH_THRESHOLD,
+    TOPIC_REFERENCE_PROBLEM_THRESHOLD,
+    search_qa_threads,
+)
+
+#: Cosine nằm giữa hai ngưỡng -> topic reference, không phải direct match. Tính
+#: từ hằng số để fixture không lệch mỗi lần hiệu chỉnh lại ngưỡng.
+_TOPIC_COSINE = (TOPIC_REFERENCE_PROBLEM_THRESHOLD + DIRECT_MATCH_THRESHOLD) / 2
 
 
 class SearchEmbedder:
@@ -30,7 +38,9 @@ class SearchEmbedder:
             elif "community-only" in lowered:
                 vectors.append([0.0, 1.0, 0.0, 0.0])
             elif "topic-reference" in lowered:
-                vectors.append([0.6, 0.0, 0.8, 0.0])
+                vectors.append(
+                    [_TOPIC_COSINE, 0.0, (1 - _TOPIC_COSINE**2) ** 0.5, 0.0]
+                )
             else:
                 vectors.append([0.0, 0.0, 0.0, 1.0])
         return vectors

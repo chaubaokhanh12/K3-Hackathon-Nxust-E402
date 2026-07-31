@@ -25,7 +25,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 # Single source of truth: ngưỡng thật nằm trong tools, import về để không drift.
 from tools.detect_question_topics.tool import PRIMARY_TOPIC_THRESHOLD
-from tools.get_qa_thread.tool import ROLE_PRIORITY
+from tools.get_qa_thread.tool import ROLE_PRIORITY, VERIFIED_ROLE_MIN_PRIORITY
 from tools.search_qa_threads.tool import (
     DIRECT_MATCH_THRESHOLD,
     TOPIC_REFERENCE_PROBLEM_THRESHOLD,
@@ -39,6 +39,8 @@ __all__ = [
     "MAX_MAIN_ANSWERS",
     "MAX_SUPPLEMENTARY_ANSWERS",
     "BOT_COPY",
+    "DEFAULT_HUMAN_TARGET",
+    "render_copy",
     "BUTTONS",
     "ANSWER_SOURCE_TIER",
     "SOURCE_TRUST_NOTE",
@@ -55,11 +57,14 @@ __all__ = [
     "BotResponse",
     # decision functions
     "classify_relevance",
+    "revalidate_buckets",
     "answer_source_tier",
     "thread_source_tier",
     "rank_for_display",
     "select_suggestions",
     "decide_confidence",
+    "has_verified_solution",
+    "tier_for_content",
     "decide_buttons",
     "should_escalate",
     "build_bot_response",
@@ -74,7 +79,9 @@ __all__ = [
 #: Vai trò được coi là nguồn đã xác minh — priority >= 3 trong ROLE_PRIORITY
 #: của get_qa_thread (Admin 5 / Mentor 4 / BTC 4 / LabCoach 3). Learner = 1 -> loại.
 VERIFIED_ROLES: frozenset[str] = frozenset(
-    role for role, priority in ROLE_PRIORITY.items() if priority >= 3
+    role
+    for role, priority in ROLE_PRIORITY.items()
+    if priority >= VERIFIED_ROLE_MIN_PRIORITY
 )
 
 #: Ánh xạ verification_label của get_qa_thread -> SourceTier.
@@ -125,6 +132,12 @@ ANSWER_SOURCE_TIER = {
 # Copy (headline/note) — phản chiếu BotMessage.jsx, không đổi tinh thần
 # ---------------------------------------------------------------------------
 
+#: Vai trò mặc định khi chưa biết kết quả định tuyến. ``bot.py`` render lại copy
+#: bằng vai trò thật (``escalation.target_role``) nên học viên không bao giờ đọc
+#: "đã chuyển cho LabCoach" trong khi payload nói Mentor.
+DEFAULT_HUMAN_TARGET = "LabCoach"
+
+#: Template copy. ``{target}`` được điền bởi :func:`render_copy`.
 BOT_COPY: dict[ConfidenceTier, dict[str, str]] = {
     ConfidenceTier.HIGH: {
         "headline": "Mình tìm thấy câu hỏi tương tự đã có lời giải",
@@ -134,17 +147,30 @@ BOT_COPY: dict[ConfidenceTier, dict[str, str]] = {
         "headline": "Mình chỉ tìm được kết quả gần đúng",
         "note": (
             "Độ khớp không cao nên có thể không đúng ý bạn. Nếu không giải quyết được, "
-            "bấm nút bên dưới để mình gọi LabCoach."
+            "bấm nút bên dưới để mình gọi {target}."
         ),
     },
     ConfidenceTier.NONE: {
         "headline": "Chưa có thread nào tương tự trong lịch sử kênh",
         "note": (
-            "Đây là câu hỏi mới. Mình đã chuyển trực tiếp cho LabCoach, "
+            "Đây là câu hỏi mới. Mình đã chuyển trực tiếp cho {target}, "
             "bạn không cần làm gì thêm."
         ),
     },
 }
+
+
+def render_copy(tier: ConfidenceTier, target: Any = None) -> dict[str, str]:
+    """Điền vai trò người thật vào copy của một tier.
+
+    ``target`` nhận ``EscalationTarget``, chuỗi, hoặc ``None`` (dùng mặc định).
+    """
+    name = getattr(target, "value", target) or DEFAULT_HUMAN_TARGET
+    copy = BOT_COPY[tier]
+    return {
+        "headline": copy["headline"].format(target=name),
+        "note": copy["note"].format(target=name),
+    }
 
 #: Ghi chú độ tin cậy để inject vào System Prompt. Phản chiếu ROLE_TRUST trong
 #: tools/search_qa_threads. Chỉ dùng để HƯỚNG dẫn LLM, KHÔNG để LLM tự xếp hạng
@@ -214,6 +240,9 @@ class SuggestedThread(BaseModel):
     excerpt: str = Field(description="Trích đoạn nguyên văn: câu trả lời hoặc câu hỏi gốc.")
     thread_url: str = Field(description="Link gốc từ tool, KHÔNG tự tạo.")
     source_tier: SourceTier
+    #: Cờ xác minh CẤP THREAD từ corpus (``verified_answer``). Khác với
+    #: ``source_tier`` — cái đó nói về câu trả lời đang được trình ra.
+    thread_has_verified_answer: bool = False
     author_name: str | None = None
     author_role: str | None = None
     #: Chỉ direct match mới có lời giải. Topic match PHẢI là None (guardrail).
@@ -232,7 +261,11 @@ class BotResponse(BaseModel):
     suggestions: list[SuggestedThread] = Field(default_factory=list)
     render_buttons: bool = False
     buttons: list[ButtonSpec] = Field(default_factory=list)
-    escalated_to_labcoach: bool = False
+    #: Tín hiệu của TẦNG HIỂN THỊ: bot đã tự chuyển vì không có gì để trình
+    #: (tier NONE). Quyết định "chuyển cho AI" là của ``agent.routing`` và chỉ
+    #: nằm ở ``payload["escalation"]`` — không sao chép sang đây để tránh hai
+    #: nguồn sự thật lệch nhau.
+    needs_human_review: bool = False
 
 
 # ---------------------------------------------------------------------------
@@ -266,6 +299,33 @@ def classify_relevance(
     ):
         return Relevance.TOPIC
     return None
+
+
+def revalidate_buckets(
+    search_result: Mapping[str, Any],
+) -> tuple[list[Mapping[str, Any]], list[Mapping[str, Any]]]:
+    """Xếp lại hai rổ direct/topic bằng chính :func:`classify_relevance`.
+
+    Guardrail không được tin rổ mà tool (hoặc fallback cục bộ) đã xếp: nếu một
+    item nằm trong ``direct_matches`` nhưng điểm của nó chỉ đủ mức topic, nó bị
+    hạ xuống topic — và do đó KHÔNG được trình lời giải. Item không đạt cả hai
+    ngưỡng thì bị loại hẳn thay vì hiển thị.
+    """
+    direct: list[Mapping[str, Any]] = []
+    topic: list[Mapping[str, Any]] = []
+    for match in [
+        *(search_result.get("direct_matches") or []),
+        *(search_result.get("topic_matches") or []),
+    ]:
+        relevance = classify_relevance(
+            float(match.get("problem_similarity") or 0.0),
+            float(match.get("topic_similarity") or 0.0),
+        )
+        if relevance is Relevance.DIRECT:
+            direct.append(match)
+        elif relevance is Relevance.TOPIC:
+            topic.append(match)
+    return direct, topic
 
 
 def answer_source_tier(answer: Mapping[str, Any]) -> SourceTier:
@@ -340,6 +400,32 @@ def decide_confidence(
     return ConfidenceTier.NONE
 
 
+def has_verified_solution(suggestions: Iterable["SuggestedThread"]) -> bool:
+    """True nếu có ít nhất một direct match trình được lời giải đã xác minh."""
+    return any(
+        suggestion.relevance is Relevance.DIRECT
+        and suggestion.main_answer is not None
+        and suggestion.main_answer.source_tier is SourceTier.VERIFIED
+        for suggestion in suggestions
+    )
+
+
+def tier_for_content(
+    tier: ConfidenceTier, suggestions: Iterable["SuggestedThread"]
+) -> ConfidenceTier:
+    """Hạ tier cho khớp nội dung thật sự trình ra.
+
+    - Không còn gợi ý nào -> NONE.
+    - HIGH nhưng không gợi ý nào có lời giải đã xác minh -> LOW.
+    """
+    items = list(suggestions)
+    if not items:
+        return ConfidenceTier.NONE
+    if tier is ConfidenceTier.HIGH and not has_verified_solution(items):
+        return ConfidenceTier.LOW
+    return tier
+
+
 def decide_buttons(tier: ConfidenceTier, status: str) -> list[ButtonSpec]:
     """Hai nút chỉ xuất hiện khi ``pending`` và tier ∈ {HIGH, LOW}.
 
@@ -384,26 +470,32 @@ def _pick_answers(
     Bổ sung phải là community và khác nội dung với câu chính — để bổ sung góc nhìn,
     không lặp. Nếu không có câu chính verified, lấy câu đầu tiên làm chính.
     """
-    answers = list(thread_detail.get("selected_answers") or [])
-    main: AnswerSummary | None = None
+    answers = [
+        _to_answer_summary(raw)
+        for raw in (thread_detail.get("selected_answers") or [])
+    ]
+    if not answers or max_main <= 0:
+        return None, None
+
+    # Chọn CHÍNH trước, rồi mới chọn BỔ SUNG từ phần còn lại. Bản cũ làm ngược:
+    # câu community đầu tiên rơi vào nhánh elif thành supp, sau đó main fallback
+    # về answers[0] — cùng một câu trả lời bị trình hai lần.
+    main = next(
+        (a for a in answers if a.source_tier is SourceTier.VERIFIED),
+        answers[0],
+    )
     supp: AnswerSummary | None = None
-
-    for raw in answers:
-        summary = _to_answer_summary(raw)
-        if main is None and summary.source_tier is SourceTier.VERIFIED:
-            main = summary
-        elif (
-            supp is None
-            and summary.source_tier is SourceTier.COMMUNITY_UNVERIFIED
-            and summary.answer_id != (main.answer_id if main else None)
-            and summary.content != (main.content if main else None)
-        ):
-            supp = summary
-        if main and (supp or max_supp <= 0):
-            break
-
-    if main is None and answers:
-        main = _to_answer_summary(answers[0])
+    if max_supp > 0:
+        supp = next(
+            (
+                a
+                for a in answers
+                if a.source_tier is SourceTier.COMMUNITY_UNVERIFIED
+                and a.answer_id != main.answer_id
+                and a.content != main.content
+            ),
+            None,
+        )
     return main, supp
 
 
@@ -431,11 +523,15 @@ def select_suggestions(
             author_name = main.author_name if main else None
             author_role = main.author_role if main else None
         else:
-            # Topic match: KHÔNG trình lời giải, chỉ tham khảo chủ đề.
+            # Topic match: KHÔNG trình lời giải. Vẫn giữ trích đoạn nguyên văn là
+            # CÂU HỎI gốc (không phải tiêu đề đã biên tập) và metadata tác giả
+            # của thread — đó là thông tin quy chiếu, không phải nội dung giải.
+            attribution, _ = _pick_answers(detail)
             main = supp = None
             excerpt = str(detail.get("question") or match.get("title") or "")
             source_tier = thread_source_tier(match)
-            author_name = author_role = None
+            author_name = attribution.author_name if attribution else None
+            author_role = attribution.author_role if attribution else None
 
         suggestions.append(
             SuggestedThread(
@@ -447,6 +543,7 @@ def select_suggestions(
                 excerpt=excerpt,
                 thread_url=str(match.get("thread_url") or detail.get("thread_url") or ""),
                 source_tier=source_tier,
+                thread_has_verified_answer=bool(match.get("has_verified_answer")),
                 author_name=author_name,
                 author_role=author_role,
                 main_answer=main,
@@ -475,12 +572,11 @@ def build_bot_response(
     status
         ``"pending"`` | ``"resolved"`` | ``"escalated"`` — quyết định có sinh nút.
     """
-    direct = list(search_result.get("direct_matches") or [])
-    topic = list(search_result.get("topic_matches") or [])
+    direct, topic = revalidate_buckets(search_result)
     details = thread_details or {}
 
     tier = decide_confidence(direct, topic)
-    copy = BOT_COPY[tier]
+    copy = render_copy(tier)
 
     if tier is ConfidenceTier.NONE:
         return BotResponse(
@@ -490,11 +586,34 @@ def build_bot_response(
             suggestions=[],
             render_buttons=False,
             buttons=[],
-            escalated_to_labcoach=True,
+            needs_human_review=True,
         )
 
+    # Đã có thread cùng vấn đề thì KHÔNG chèn thêm thread "cùng chủ đề". Đã thử
+    # cho topic reference lấp chỗ trống: eval tụt 53->52 và rớt một P0
+    # (phan_tang_nguon), vì trộn hai mức độ liên quan làm thứ tự "nguồn đã xác
+    # minh xếp trước" trở nên mập mờ.
+    if direct:
+        topic = []
     ranked = rank_for_display(direct, topic)
     suggestions = select_suggestions(ranked, details, max_threads=max_threads)
+
+    # Tier phải khớp thứ THẬT SỰ trình ra, không khớp cờ cấp thread. Một thread
+    # có has_verified_answer=true nhưng câu trả lời đã bị get_qa_thread lọc sạch
+    # (noise / trùng lặp) thì không được nói "đã có lời giải".
+    tier = tier_for_content(tier, suggestions)
+    copy = render_copy(tier)
+    if tier is ConfidenceTier.NONE:
+        return BotResponse(
+            confidence=tier,
+            headline=copy["headline"],
+            note=copy["note"],
+            suggestions=[],
+            render_buttons=False,
+            buttons=[],
+            needs_human_review=True,
+        )
+
     buttons = decide_buttons(tier, status)
     return BotResponse(
         confidence=tier,
@@ -503,7 +622,7 @@ def build_bot_response(
         suggestions=suggestions,
         render_buttons=bool(buttons),
         buttons=buttons,
-        escalated_to_labcoach=should_escalate(tier),
+        needs_human_review=should_escalate(tier),
     )
 
 
@@ -537,6 +656,19 @@ def validate_answer_limits(response: BotResponse) -> None:
             )
 
 
+def validate_no_duplicate_answer(response: BotResponse) -> None:
+    """Câu bổ sung phải khác câu chính — không trình lại cùng một nội dung."""
+    for s in response.suggestions:
+        main, supp = s.main_answer, s.supplementary_answer
+        if main is None or supp is None:
+            continue
+        if main.answer_id == supp.answer_id or main.content == supp.content:
+            raise GuardrailViolation(
+                f"Thread {s.thread_id} trình cùng một câu trả lời ở cả vị trí "
+                "chính và bổ sung."
+            )
+
+
 def validate_none_is_empty(response: BotResponse) -> None:
     """B.2 (lỗi nặng nhất): tier NONE phải không có gợi ý — không bịa."""
     if response.confidence is ConfidenceTier.NONE and response.suggestions:
@@ -566,6 +698,17 @@ def validate_no_fabrication(response: BotResponse) -> None:
             )
 
 
+def validate_tier_matches_content(response: BotResponse) -> None:
+    """Tier HIGH bắt buộc phải có lời giải đã xác minh đi kèm."""
+    if response.confidence is ConfidenceTier.HIGH and not has_verified_solution(
+        response.suggestions
+    ):
+        raise GuardrailViolation(
+            "Tier HIGH nhưng không gợi ý nào có lời giải đã xác minh — "
+            "không được nói 'đã có lời giải'."
+        )
+
+
 def enforce(response: BotResponse) -> BotResponse:
     """Chạy toàn bộ validator. Raise :class:`GuardrailViolation` nếu vi phạm.
 
@@ -574,7 +717,9 @@ def enforce(response: BotResponse) -> BotResponse:
     """
     validate_links_present(response)
     validate_answer_limits(response)
+    validate_no_duplicate_answer(response)
     validate_none_is_empty(response)
     validate_topic_not_solution(response)
     validate_no_fabrication(response)
+    validate_tier_matches_content(response)
     return response

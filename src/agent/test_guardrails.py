@@ -8,6 +8,15 @@ from __future__ import annotations
 
 import pytest
 
+from tools.search_qa_threads.tool import (
+    DIRECT_MATCH_THRESHOLD,
+    TOPIC_REFERENCE_PROBLEM_THRESHOLD,
+    TOPIC_REFERENCE_TOPIC_THRESHOLD,
+)
+
+#: Điểm nằm giữa hai ngưỡng: đủ để là topic reference, chưa đủ là direct match.
+TOPIC_LEVEL = (TOPIC_REFERENCE_PROBLEM_THRESHOLD + DIRECT_MATCH_THRESHOLD) / 2
+
 from agent.guardrails import (
     BUTTONS,
     MAX_MAIN_ANSWERS,
@@ -41,18 +50,13 @@ from agent.guardrails import (
 def test_thresholds_match_tools():
     """guardrails import ngưỡng từ tools -> phải khớp giá trị đặc tả."""
     from agent import guardrails as g
-    from tools.search_qa_threads.tool import (
-        DIRECT_MATCH_THRESHOLD,
-        TOPIC_REFERENCE_PROBLEM_THRESHOLD,
-        TOPIC_REFERENCE_TOPIC_THRESHOLD,
-    )
-
     assert g.DIRECT_MATCH_THRESHOLD is DIRECT_MATCH_THRESHOLD
     assert g.TOPIC_REFERENCE_PROBLEM_THRESHOLD is TOPIC_REFERENCE_PROBLEM_THRESHOLD
     assert g.TOPIC_REFERENCE_TOPIC_THRESHOLD is TOPIC_REFERENCE_TOPIC_THRESHOLD
-    assert g.DIRECT_MATCH_THRESHOLD == pytest.approx(0.78)
-    assert g.TOPIC_REFERENCE_PROBLEM_THRESHOLD == pytest.approx(0.40)
-    assert g.TOPIC_REFERENCE_TOPIC_THRESHOLD == pytest.approx(0.50)
+    # Không ghim con số: ngưỡng được hiệu chỉnh lại theo thang cosine thật của
+    # embedding model (xem eval/threshold_calibration.md). Chỉ ghim quan hệ.
+    assert 0.0 < TOPIC_REFERENCE_PROBLEM_THRESHOLD < DIRECT_MATCH_THRESHOLD <= 1.0
+    assert 0.0 < TOPIC_REFERENCE_TOPIC_THRESHOLD <= 1.0
 
 
 def test_verified_roles_match_spec():
@@ -68,13 +72,13 @@ def test_verified_roles_match_spec():
 
 
 def test_classify_direct_at_threshold():
-    assert classify_relevance(0.78, 0.0) is Relevance.DIRECT
+    assert classify_relevance(DIRECT_MATCH_THRESHOLD, 0.0) is Relevance.DIRECT
 
 
 def test_classify_topic_requires_both_conditions():
-    assert classify_relevance(0.50, 0.60) is Relevance.TOPIC
+    assert classify_relevance(TOPIC_LEVEL, 1.0) is Relevance.TOPIC
     # thiếu topic_similarity -> loại dù problem đủ
-    assert classify_relevance(0.50, 0.30) is None
+    assert classify_relevance(TOPIC_LEVEL, 0.0) is None
 
 
 def test_classify_drop_when_too_weak():
@@ -191,7 +195,7 @@ def test_rank_direct_verified_first_then_community_then_topic():
     ]
     topic = [
         _match("t-verified", 0.55, True, trust=0.95),  # topic đã xác minh
-        _match("t-community", 0.50, False, trust=0.40),  # topic cộng đồng
+        _match("t-community", TOPIC_LEVEL, False, trust=0.40),  # topic cộng đồng
     ]
     ranked = rank_for_display(direct, topic)
     ids = [m["thread_id"] for _, m in ranked]
@@ -275,7 +279,7 @@ def test_build_response_none_is_empty_and_escalates():
     assert response.suggestions == []
     assert response.render_buttons is False
     assert response.buttons == []
-    assert response.escalated_to_labcoach is True
+    assert response.needs_human_review is True
     enforce(response)  # NONE sạch -> pass
 
 
@@ -289,7 +293,7 @@ def test_build_response_high_renders_buttons():
     assert response.confidence is ConfidenceTier.HIGH
     assert len(response.suggestions) == 1
     assert response.render_buttons is True
-    assert response.escalated_to_labcoach is False
+    assert response.needs_human_review is False
     enforce(response)
 
 

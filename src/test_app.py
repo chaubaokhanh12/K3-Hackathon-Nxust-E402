@@ -1,11 +1,25 @@
 from __future__ import annotations
 
+import pytest
+
 from starlette.testclient import TestClient
 
 from app import app
 
 
 client = TestClient(app)
+
+
+@pytest.fixture(autouse=True)
+def force_local_retrieval(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Unit test phải tất định và không gọi API tính phí.
+
+    Các khẳng định trong file này pin hành vi của chế độ ``local-corpus-fallback``;
+    nếu máy dev có ``OPENAI_API_KEY`` thì cùng một test lại chạy nhánh embeddings
+    và đỏ vì lý do không liên quan. Nhánh embeddings được đo bằng
+    ``src/test/test_cases.py``, không phải ở đây.
+    """
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
 
 
 def test_health_reports_active_retrieval_mode() -> None:

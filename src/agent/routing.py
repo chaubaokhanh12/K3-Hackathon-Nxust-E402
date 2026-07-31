@@ -28,11 +28,14 @@ Yêu cầu ``PYTHONPATH=src``.
 
 from __future__ import annotations
 
+import functools
+import os
 import re
 import unicodedata
 from enum import Enum
 from typing import Iterable, Mapping
 
+from openai import OpenAI
 from pydantic import BaseModel, ConfigDict, Field
 
 # Single source of truth: nhóm topic thật nằm trong tool detect_question_topics.
@@ -65,7 +68,9 @@ __all__ = [
     "LABCOACH_SIGNAL_PHRASES",
     # hàm
     "ascii_fold",
+    "phrase_pattern",
     "classify_scope",
+    "prospective_target",
     "has_verified_source",
     "route_escalation",
     "routing_prompt_block",
@@ -94,6 +99,11 @@ def _phrase_pattern(phrases: Iterable[str]) -> re.Pattern[str]:
     # Nhóm alternation lại: nếu không, lookbehind chỉ áp cho nhánh đầu và lookahead
     # chỉ áp cho nhánh cuối -> "tu vi" khớp trong "tu việc", "thi ho" khớp trong "thì hỏi".
     return re.compile(rf"(?<![a-z0-9])(?:{alternatives})(?![a-z0-9])")
+
+
+#: Alias công khai của :func:`_phrase_pattern` — ``bot.py`` cần đúng cách khớp
+#: cụm có biên từ này cho danh sách chủ đề ngoài corpus.
+phrase_pattern = _phrase_pattern
 
 
 # ---------------------------------------------------------------------------
@@ -203,21 +213,102 @@ INTEGRITY_PATTERN = _phrase_pattern(INTEGRITY_PHRASES)
 POLICY_PATTERN = _phrase_pattern(POLICY_MARKERS)
 
 
-def classify_scope(question: str) -> Scope:
-    """Xác định phạm vi trước khi tra cứu.
+# ---------------------------------------------------------------------------
+# LLM-based Scope Classifier (comprehensive off-topic detection)
+# ---------------------------------------------------------------------------
 
-    Thứ tự kiểm: liêm chính học thuật -> ngoài phạm vi -> trong phạm vi. Câu chứa
-    dấu hiệu hỏi quy định (:data:`POLICY_MARKERS`) luôn được coi là trong phạm vi,
-    kể cả khi có động từ "làm hộ" — học viên đang hỏi luật, không nhờ làm bài.
+
+def _get_scope_classifier_model() -> str:
+    """Get model name for scope classification from env or default."""
+    return os.getenv("SCOPE_CLASSIFIER_MODEL", "gpt-4o-mini")
+
+
+def _is_llm_classifier_enabled() -> bool:
+    """Check if LLM classifier is enabled via config."""
+    config = os.getenv("SCOPE_CLASSIFIER", "hybrid").lower()
+    return config in ("llm", "hybrid")
+
+
+@functools.lru_cache(maxsize=1000)
+def classify_scope_llm(question: str) -> Scope:
+    """Dùng LLM để classify scope - comprehensive hơn keyword matching.
+
+    Returns:
+        IN_SCOPE: câu hỏi về học tập, dự án, quy định khóa học
+        OFF_TOPIC: thể thao, giải trí, kiến thức chung, politics, celebrity, science, etc.
+        INTEGRITY: nhờ bot làm bài thay
+
+    Cached với LRU để optimize cost cho duplicate questions.
     """
+    try:
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        model = _get_scope_classifier_model()
+
+        system_prompt = """Bạn là content classifier cho chatbot khóa học AI.
+Phân loại câu hỏi vào 3 category:
+
+1. IN_SCOPE - Hỏi về: bài học, dự án, code/lỗi kỹ thuật, quy định khóa học, điểm danh, nghỉ học, XP, tài liệu, deadline, thành viên nhóm, mentor support
+2. OFF_TOPIC - Hỏi về: thể thao, giải trí, celebrity/người nổi tiếng, politics/chính trị, khoa học chung, movies/music/books/songs, thời tiết, tài chính, tin tức xã hội, bất cứ câu hỏi nào KHÔNG liên quan đến khóa học
+3. INTEGRITY - Nhờ bot làm bài thay: "viết hộ", "làm hộ", "giải hộ", "thi hộ", "code hộ"
+
+QUAN TRỌNG: Chỉ trả về ĐÚNG 3 từ: IN_SCOPE hoặc OFF_TOPIC hoặc INTEGRITY (không có thêm text nào khác)."""
+
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Câu hỏi: {question}"},
+            ],
+            temperature=0.0,
+            max_tokens=10,
+        )
+
+        result = response.choices[0].message.content.strip().upper()
+
+        # Parse LLM response
+        if "OFF_TOPIC" in result:
+            return Scope.OFF_TOPIC
+        elif "INTEGRITY" in result:
+            return Scope.INTEGRITY
+        else:
+            # Default to IN_SCOPE if unclear
+            return Scope.IN_SCOPE
+
+    except Exception as e:
+        # Fallback: raise exception to trigger keyword fallback
+        raise RuntimeError(f"LLM classification failed: {e}")
+
+
+def classify_scope(question: str, *, use_llm: bool = True) -> Scope:
+    """Xác định phạm vi trước khi tra cứu - hybrid approach.
+
+    Thứ tự kiểm:
+    1. Fast path: keyword patterns cho INTEGRITY (liêm chính học thuật)
+    2. LLM-based classification (comprehensive OFF_TOPIC detection)
+    3. Fallback: keyword matching (original logic)
+
+    :data:`POLICY_MARKERS` **chỉ** gỡ được cổng liêm chính (học viên hỏi luật chứ
+    không nhờ bot làm bài). LLM classifier sẽ handle comprehensive OFF_TOPIC detection
+    bao gồm celebrity, politics, science, entertainment, etc.
+    """
+    # Fast path: keyword patterns cho INTEGRITY (keep original logic)
     folded = ascii_fold(question)
-    if POLICY_PATTERN.search(folded):
-        return Scope.IN_SCOPE
-    if INTEGRITY_PATTERN.search(folded):
+    if INTEGRITY_PATTERN.search(folded) and not POLICY_PATTERN.search(folded):
         return Scope.INTEGRITY
+
+    # LLM-based classification (comprehensive OFF_TOPIC detection)
+    if use_llm and _is_llm_classifier_enabled():
+        try:
+            return classify_scope_llm(question)
+        except Exception:
+            # Fallback to keyword matching if LLM fails
+            pass
+
+    # Fallback: keyword matching (original logic)
     if OFF_TOPIC_PATTERN.search(folded):
         return Scope.OFF_TOPIC
     return Scope.IN_SCOPE
+
 
 
 # ---------------------------------------------------------------------------
@@ -365,6 +456,19 @@ def _target_for_domain(
     return EscalationTarget.LABCOACH
 
 
+def prospective_target(
+    question: str,
+    primary_topic_id: str | None = None,
+    intent: str | None = None,
+) -> EscalationTarget:
+    """Vai trò SẼ nhận câu hỏi nếu học viên bấm "Chưa đúng ý tôi".
+
+    Dùng để viết đúng câu "bấm nút bên dưới để mình gọi X" ngay từ lượt đầu,
+    thay vì mặc định nói LabCoach rồi lại chuyển cho Mentor.
+    """
+    return _target_for_domain(question, primary_topic_id, intent)
+
+
 _REASON_NOTE = {
     EscalationReason.NO_SOURCE: (
         "Chưa có thread nào trong kênh trả lời câu này nên mình chuyển thẳng cho {target}."
@@ -430,17 +534,33 @@ def route_escalation(
 
 
 def has_verified_source(suggestions: Iterable[Mapping[str, object]]) -> bool:
-    """True nếu có ít nhất một gợi ý đến từ nguồn đã xác minh.
+    """Câu hỏi ĐANG hỏi đã có nguồn xác minh hay chưa.
+
+    Chỉ xét thread **giống nhất** trong nhóm direct — tức là thread mà bot đang
+    coi là "cùng vấn đề". Hai cái bẫy đã gặp thật:
+
+    * Một tham chiếu **cùng chủ đề** có LabCoach trả lời không xác minh gì cho
+      câu đang hỏi; nó trả lời câu khác.
+    * Một direct match *kém giống hơn* nhưng đã xác minh (ví dụ 55%) từng nuốt
+      mất lượt nhờ người thật, trong khi thread trùng khớp 80% chỉ có học viên
+      trả lời (TC-016).
 
     Nhận cả payload guardrail (``source_tier``) và payload legacy (``verified``).
     """
-    for item in suggestions:
-        tier = item.get("source_tier")
-        if tier == SourceTier.VERIFIED or tier == SourceTier.VERIFIED.value:
-            return True
-        if item.get("verified") is True:
-            return True
-    return False
+
+    def _relevance(item: Mapping[str, object]) -> str:
+        value = item.get("relevance")
+        return str(getattr(value, "value", value) or "direct")
+
+    direct = [item for item in suggestions if _relevance(item) == "direct"]
+    if not direct:
+        return False
+
+    closest = max(direct, key=lambda item: float(item.get("similarity") or 0.0))
+    tier = closest.get("source_tier")
+    if tier == SourceTier.VERIFIED or tier == SourceTier.VERIFIED.value:
+        return True
+    return closest.get("verified") is True
 
 
 # ---------------------------------------------------------------------------
