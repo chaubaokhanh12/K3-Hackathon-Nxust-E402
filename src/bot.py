@@ -56,6 +56,12 @@ from tools._shared.generation import (
     OpenAIAnswerGenerator,
 )
 from tools._shared.repository import CorpusRepository
+from tools._shared.translation import (
+    TranslationService,
+    OpenAITranslator,
+    NullTranslator,
+    create_translator,
+)
 from tools.detect_question_topics import detect_question_topics
 from tools.get_qa_thread import get_qa_thread
 from tools.search_qa_threads import search_qa_threads
@@ -608,6 +614,37 @@ def answer(
             clarifying_question=CLARIFYING_QUESTION,
         )
 
+    # ---------------------------------------------------------------------------
+    # Translation Step: Handle multilingual queries (English → Vietnamese)
+    # ---------------------------------------------------------------------------
+    # Inject AFTER scope classification, BEFORE topic detection.
+    # This ensures:
+    # - Translation only runs for IN_SCOPE questions (cost optimization)
+    # - All downstream tools (topic detection, embeddings, search) work with Vietnamese
+    # - Original question preserved for user-facing text
+    translator: TranslationService | None = None
+    translation_applied = False
+    original_question = normalized_question
+
+    if os.getenv("TRANSLATION_ENABLED", "false").lower() == "true":
+        try:
+            translator = create_translator()
+            if not isinstance(translator, NullTranslator):
+                detected_lang = translator.detect_language(normalized_question)
+                if detected_lang != "vi":
+                    translated = translator.translate_to_vietnamese(normalized_question)
+                    normalized_question = translated
+                    translation_applied = True
+                    LOGGER.info(
+                        "Translated query from %s to Vietnamese: %s → %s",
+                        detected_lang,
+                        original_question,
+                        normalized_question,
+                    )
+        except Exception as exc:
+            LOGGER.warning("Translation failed (%s); using original query.", type(exc).__name__)
+            translator = None
+
     resolved_repository = repository or CorpusRepository()
     retrieval_mode = "openai-embeddings"
     warning: str | None = None
@@ -769,6 +806,7 @@ def answer(
             "reason": None if has_answer else "no_source",
             "results": _legacy_results(suggestions),
             "clarifying_question": None,
+            "translation_applied": translation_applied,  # Track translation usage
             **_escalation_fields(decision),
         }
     )

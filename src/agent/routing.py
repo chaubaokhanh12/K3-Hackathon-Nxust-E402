@@ -28,11 +28,14 @@ Yêu cầu ``PYTHONPATH=src``.
 
 from __future__ import annotations
 
+import functools
+import os
 import re
 import unicodedata
 from enum import Enum
 from typing import Iterable, Mapping
 
+from openai import OpenAI
 from pydantic import BaseModel, ConfigDict, Field
 
 # Single source of truth: nhóm topic thật nằm trong tool detect_question_topics.
@@ -210,22 +213,102 @@ INTEGRITY_PATTERN = _phrase_pattern(INTEGRITY_PHRASES)
 POLICY_PATTERN = _phrase_pattern(POLICY_MARKERS)
 
 
-def classify_scope(question: str) -> Scope:
-    """Xác định phạm vi trước khi tra cứu.
+# ---------------------------------------------------------------------------
+# LLM-based Scope Classifier (comprehensive off-topic detection)
+# ---------------------------------------------------------------------------
 
-    Thứ tự kiểm: ngoài phạm vi -> liêm chính học thuật -> trong phạm vi.
+
+def _get_scope_classifier_model() -> str:
+    """Get model name for scope classification from env or default."""
+    return os.getenv("SCOPE_CLASSIFIER_MODEL", "gpt-4o-mini")
+
+
+def _is_llm_classifier_enabled() -> bool:
+    """Check if LLM classifier is enabled via config."""
+    config = os.getenv("SCOPE_CLASSIFIER", "hybrid").lower()
+    return config in ("llm", "hybrid")
+
+
+@functools.lru_cache(maxsize=1000)
+def classify_scope_llm(question: str) -> Scope:
+    """Dùng LLM để classify scope - comprehensive hơn keyword matching.
+
+    Returns:
+        IN_SCOPE: câu hỏi về học tập, dự án, quy định khóa học
+        OFF_TOPIC: thể thao, giải trí, kiến thức chung, politics, celebrity, science, etc.
+        INTEGRITY: nhờ bot làm bài thay
+
+    Cached với LRU để optimize cost cho duplicate questions.
+    """
+    try:
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        model = _get_scope_classifier_model()
+
+        system_prompt = """Bạn là content classifier cho chatbot khóa học AI.
+Phân loại câu hỏi vào 3 category:
+
+1. IN_SCOPE - Hỏi về: bài học, dự án, code/lỗi kỹ thuật, quy định khóa học, điểm danh, nghỉ học, XP, tài liệu, deadline, thành viên nhóm, mentor support
+2. OFF_TOPIC - Hỏi về: thể thao, giải trí, celebrity/người nổi tiếng, politics/chính trị, khoa học chung, movies/music/books/songs, thời tiết, tài chính, tin tức xã hội, bất cứ câu hỏi nào KHÔNG liên quan đến khóa học
+3. INTEGRITY - Nhờ bot làm bài thay: "viết hộ", "làm hộ", "giải hộ", "thi hộ", "code hộ"
+
+QUAN TRỌNG: Chỉ trả về ĐÚNG 3 từ: IN_SCOPE hoặc OFF_TOPIC hoặc INTEGRITY (không có thêm text nào khác)."""
+
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Câu hỏi: {question}"},
+            ],
+            temperature=0.0,
+            max_tokens=10,
+        )
+
+        result = response.choices[0].message.content.strip().upper()
+
+        # Parse LLM response
+        if "OFF_TOPIC" in result:
+            return Scope.OFF_TOPIC
+        elif "INTEGRITY" in result:
+            return Scope.INTEGRITY
+        else:
+            # Default to IN_SCOPE if unclear
+            return Scope.IN_SCOPE
+
+    except Exception as e:
+        # Fallback: raise exception to trigger keyword fallback
+        raise RuntimeError(f"LLM classification failed: {e}")
+
+
+def classify_scope(question: str, *, use_llm: bool = True) -> Scope:
+    """Xác định phạm vi trước khi tra cứu - hybrid approach.
+
+    Thứ tự kiểm:
+    1. Fast path: keyword patterns cho INTEGRITY (liêm chính học thuật)
+    2. LLM-based classification (comprehensive OFF_TOPIC detection)
+    3. Fallback: keyword matching (original logic)
 
     :data:`POLICY_MARKERS` **chỉ** gỡ được cổng liêm chính (học viên hỏi luật chứ
-    không nhờ bot làm bài, ví dụ TC-029 "… có bị coi là gian lận không"). Nó không
-    gỡ cổng ngoài phạm vi: "tỷ số trận real madrid thế nào, có sao không" vẫn là
-    câu bóng đá, không được đi vào retrieval rồi tag người thật.
+    không nhờ bot làm bài). LLM classifier sẽ handle comprehensive OFF_TOPIC detection
+    bao gồm celebrity, politics, science, entertainment, etc.
     """
+    # Fast path: keyword patterns cho INTEGRITY (keep original logic)
     folded = ascii_fold(question)
-    if OFF_TOPIC_PATTERN.search(folded):
-        return Scope.OFF_TOPIC
     if INTEGRITY_PATTERN.search(folded) and not POLICY_PATTERN.search(folded):
         return Scope.INTEGRITY
+
+    # LLM-based classification (comprehensive OFF_TOPIC detection)
+    if use_llm and _is_llm_classifier_enabled():
+        try:
+            return classify_scope_llm(question)
+        except Exception:
+            # Fallback to keyword matching if LLM fails
+            pass
+
+    # Fallback: keyword matching (original logic)
+    if OFF_TOPIC_PATTERN.search(folded):
+        return Scope.OFF_TOPIC
     return Scope.IN_SCOPE
+
 
 
 # ---------------------------------------------------------------------------

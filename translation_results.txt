@@ -1,0 +1,25 @@
+Translation Test Results
+============================================================
+
+Test 1:
+  English: I want to ask how to take a leave of absence
+  Detected: en
+  Vietnamese: Tôi muốn hỏi cách xin nghỉ học.
+
+Test 2:
+  English: How to fix Missing credentials error
+  Detected: en
+  Vietnamese: Cách fix lỗi Missing credentials
+  Keywords: loi/fix
+
+Test 3:
+  English: When is the deadline for project submission?
+  Detected: en
+  Vietnamese: Deadline nộp dự án là khi nào?
+  Keywords: deadline/han nop
+
+Test 4:
+  English: My code is not working, can you help?
+  Detected: en
+  Vietnamese: Mã của tôi không hoạt động, bạn có thể giúp tôi không?
+
