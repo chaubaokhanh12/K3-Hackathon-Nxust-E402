@@ -4,7 +4,7 @@
 
 | Thành viên | Vai trò | Công việc phụ trách |
 |------------|---------|---------------------|
-| **Châu** | Leader / PM | Quản lý dự án, lập kế hoạch, xây dựng test cases, review toàn bộ hệ thống, cập nhật pipeline, tích hợp tool, kiểm định chất lượng, cập nhật các phiên bản Retrieval và LLM |
+| **Châu** | Leader / PM | Quản lý dự án, lập kế hoạch, xây dựng test cases, review hệ thống, cập nhật pipeline, kiểm định & cập nhật các phiên bản Retrieval và LLM |
 | **Bình An** | AI Engineer | Thiết kế System Prompts, xây dựng Prompt Guardrails và các cơ chế an toàn |
 | **Khải** | AI Engineer / Business | Phát triển Tool, chuẩn bị Pitching, thực hiện khảo sát người dùng |
 | **Tiến Đạt** | Data & Documentation | Thiết kế và triển khai bài khảo sát, thu thập dữ liệu từ Discord, chuẩn bị slide trình bày |
