@@ -112,7 +112,16 @@ def _infer_intent(topic_id: str) -> str:
 
 def _build_topic_profiles(
     repository: CorpusRepository,
-) -> list[tuple[str, str]]:
+) -> list[tuple[str, list[str]]]:
+    """Mỗi topic -> danh sách document của TỪNG thread (không nối lại làm một).
+
+    Bản cũ nối toàn bộ thread của một topic thành một chuỗi rồi embed. Hai vấn
+    đề: (1) topic đông thread sẽ vượt giới hạn 8192 token của
+    ``text-embedding-3-small``, hỏng cả lượt tra cứu; (2) vector của chuỗi ghép
+    bị chi phối bởi thread dài nhất. Ở đây embed từng thread rồi lấy tâm
+    (:func:`_centroid`): không có trần độ dài, mỗi thread đóng góp ngang nhau,
+    và vector từng thread còn tái dùng được qua cache.
+    """
     grouped: dict[str, list[str]] = defaultdict(list)
     for thread in repository.threads:
         topic_id = str(thread.get("topic_id") or "other")
@@ -125,9 +134,17 @@ def _build_topic_profiles(
             f"Tiêu đề: {title}\n"
             f"Câu hỏi: {question}"
         )
+    return [(topic_id, grouped[topic_id]) for topic_id in sorted(grouped)]
+
+
+def _centroid(vectors: list[list[float]]) -> list[float]:
+    """Vector trung bình. Cosine bất biến theo độ dài nên không cần chuẩn hoá."""
+    if not vectors:
+        return []
+    size = min(len(vector) for vector in vectors)
+    count = len(vectors)
     return [
-        (topic_id, "\n\n".join(grouped[topic_id]))
-        for topic_id in sorted(grouped)
+        sum(vector[index] for vector in vectors) / count for index in range(size)
     ]
 
 
@@ -150,19 +167,24 @@ def detect_question_topics(
     if not profiles:
         return _other_result(payload.question)
 
-    texts = [payload.question, *(profile for _, profile in profiles)]
+    documents = [document for _, group in profiles for document in group]
+    texts = [payload.question, *documents]
     vectors = resolved_embedder.embed(texts)
     if len(vectors) != len(texts):
         raise ValueError("Embedder returned an unexpected number of vectors")
 
     query_vector = vectors[0]
-    scored_topics = [
-        (
-            topic_id,
-            max(0.0, min(1.0, cosine_similarity(query_vector, vector))),
+    scored_topics: list[tuple[str, float]] = []
+    offset = 0
+    for topic_id, group in profiles:
+        centroid = _centroid(vectors[1 + offset : 1 + offset + len(group)])
+        offset += len(group)
+        scored_topics.append(
+            (
+                topic_id,
+                max(0.0, min(1.0, cosine_similarity(query_vector, centroid))),
+            )
         )
-        for (topic_id, _), vector in zip(profiles, vectors[1:], strict=True)
-    ]
     scored_topics.sort(key=lambda item: (-item[1], item[0]))
     primary_id, primary_score = scored_topics[0]
 

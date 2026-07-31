@@ -3,14 +3,19 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import threading
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Protocol
+from uuid import uuid4
 
 from openai import OpenAI
 
 
 DEFAULT_EMBEDDING_MODEL = "text-embedding-3-small"
+#: Số input tối đa mỗi request. Corpus lớn phải cắt lô, nếu không API từ chối cả
+#: lượt tra cứu và bot tụt xuống chế độ tìm kiếm cục bộ.
+MAX_BATCH_SIZE = 96
 DEFAULT_CACHE_PATH = Path(__file__).resolve().parents[1] / ".cache" / "embeddings.json"
 
 
@@ -57,6 +62,16 @@ class OpenAIEmbedder:
         if not items:
             return []
 
+        vectors: list[list[float]] = []
+        for start in range(0, len(items), MAX_BATCH_SIZE):
+            vectors.extend(self._embed_batch(items[start : start + MAX_BATCH_SIZE]))
+        if len(vectors) != len(items):
+            raise EmbeddingResponseError(
+                f"Expected {len(items)} embeddings, received {len(vectors)}"
+            )
+        return vectors
+
+    def _embed_batch(self, items: list[str]) -> list[list[float]]:
         response = self._client.embeddings.create(
             model=self.model_name,
             input=items,
@@ -67,12 +82,7 @@ class OpenAIEmbedder:
             raise EmbeddingResponseError(
                 "Embedding response indexes must be unique and contiguous"
             )
-        vectors = [list(item.embedding) for item in ordered]
-        if len(vectors) != len(items):
-            raise EmbeddingResponseError(
-                f"Expected {len(items)} embeddings, received {len(vectors)}"
-            )
-        return vectors
+        return [list(item.embedding) for item in ordered]
 
 
 class CachedEmbedder:
@@ -88,6 +98,7 @@ class CachedEmbedder:
         self.model_name = delegate.model_name
         self.cache_path = Path(cache_path)
         self._entries: dict[str, list[float]] | None = None
+        self._write_lock = threading.Lock()
 
     def embed(self, texts: Sequence[str]) -> list[list[float]]:
         items = list(texts)
@@ -123,9 +134,7 @@ class CachedEmbedder:
         payload = f"{self.model_name}\0{text}".encode("utf-8")
         return hashlib.sha256(payload).hexdigest()
 
-    def _load_entries(self) -> dict[str, list[float]]:
-        if self._entries is not None:
-            return self._entries
+    def _read_file(self) -> dict[str, list[float]]:
         try:
             payload = json.loads(self.cache_path.read_text(encoding="utf-8"))
             raw_entries = payload.get("entries", {})
@@ -142,19 +151,39 @@ class CachedEmbedder:
                 valid_entries[str(key)] = [float(value) for value in vector]
             except (TypeError, ValueError):
                 continue
-        self._entries = valid_entries
+        return valid_entries
+
+    def _load_entries(self) -> dict[str, list[float]]:
+        if self._entries is None:
+            self._entries = self._read_file()
         return self._entries
 
     def _save_entries(self, entries: dict[str, list[float]]) -> None:
-        self.cache_path.parent.mkdir(parents=True, exist_ok=True)
-        temporary_path = self.cache_path.with_suffix(
-            f"{self.cache_path.suffix}.tmp"
-        )
-        temporary_path.write_text(
-            json.dumps(
-                {"model": self.model_name, "entries": entries},
-                ensure_ascii=False,
-            ),
-            encoding="utf-8",
-        )
-        temporary_path.replace(self.cache_path)
+        """Ghi nguyên tử, hợp nhất với những gì tiến trình khác đã ghi.
+
+        Hai điểm phải giữ: (1) file tạm mang tên duy nhất — dùng chung một tên
+        thì hai request song song (FastAPI chạy endpoint sync trên threadpool)
+        ghi đè lên nhau giữa chừng và file cache hỏng; (2) đọc lại đĩa rồi mới
+        hợp nhất — mỗi request tạo một CachedEmbedder riêng nên nếu ghi đè thẳng
+        thì entry của request kia bị mất.
+        """
+        with self._write_lock:
+            self.cache_path.parent.mkdir(parents=True, exist_ok=True)
+            merged = self._read_file()
+            merged.update(entries)
+            temporary_path = self.cache_path.with_name(
+                f"{self.cache_path.name}.{os.getpid()}.{uuid4().hex}.tmp"
+            )
+            try:
+                temporary_path.write_text(
+                    json.dumps(
+                        {"model": self.model_name, "entries": merged},
+                        ensure_ascii=False,
+                    ),
+                    encoding="utf-8",
+                )
+                temporary_path.replace(self.cache_path)
+            except OSError:
+                temporary_path.unlink(missing_ok=True)
+                raise
+            self._entries = merged

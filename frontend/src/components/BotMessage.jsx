@@ -1,4 +1,5 @@
 import SimilarThreadCard from './SimilarThreadCard.jsx'
+import GeneratedAnswer from './GeneratedAnswer.jsx'
 import { Sparkles, Check, ThumbsDown, Clock } from './Icons.jsx'
 import { CONFIDENCE } from '../lib/semanticSearch.js'
 
@@ -58,11 +59,14 @@ export default function BotMessage({ result, status, onResolve, onEscalate }) {
             <p className="text-[15px] font-semibold text-white">{copy.headline}</p>
             <p className="mt-0.5 text-[14px] leading-relaxed text-dc-muted">{copy.note}</p>
 
+            <GeneratedAnswer answer={result.generated_answer} suggestions={matches} />
+
             {matches.length > 0 && (
               <>
                 <div className="mt-3 space-y-2">
                   {matches.map((t, i) => (
-                    <SimilarThreadCard key={t.id} thread={t} rank={i + 1} />
+                    // Backend trả `thread_id`; chỉ mock cũ mới có `id`.
+                    <SimilarThreadCard key={t.thread_id ?? t.id} thread={t} rank={i + 1} />
                   ))}
                 </div>
                 <p className="mt-2.5 text-[12px] leading-relaxed text-dc-muted">

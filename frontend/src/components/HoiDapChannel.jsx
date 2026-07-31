@@ -80,6 +80,7 @@ export default function HoiDapChannel({ onResolvedCountChange, onThreadResolvedC
         result.reason === 'no_source'
           ? 'Không có thread nào đủ liên quan trong corpus.'
           : result.note,
+        'auto_no_source',
       )
     }
   }
@@ -114,9 +115,9 @@ export default function HoiDapChannel({ onResolvedCountChange, onThreadResolvedC
     )
   }
 
-  async function escalate(botId, questionId, query, rejected, reason) {
+  async function escalate(botId, questionId, query, rejected, reason, trigger = 'learner_request') {
     try {
-      const res = await escalateToLabCoach(questionId, { query, rejected, reason })
+      const res = await escalateToLabCoach(questionId, { query, rejected, reason, trigger })
       setMessages((prev) => prev.map((m) => (m.id === botId ? { ...m, status: 'escalated' } : m)))
       setMessages((prev) => [
         ...prev,

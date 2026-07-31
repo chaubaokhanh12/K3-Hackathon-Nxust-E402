@@ -7,6 +7,13 @@ source of truth: đổi threshold trong tool -> prompt tự cập nhật.
 
 Phản chiếu ``Bot_System_Instructions.md`` nhưng ở dạng operational (ngắn hơn),
 dành cho LLM điều phối bot.
+
+.. warning::
+   Pipeline hiện tại (``bot.answer``) **hoàn toàn xác định, không gọi LLM**, nên
+   chuỗi này chưa được nạp ở runtime. Mọi ràng buộc thật sự được bảo đảm bởi
+   ``agent.guardrails`` / ``agent.routing``. Khi cắm LLM vào, prompt này là đầu
+   vào system message; đến lúc đó vẫn phải chạy ``enforce()`` trên output vì
+   prompt không phải cơ chế cưỡng chế.
 """
 
 from __future__ import annotations
@@ -14,12 +21,12 @@ from __future__ import annotations
 from agent.routing import routing_prompt_block
 from agent.guardrails import (
     DIRECT_MATCH_THRESHOLD,
+    render_copy,
     MAX_SUGGESTED_THREADS,
     SOURCE_TRUST_NOTE,
     TOPIC_REFERENCE_PROBLEM_THRESHOLD,
     TOPIC_REFERENCE_TOPIC_THRESHOLD,
     VERIFIED_ROLES,
-    BOT_COPY,
     BUTTONS,
     ConfidenceTier,
 )
@@ -45,15 +52,19 @@ def build_system_prompt() -> str:
 - NGUỒN ĐÃ XÁC MINH (✅, trình trước): {verified}.
   NGUỒN CỘNG ĐỒNG (⚠️ "chưa được xác minh", trình sau): học viên chưa xác minh.
 {SOURCE_TRUST_NOTE}
-- GIỚI HẬN: tối đa {MAX_SUGGESTED_THREADS} thread; mỗi thread 1 câu chính + tối đa 1 câu bổ sung.
+- GIỚI HẠN: tối đa {MAX_SUGGESTED_THREADS} thread; mỗi thread 1 câu chính + tối đa 1 câu bổ sung.
 - NÚT ("{resolve_label}" / "{escalate_label}") CHỈ sinh khi status=pending VÀ tier ∈ {{HIGH, LOW}}. Tier NONE: KHÔNG nút, đã tự chuyển LabCoach.
-- CẤM TUYỆT: bịa nội dung/link/tác giả/trạng thái xác minh · dùng topic match làm câu trả lời · tự đăng/escalate khi chưa xác nhận · bỏ qua detect_question_topics."""
+- CẤM TUYỆT ĐỐI: bịa nội dung/link/tác giả/trạng thái xác minh · dùng topic match làm câu trả lời · tự đăng/escalate khi chưa xác nhận · bỏ qua detect_question_topics."""
 
-    # Headline/note cố định — bot không được đổi tinh thần.
+    # Headline/note cố định — bot không được đổi tinh thần. Chỗ {target} phải
+    # điền bằng vai trò thật đã định tuyến, không mặc định nói "LabCoach".
     copy_block = "\n".join(
-        f"  - {tier.value.upper()}: headline=\"{BOT_COPY[tier]['headline']}\"; "
-        f"note=\"{BOT_COPY[tier]['note']}\""
-        for tier in ConfidenceTier
+        f"  - {tier.value.upper()}: headline=\"{rendered['headline']}\"; "
+        f"note=\"{rendered['note']}\""
+        for tier, rendered in (
+            (tier, render_copy(tier, "<escalation.target_role>"))
+            for tier in ConfidenceTier
+        )
     )
 
     return f"""Bạn là DupBot — bot Discord ở kênh "Hỏi đáp" của khoá học AI. Nhiệm vụ duy nhất: TRA CỨU câu hỏi trùng lặp — tìm các thread cũ CÙNG VẤN ĐỀ ĐÃ CÓ LỜI GIẢI và đề xuất tối đa {MAX_SUGGESTED_THREADS} thread kèm link gốc, để học viên không phải chờ và LabCoach không phải trả lời câu đã có sẵn lời giải. Bạn KHÔNG phải chatbot tri thức chung, không giảng bài.
@@ -68,7 +79,7 @@ GIỌNG ĐIỆU
 
 {routing_prompt_block()}
 
-VĂNẢN THEO TIER (phải khớp):
+VĂN ÁN THEO TIER (phải khớp):
 {copy_block}
 
 NGUYÊN TẮC BẮT BUỘC — KHÔNG NGOẠI LỆ

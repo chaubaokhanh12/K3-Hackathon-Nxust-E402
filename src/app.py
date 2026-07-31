@@ -14,6 +14,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
+from agent import ConfidenceTier
 from agent.routing import classify_scope, route_escalation
 from bot import answer
 
@@ -56,6 +57,10 @@ class EscalationRequest(BaseModel):
     query: str = Field(min_length=1, max_length=8_000)
     rejectedThreadIds: list[str] = Field(default_factory=list, max_length=3)
     reason: str = Field(min_length=1, max_length=2_000)
+    #: Ai kích hoạt lượt chuyển này. "learner_request" = học viên bấm "Chưa đúng
+    #: ý tôi"; "auto_no_source" = bot tự chuyển vì corpus không có gì. Ghi sai
+    #: trường này thì mọi thống kê SLA/định tuyến sau đó đều lệch.
+    trigger: Literal["learner_request", "auto_no_source"] = "learner_request"
 
 
 class MessageRequest(BaseModel):
@@ -115,10 +120,12 @@ def escalate_thread(
 ) -> dict[str, Any]:
     # Học viên bấm "Chưa đúng ý tôi": chuyển theo địa hạt câu hỏi (Admin / Mentor /
     # LabCoach) thay vì luôn gọi LabCoach.
+    scope = classify_scope(payload.query)
     decision = route_escalation(
         question=payload.query,
-        scope=classify_scope(payload.query),
-        learner_requested=True,
+        scope=scope,
+        tier=ConfidenceTier.NONE if payload.trigger == "auto_no_source" else None,
+        learner_requested=payload.trigger == "learner_request",
     )
     if not decision.tagged:
         # Câu ngoài phạm vi khoá học không có nút escalate, nên đây là lời gọi sai.
@@ -132,6 +139,7 @@ def escalate_thread(
             {
                 "threadId": thread_id,
                 "targetRole": decision.target.value,
+                "reason": decision.reason.value,
                 "slaMinutes": decision.sla_minutes,
                 **payload.model_dump(),
             }
@@ -143,7 +151,9 @@ def escalate_thread(
         "status": "escalated",
         "queuePosition": queue_position,
         "targetRole": decision.target.value,
+        "reason": decision.reason.value,
         "slaMinutes": decision.sla_minutes,
+        "note": decision.note,
     }
 
 

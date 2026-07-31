@@ -101,7 +101,7 @@ export async function markThreadResolved(threadId) {
  * Thật: POST {API_BASE}/threads/{threadId}/escalate { query, rejectedThreadIds, reason }
  * Backend nên tag LabCoach thật (Discord mention / webhook) và ghi vào hàng chờ.
  */
-export async function escalateToLabCoach(threadId, { query, rejected, reason }) {
+export async function escalateToLabCoach(threadId, { query, rejected, reason, trigger = 'learner_request' }) {
   if (USE_MOCK) {
     return {
       ok: true,
@@ -119,6 +119,7 @@ export async function escalateToLabCoach(threadId, { query, rejected, reason }) 
       query,
       rejectedThreadIds: rejected.map((t) => t.thread_id ?? t.id),
       reason,
+      trigger,
     }),
   })
   return readJson(res, 'Chuyển LabCoach')
